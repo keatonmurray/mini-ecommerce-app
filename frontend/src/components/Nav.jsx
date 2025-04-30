@@ -8,7 +8,7 @@ const Header = () => {
   };
 
   return (
-    <div className="header d-flex flex-wrap flex-md-row align-items-center justify-content-between px-3 py-3 px-md-4 py-md-4">
+    <div className="header d-flex flex-wrap flex-md-row align-items-center justify-content-between py-3 py-md-4 mb-3">
         <div className="category mb-3 mb-md-0 w-md-50-custom">
             <ul className="d-flex flex-row align-items-center m-0 p-0">
             {['Women', 'Men', 'Kids'].map((category) => (
@@ -24,7 +24,7 @@ const Header = () => {
             </ul>
         </div>
 
-        <div className="d-flex justify-content-between align-items-center gap-2 w-md-50-custom">
+        <div className="d-flex justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
             <div className="icons">
                 <i class="bi bi-bag-heart-fill"></i>
             </div>

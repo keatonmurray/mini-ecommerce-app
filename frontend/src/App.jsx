@@ -4,7 +4,7 @@ import Nav from './components/Nav';
 
 const App = () => {
   return (
-    <div className="app">
+    <div className="app container pb-5">
     <Nav />
     <main>
       <Outlet />
