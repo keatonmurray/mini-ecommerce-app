@@ -1,14 +1,15 @@
 import React from 'react'
-import Nav from './components/Nav'
+import { Outlet } from 'react-router-dom';
+import Nav from './components/Nav';
 
-const App = ({children}) => {
+const App = () => {
   return (
     <div className="app">
-        <Nav />
-      <main>
-        {children}
-      </main>
-    </div>
+    <Nav />
+    <main>
+      <Outlet />
+    </main>
+  </div>
   )
 }
 
