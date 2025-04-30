@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import client from './apollo';
 import './assets/css/style.css';
+import './assets/css/media.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
