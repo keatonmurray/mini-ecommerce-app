@@ -6,5 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'KeatonMurray\\Api\\' => array($baseDir . '/src'),
+    'GraphQL\\' => array($vendorDir . '/webonyx/graphql-php/src'),
+    'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
+    'App\\' => array($baseDir . '/src'),
 );

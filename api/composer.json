@@ -1,15 +1,16 @@
 {
-    "name": "keaton-murray/api",
+    "name": "scandiweb/fullstack",
+    "type": "project",
     "autoload": {
         "psr-4": {
-            "KeatonMurray\\Api\\": "src/"
+            "App\\": "src/"
+        },
+        "psr-0": {
+            "": "src/"
         }
     },
-    "authors": [
-        {
-            "name": "Keaton Murray",
-            "email": "murraykeaton422@gmail.com"
-        }
-    ],
-    "require": {}
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "webonyx/graphql-php": "^15.2"
+    }
 }
