@@ -1,0 +1,15 @@
+{
+    "name": "keaton-murray/api",
+    "autoload": {
+        "psr-4": {
+            "KeatonMurray\\Api\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Keaton Murray",
+            "email": "murraykeaton422@gmail.com"
+        }
+    ],
+    "require": {}
+}
