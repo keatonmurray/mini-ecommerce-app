@@ -1,32 +1,15 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react'
+import Nav from './components/Nav'
 
-const App = () => {
-  useEffect(() => {
-    const query = `
-      query Echo($message: String!) {
-        echo(message: $message)
-      }
-    `;
-
-    axios
-      .post('http://localhost:8000/graphql', {
-        query: query,
-        variables: { message: 'Hello from React!' },
-      })
-      .then((response) => {
-        console.log('Response from GraphQL:', response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
+const App = ({children}) => {
   return (
-    <div>
-      <h1>Test</h1>
+    <div className="app">
+        <Nav />
+      <main>
+        {children}
+      </main>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
