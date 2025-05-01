@@ -60,6 +60,12 @@
     padding: 4px 7px;
 }
 
+.header .icons {
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+  }
+  
 /** Homepage Styles **/
 
 .page-title {
@@ -117,8 +123,39 @@
     font-size: 22px;
 }
 
-.single-product .product-full-preview {
-    height: 440px;
+.single-product .row {
+    align-items: stretch;
+}
+
+.product-full-preview img{
+    cursor: pointer;
+}
+
+.product-container {
+    display: flex;
+    align-items: stretch;
+}
+
+.thumbnail-container {
+    height: 100%;
+}
+
+.thumbnail-container .row {
+    height: 100%;
+}
+
+.thumbnail-img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-full-preview {
+    height: 100%;
+}
+
+.product-full-preview img {
+    height: 100%;
+    object-fit: cover;
 }
 
 .color-active-selected {

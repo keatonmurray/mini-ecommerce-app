@@ -5,7 +5,8 @@ const items = [
   { id: 1, title: 'Clothes', price: 50, image: '/images/women.png' },
   { id: 2, title: 'Clothes', price: 50, image: '/images/women.png' },
   { id: 3, title: 'Clothes', price: 50, image: '/images/women.png' },
-  { id: 4, title: 'Clothes', price: 50, image: '/images/women.png' }
+  { id: 4, title: 'Clothes', price: 50, image: '/images/women.png' },
+  { id: 5, title: 'Clothes', price: 50, image: '/images/women.png' }
 ];
 
 const Home = () => {

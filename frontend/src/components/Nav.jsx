@@ -25,13 +25,13 @@ const Header = () => {
             </ul>
         </div>
 
-        <div className="d-flex justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
+        <div className="d-flex flex-nowrap justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
             <div className="icons">
                 <Link to="/">
                     <i className="bi bi-bag-heart-fill"></i>
                 </Link>
             </div>
-            <div className="icons me-4 position-relative">
+            <div className="icons me-md-4 me-0 position-relative">
                 <i className="bi bi-cart fs-4"></i>
                 <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
                     3
