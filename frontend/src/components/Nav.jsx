@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [activeCategory, setActiveCategory] = useState('Women'); 
@@ -26,7 +27,9 @@ const Header = () => {
 
         <div className="d-flex justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
             <div className="icons">
-                <i class="bi bi-bag-heart-fill"></i>
+                <Link to="/">
+                    <i className="bi bi-bag-heart-fill"></i>
+                </Link>
             </div>
             <div className="icons me-4 position-relative">
                 <i className="bi bi-cart fs-4"></i>
