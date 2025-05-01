@@ -1,5 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
+import Size from '../components/partials/Size';
+import Color from '../components/partials/Color';
 
 const SingleProduct = () => {
 
@@ -68,15 +70,13 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
               {['XS', 'S', 'M', 'L'].map((size) => (
-                <div
-                  key={size}
-                  className={`size ${
-                    isSizeSelected === size ? 'size-active-selected' : ''
-                  }`}
+                <Size
+                  key={size}  
+                  className={`size ${isSizeSelected === size ? 'size-active-selected' : ''}`}
                   onClick={() => sizeSelected(size)}
                 >
                   {size}
-                </div>
+                </Size>
               ))}
             </div>
 
@@ -86,13 +86,11 @@ const SingleProduct = () => {
               data-testid="product-attribute-color"
             >
               {['lavender', 'black', 'green'].map((color) => (
-                <div
-                  key={color}
+                <Color  key={color}
                   className={`color color-${color} ${
                     isColorSelected === color ? 'color-active-selected' : ''
                   }`}
-                  onClick={() => colorSelected(color)}
-                />
+                  onClick={() => colorSelected(color)}/>
               ))}
             </div>
 
