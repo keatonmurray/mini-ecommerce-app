@@ -1,18 +1,12 @@
 <?php
 
 namespace App\Controller;
-use App\Config\Database;
+use App\Models\Product;
 
-class ProductsController {
-
-    public function __construct() 
-    {
-        $database = new Database();
-        $database->connect();
-    }
-    
+class ProductsController extends Product
+{
     public function getProducts()
     {
-        
+        return $this->products();
     }
 }

@@ -4,9 +4,9 @@ namespace App\Config;
 
 include_once __DIR__ . '/DbCredentials.php';
 
-use PDO; 
-use PDOException; 
-use Exception; 
+use PDO;
+use PDOException;
+use Exception;
 
 class Database {
     private $connection;
@@ -35,6 +35,26 @@ class Database {
     }
 
     public function close() {
-        $this->connection = null; 
+        $this->connection = null;
+    }
+
+    public function prepare($query) {
+        return $this->connection->prepare($query);
+    }
+
+    public function beginTransaction() {
+        return $this->connection->beginTransaction();
+    }
+
+    public function commit() {
+        return $this->connection->commit();
+    }
+
+    public function rollBack() {
+        return $this->connection->rollBack();
+    }
+
+    public function getConnection() {
+        return $this->connection;
     }
 }

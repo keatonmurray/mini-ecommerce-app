@@ -10,9 +10,13 @@ use GraphQL\Type\SchemaConfig;
 use RuntimeException;
 use Throwable;
 
+use App\GraphQL\ProductSchema;
+
 class GraphQL {
     static public function handle() {
         try {
+            self::createProductSchema();
+
             $queryType = new ObjectType([
                 'name' => 'Query',
                 'fields' => [
@@ -47,6 +51,8 @@ class GraphQL {
                 ->setQuery($queryType)
                 ->setMutation($mutationType)
             );
+
+
         
             $rawInput = file_get_contents('php://input');
             if ($rawInput === false) {
@@ -70,5 +76,10 @@ class GraphQL {
 
         header('Content-Type: application/json; charset=UTF-8');
         return json_encode($output);
+    }
+
+    private static function createProductSchema()
+    {
+        return ProductSchema::createSchema();
     }
 }
