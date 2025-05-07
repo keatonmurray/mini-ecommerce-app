@@ -41,7 +41,8 @@
                 attribute_values.value,
                 products.gallery,
                 prices.amount,
-                prices.currency
+                prices.currency,
+                products.description
             FROM products
             INNER JOIN attributes ON attributes.product_id = products.id
             INNER JOIN attribute_values ON attribute_values.attribute_id = attributes.id

@@ -26,6 +26,7 @@ class SingleProductSchema
                 'gallery' => Type::listOf(Type::string()),
                 'value' => Type::string(),
                 'amount' => Type::float(),
+                'description' => Type::string(),
                 'currency' => $currencyType
             ]
         ]);

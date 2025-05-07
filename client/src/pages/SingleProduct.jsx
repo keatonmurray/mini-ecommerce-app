@@ -35,9 +35,10 @@ const SingleProduct = () => {
             singleProduct(product_id: "${id}") {
               product_name
               attribute_name
+              gallery
               value
               amount
-              gallery
+              description
               currency {
                 label
                 symbol
@@ -72,7 +73,7 @@ const SingleProduct = () => {
               {thumbnails.map((src, index) => (
                 <div key={index}>
                   <img
-                    src={src}
+                    src={product.gallery[0]}
                     alt={`Thumbnail ${index + 1}`}
                     className="img-fluid thumbnail-img"
                   />
@@ -146,10 +147,8 @@ const SingleProduct = () => {
           <p
             className="mt-4 w-lg-75 w-100 text-lg-start text-center"
             data-testid="product-description"
-          >
-            Find women's stunning cocktail dresses. Standout in lace and metallic
-            cocktail dresses and party dresses from all your favourite brands.
-          </p>
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
         </div>
       </div>
     </div>
