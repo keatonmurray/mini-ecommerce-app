@@ -39,6 +39,7 @@
                 products.id AS product_id,
                 attributes.name AS attribute_name,
                 attribute_values.value,
+                products.gallery,
                 prices.amount,
                 prices.currency
             FROM products

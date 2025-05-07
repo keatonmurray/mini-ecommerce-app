@@ -23,6 +23,7 @@ class SingleProductSchema
                 'product_name' => Type::string(),
                 'product_id' => Type::string(),
                 'attribute_name' => Type::string(),
+                'gallery' => Type::listOf(Type::string()),
                 'value' => Type::string(),
                 'amount' => Type::float(),
                 'currency' => $currencyType

@@ -37,6 +37,7 @@ const SingleProduct = () => {
               attribute_name
               value
               amount
+              gallery
               currency {
                 label
                 symbol
@@ -83,7 +84,7 @@ const SingleProduct = () => {
           {/* Full Preview */}
           <div className="product-full-preview w-100">
             <img
-              src="/images/men.png"
+              src={product.gallery[0]}
               alt="Men"
               className="img-fluid w-100 object-fit-cover"
             />
