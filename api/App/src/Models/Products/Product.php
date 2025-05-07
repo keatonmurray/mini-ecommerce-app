@@ -57,7 +57,8 @@
         
             foreach ($products as &$product) {
                 $product['gallery'] = json_decode($product['gallery'], true) ?? [];
-                $product['currency'] = json_decode($product['currency'], true) ?? [];            }
+                $product['currency'] = json_decode($product['currency'], true) ?? [];            
+            }
 
             return $products;
         }

@@ -51,7 +51,7 @@ const SingleProduct = () => {
           }
         `
       });
-      setProduct(response.data.data.singleProduct); // store the full array
+      setProduct(response.data.data.singleProduct);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -117,11 +117,27 @@ const SingleProduct = () => {
               ))}
             </div>
 
+            <p className="fw-bold text-uppercase mt-4">Color:</p>
+            <div
+              className="colors d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-color"
+            >
+
+              {singleProduct.map((product) => (
+                <Color
+                  key={product.attribute_name}
+                  className={`color color-${product.attribute_name} ${
+                    isColorSelected === product.attribute_name ? 'color-active-selected' : ''
+                  }`}
+                  onClick={() => colorSelected(product.attribute_name)}
+              />
+              ))}
+            </div>
+
             <p className="fw-bold text-uppercase mt-4">Price:</p>
             <h6 className="price fw-bold">
               {mainProduct.currency?.symbol}{mainProduct.amount}
             </h6>
-            
           </div>
 
           <button
