@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller;
-use App\Models\Product;
+namespace App\Controller\Products;
+use App\Models\Products\Product;
 
 class ProductsController extends Product
 {

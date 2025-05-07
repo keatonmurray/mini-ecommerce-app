@@ -4,7 +4,7 @@ namespace App\GraphQL;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
-use App\Controller\ProductsController;
+use App\Controller\Products\ProductsController;
 
 class ProductSchema
 {
@@ -13,13 +13,10 @@ class ProductSchema
         $productType = new ObjectType([
             'name' => 'Product',
             'fields' => [
-                'id' => Type::int(),
                 'name' => Type::string(),
-                'price' => Type::float(),
-                'description' => Type::string(),
             ]
         ]);
-    
+
         $queryType = new ObjectType([
             'name' => 'Query',
             'fields' => [
@@ -32,7 +29,7 @@ class ProductSchema
                 ]
             ]
         ]);
-    
+
         return new \GraphQL\Type\Schema([
             'query' => $queryType,
         ]);
