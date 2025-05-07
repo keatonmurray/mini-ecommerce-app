@@ -22,6 +22,7 @@ class GraphQL {
             }
 
             $input = json_decode($rawInput, true);
+            
             if (!isset($input['query'])) {
                 throw new RuntimeException('No GraphQL query found in request.');
             }

@@ -10,10 +10,21 @@ class ProductSchema
 {
     public static function createSchema()
     {
+        $currencyType = new ObjectType([
+            'name' => 'Currency',
+            'fields' => [
+                'label' => Type::string(),
+                'symbol' => Type::string(),
+            ]
+        ]);
+
         $productType = new ObjectType([
             'name' => 'Product',
             'fields' => [
                 'name' => Type::string(),
+                'gallery' => Type::listOf(Type::string()),
+                'amount' => Type::float(),
+                'currency' => $currencyType,
             ]
         ]);
 

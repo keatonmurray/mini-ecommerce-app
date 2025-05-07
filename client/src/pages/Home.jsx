@@ -12,6 +12,12 @@ const Home = () => {
           {
             products {
               name
+              gallery
+              amount
+              currency {
+                label
+                symbol
+              }
             }
           }
         `
@@ -39,11 +45,11 @@ const Home = () => {
             <Link to="/product" className="text-decoration-none">
               <div className="item mt-5 w-100">
                 <div className="m-0 w-100 px-md-auto px-3">
-                  <img src="/images/women.png" alt={product.name} className="img-fluid w-100" />
+                  <img src={product.gallery[0]} alt={product.name} className="img-fluid w-100" />
                   <div className="text-start mt-3">
                     <p className="product-name">
                       {product.name}
-                      <span className="d-block fw-bold">$99</span> {/* Placeholder price */}
+                      <span className="d-block fw-bold">{product.currency?.symbol} {product.amount}</span> {/* Placeholder price */}
                     </p>
                   </div>
                 </div>
