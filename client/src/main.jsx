@@ -17,14 +17,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ApolloProvider client={client}>
       <BrowserRouter>
         <Routes>
+          
           {/* Home Route */}
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
           </Route>
+
           {/* Product Route */}
-          <Route path="/product" element={<App />}>
+          <Route path="/product/:id" element={<App />}>
             <Route index element={<SingleProduct />} />
           </Route>
+
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

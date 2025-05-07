@@ -1,12 +1,11 @@
 <?php
-
 namespace App\GraphQL;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Controller\Products\ProductsController;
 
-class ProductSchema
+class SingleProductSchema 
 {
     public static function createSchema()
     {
@@ -19,11 +18,12 @@ class ProductSchema
         ]);
 
         $productType = new ObjectType([
-            'name' => 'Product',
+            'name' => 'SingleProduct',
             'fields' => [
-                'slug' => Type::string(),
-                'name' => Type::string(),
-                'gallery' => Type::listOf(Type::string()),
+                'product_name' => Type::string(),
+                'product_id' => Type::string(),
+                'attribute_name' => Type::string(),
+                'value' => Type::string(),
                 'amount' => Type::float(),
                 'currency' => $currencyType
             ]
@@ -32,11 +32,14 @@ class ProductSchema
         $queryType = new ObjectType([
             'name' => 'Query',
             'fields' => [
-                'products' => [
+                'singleProduct' => [
                     'type' => Type::listOf($productType),
-                    'resolve' => function() {
-                        $getProducts = new ProductsController();
-                        return $getProducts->getProducts();
+                    'args' => [ 
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function($root, $args) { 
+                        $getSingleProduct = new ProductsController;
+                        return $getSingleProduct->showSingleProduct($args['product_id']);
                     }
                 ]
             ]

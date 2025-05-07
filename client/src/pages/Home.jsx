@@ -11,6 +11,7 @@ const Home = () => {
         query: `
           {
             products {
+              slug
               name
               gallery
               amount
@@ -35,15 +36,15 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h4 className="page-title mt-5 px-md-auto px-3">Products</h4>
+      <h4 className="page-title mt-4 px-md-auto px-3">Products</h4>
       <div className="row text-center">
         {products.map((product, index) => (
           <div
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
-            <Link to="/product" className="text-decoration-none">
-              <div className="item mt-5 w-100">
+            <Link to={`product/${product.slug}`} className="text-decoration-none">
+              <div className="item mt-4 w-100">
                 <div className="m-0 w-100 px-md-auto px-3">
                   <img src={product.gallery[0]} alt={product.name} className="img-fluid w-100" />
                   <div className="text-start mt-3">
