@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Schema;
-use RuntimeException;
 use Throwable;
+use GraphQL\Type\Definition\ObjectType;
 
 use App\GraphQL\ProductSchema;
 use App\GraphQL\SingleProductSchema;
@@ -27,7 +27,8 @@ class GraphQL {
             } elseif (strpos($query, 'singleProduct') !== false) {
                 $schema = self::createSingleProductSchema();
             } elseif (strpos($query, 'attributes') !== false) {
-                $schema = self::createAttributeSchema();
+                $queryType = AttributeSchema::getObjectType();
+                $schema = self::createAttributeSchema($queryType);
             } else {
                 throw new \Exception("No matching schema found in query.");
             }
@@ -57,8 +58,10 @@ class GraphQL {
         return SingleProductSchema::createSchema(); 
     }
 
-    private static function createAttributeSchema()
+    private static function createAttributeSchema(ObjectType $queryType): Schema 
     {
-        return AttributeSchema::createSchema();
+        return new Schema([
+            'query' => $queryType
+        ]);
     }
 }

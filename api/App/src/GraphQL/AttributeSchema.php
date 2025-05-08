@@ -6,11 +6,11 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Controller\Products\AttributesController;
 
-class AttributeSchema {
-    
-    public static function createSchema()
+class AttributeSchema
+{
+    public static function getObjectType(): ObjectType
     {
-        $productType = new ObjectType([
+        $attributeType = new ObjectType([
             'name' => 'Attributes',
             'fields' => [
                 'attribute_name' => Type::string(),
@@ -19,21 +19,17 @@ class AttributeSchema {
             ]
         ]);
 
-        $queryType = new ObjectType([
+        return new ObjectType([
             'name' => 'Query',
             'fields' => [
                 'attributes' => [
-                    'type' => Type::listOf($productType),
-                    'resolve' => function() {
-                        $getAttribute = new AttributesController;
-                        return $getAttribute->getAttributes();
+                    'type' => Type::listOf($attributeType),
+                    'resolve' => function () {
+                        $controller = new AttributesController;
+                        return $controller->getAttributes();
                     }
                 ]
             ]
-        ]);
-
-        return new \GraphQL\Type\Schema([
-            'query' => $queryType
         ]);
     }
 }
