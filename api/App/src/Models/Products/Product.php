@@ -3,7 +3,8 @@
     namespace App\Models\Products;
     use App\Config\Database;
 
-    class Product {
+    class Product 
+    {
         private $database;
 
         public function __construct()

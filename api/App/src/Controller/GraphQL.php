@@ -9,6 +9,7 @@ use Throwable;
 
 use App\GraphQL\ProductSchema;
 use App\GraphQL\SingleProductSchema;
+use App\GraphQL\AttributeSchema;
 
 class GraphQL {
     static public function handle() {
@@ -25,6 +26,8 @@ class GraphQL {
                 $schema = self::createProductSchema();
             } elseif (strpos($query, 'singleProduct') !== false) {
                 $schema = self::createSingleProductSchema();
+            } elseif (strpos($query, 'attributes') !== false) {
+                $schema = self::createAttributeSchema();
             } else {
                 throw new \Exception("No matching schema found in query.");
             }
@@ -52,5 +55,10 @@ class GraphQL {
     private static function createSingleProductSchema()
     {
         return SingleProductSchema::createSchema(); 
+    }
+
+    private static function createAttributeSchema()
+    {
+        return AttributeSchema::createSchema();
     }
 }
