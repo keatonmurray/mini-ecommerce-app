@@ -9,13 +9,29 @@ use App\Controller\Products\AttributesController;
 class AttributeSchema
 {
     public static function getObjectType(): ObjectType
-    {
+    {   
+
+        $currencyType = new ObjectType([
+            'name' => 'Currency',
+            'fields' => [
+                'label' => Type::string(),
+                'symbol' => Type::string(),
+            ]
+        ]);
+
+
         $attributeType = new ObjectType([
             'name' => 'Attributes',
             'fields' => [
                 'attribute_name' => Type::string(),
-                'value' => Type::string(),
-                'display_value' => Type::string()
+                'attribute_value' => Type::int(),
+                'product_slug' => Type::string(),
+                'attribute_display_value' => Type::int(),
+                'gallery' => Type::listOf(Type::string()),
+                'product_name' => Type::string(),
+                'description' => Type::string(),
+                'amount' => Type::int(),
+                'currency' => $currencyType
             ]
         ]);
 
@@ -24,9 +40,12 @@ class AttributeSchema
             'fields' => [
                 'attributes' => [
                     'type' => Type::listOf($attributeType),
-                    'resolve' => function () {
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
                         $controller = new AttributesController;
-                        return $controller->getAttributes();
+                        return $controller->getAttributes($args['product_id']);
                     }
                 ]
             ]

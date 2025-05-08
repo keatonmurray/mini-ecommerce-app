@@ -25,9 +25,6 @@ class GraphQL {
             if (strpos($query, 'products') !== false) {
                 $queryType = ProductSchema::getObjectType();
                 $schema = self::createProductSchema($queryType);
-            } elseif (strpos($query, 'singleProduct') !== false) {
-               $queryType = SingleProductSchema::getObjectType();
-               $schema = self::createSingleProductSchema($queryType);
             } elseif (strpos($query, 'attributes') !== false) {
                 $queryType = AttributeSchema::getObjectType();
                 $schema = self::createAttributeSchema($queryType);

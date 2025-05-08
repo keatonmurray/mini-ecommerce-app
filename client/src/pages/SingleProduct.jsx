@@ -5,53 +5,35 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const SingleProduct = () => {
-  const [product, setProduct] = useState([]); 
-  const [isSizeSelected, setIsSizeSelected] = useState('XS');
-  const [isColorSelected, setIsColorSelected] = useState('lavender');
+  const [attributes, setAttribute] = useState();
+  const [isSizeSelected, setIsSizeSelected] = useState();
+  const [isColorSelected, setIsColorSelected] = useState();
 
   const { id } = useParams();
-
-  const singleProduct = product;
-
-  const mainProduct = product[0]; 
-
-  const sizeSelected = (size) => {
-    setIsSizeSelected(size);
-  };
-
-  const colorSelected = (color) => {
-    setIsColorSelected(color);
-  };
-
-  const thumbnails = [
-    "/images/men.png",
-    "/images/men.png",
-    "/images/men.png",
-    "/images/men.png",
-    "/images/men.png"
-  ];
 
   const fetchProduct = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: `
+        {
+          attributes(product_id: "${id}")
           {
-            singleProduct(product_id: "${id}") {
-              product_name
-              attribute_name
-              gallery
-              value
-              amount
-              description
-              currency {
-                label
-                symbol
+            attribute_name
+            attribute_value
+            attribute_display_value
+            product_slug
+            gallery
+            amount
+            product_name
+            description
+            currency {
+                  label
+                  symbol 
               }
-            }
           }
-        `
+        }`
       });
-      setProduct(response.data.data.singleProduct);
+      setAttribute(response.data.data.attributes);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -61,7 +43,7 @@ const SingleProduct = () => {
     fetchProduct();
   }, []);
 
-  if (!mainProduct) {
+  if (!attributes) {
     return <div>Loading...</div>;
   }
 
@@ -74,10 +56,10 @@ const SingleProduct = () => {
             data-testid="product-gallery"
           >
             <div className="row">
-              {thumbnails.map((src, index) => (
+              {attributes[0]?.gallery.map((src, index) => (
                 <div key={index}>
                   <img
-                    src={mainProduct.gallery[0]}
+                    src={src}
                     alt={`Thumbnail ${index + 1}`}
                     className="img-fluid thumbnail-img"
                   />
@@ -88,7 +70,7 @@ const SingleProduct = () => {
 
           <div className="product-full-preview w-100">
             <img
-              src={mainProduct.gallery[0]}
+              src={attributes[0]?.gallery[0]}
               alt="Men"
               className="img-fluid w-100 object-fit-cover"
             />
@@ -97,22 +79,22 @@ const SingleProduct = () => {
 
         <div className="col-12 col-lg-4 d-flex flex-column align-items-lg-start align-items-center">
           <h4 className="fw-bold mt-lg-0 mt-4 text-lg-start text-center">
-            {mainProduct.product_name}
+            {attributes[0]?.product_name}
           </h4>
 
           <div className="attributes text-lg-start text-center w-100">
-            <p className="fw-bold text-uppercase mt-4">{mainProduct.attribute_name}</p>
+            <p className="fw-bold text-uppercase mt-4">{attributes[0]?.attribute_name}</p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-              {singleProduct.map((product) => (
+             {attributes.map((attr) => (
                 <Size
-                  key={product.value}
-                  className={`size ${isSizeSelected === product.value ? 'size-active-selected' : ''}`}
-                  onClick={() => sizeSelected(product.value)}
+                  key={attr.attribute_value}
+                  className={`size ${isSizeSelected === attr.attribute_value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsSizeSelected(attr.attribute_value)}
                 >
-                  {product.value}
+                  {attr.attribute_display_value}
                 </Size>
               ))}
             </div>
@@ -123,20 +105,21 @@ const SingleProduct = () => {
               data-testid="product-attribute-color"
             >
 
-              {singleProduct.map((product) => (
+            {attributes.map((attr) => {
+              const product = attr.attribute_value; 
+              return (
                 <Color
-                  key={product.attribute_name}
-                  className={`color color-${product.attribute_name} ${
-                    isColorSelected === product.attribute_name ? 'color-active-selected' : ''
-                  }`}
-                  onClick={() => colorSelected(product.attribute_name)}
-              />
-              ))}
+                  key={product}
+                  className={`color color-${product} ${isColorSelected === product ? 'color-active-selected' : ''}`}
+                  onClick={() => setIsColorSelected(product)}
+                />
+              );
+            })}
             </div>
 
             <p className="fw-bold text-uppercase mt-4">Price:</p>
             <h6 className="price fw-bold">
-              {mainProduct.currency?.symbol}{mainProduct.amount}
+              {attributes[0]?.currency?.symbol}{attributes[0]?.amount} {attributes[0]?.currency?.label}
             </h6>
           </div>
 
@@ -146,11 +129,10 @@ const SingleProduct = () => {
           >
             Add to Cart
           </button>
-
           <p
             className="mt-4 w-lg-75 w-100 text-lg-start text-center"
             data-testid="product-description"
-            dangerouslySetInnerHTML={{ __html: mainProduct.description }}
+            dangerouslySetInnerHTML={{ __html: attributes[0]?.description }}
           />
         </div>
       </div>

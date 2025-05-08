@@ -9,9 +9,4 @@ class ProductsController extends Product
     {
         return $this->products();
     }
-
-    public function showSingleProduct($id)
-    {
-        return $this->product($id);
-    }
 }
