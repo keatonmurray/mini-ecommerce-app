@@ -7,7 +7,7 @@ use App\Controller\Products\ProductsController;
 
 class SingleProductSchema 
 {
-    public static function createSchema()
+    public static function getObjectType(): ObjectType
     {
         $currencyType = new ObjectType([
             'name' => 'Currency',
@@ -47,8 +47,6 @@ class SingleProductSchema
             ]
         ]);
 
-        return new \GraphQL\Type\Schema([
-            'query' => $queryType,
-        ]);
+        return $queryType;
     }
 }

@@ -10,7 +10,6 @@ use GraphQL\Type\Definition\ObjectType;
 use App\GraphQL\ProductSchema;
 use App\GraphQL\SingleProductSchema;
 use App\GraphQL\AttributeSchema;
-use App\Models\Products\Product;
 
 class GraphQL {
     static public function handle() {
@@ -27,7 +26,8 @@ class GraphQL {
                 $queryType = ProductSchema::getObjectType();
                 $schema = self::createProductSchema($queryType);
             } elseif (strpos($query, 'singleProduct') !== false) {
-                $schema = self::createSingleProductSchema();
+               $queryType = SingleProductSchema::getObjectType();
+               $schema = self::createSingleProductSchema($queryType);
             } elseif (strpos($query, 'attributes') !== false) {
                 $queryType = AttributeSchema::getObjectType();
                 $schema = self::createAttributeSchema($queryType);
@@ -57,9 +57,11 @@ class GraphQL {
         ]);
     }
 
-    private static function createSingleProductSchema()
+    private static function createSingleProductSchema(ObjectType $queryType): Schema
     {
-        return SingleProductSchema::createSchema(); 
+        return new Schema([
+            'query' => $queryType,
+        ]);
     }
 
     private static function createAttributeSchema(ObjectType $queryType): Schema 
