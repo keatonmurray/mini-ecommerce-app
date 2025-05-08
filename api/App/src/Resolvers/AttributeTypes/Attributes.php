@@ -1,12 +1,13 @@
 <?php
 
-namespace App\GraphQL;
+namespace App\Resolvers\AttributeTypes;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Controller\Products\AttributesController;
+use App\Resolvers\AttributeSchema;
 
-class AttributeSchema
+class Attributes extends AttributeSchema
 {
     public static function getObjectType(): ObjectType
     {   
@@ -26,7 +27,7 @@ class AttributeSchema
                 'attribute_name' => Type::string(),
                 'attribute_value' => Type::int(),
                 'product_slug' => Type::string(),
-                'attribute_display_value' => Type::int(),
+                'attribute_display_value' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
                 'product_name' => Type::string(),
                 'description' => Type::string(),

@@ -46,4 +46,23 @@ class Attribute
 
         return $attributes;
     }
+
+    protected function size()
+    {
+        $query = "SELECT
+            attributes.name AS attribute_name,
+            attributes.product_id,
+            attribute_values.display_value,
+            attribute_values.attribute_id,
+            attribute_values.value
+            FROM attributes
+            INNER JOIN 
+            attribute_values 
+            ON attributes.id = attribute_values. 	attribute_id 	
+            WHERE name = 'Size'";
+
+        $stmt = $this->database->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

@@ -10,4 +10,9 @@ class AttributesController extends Attribute {
     {
         return $this->attributes($id);
     }
+
+    public function getSize()
+    {
+        return $this->size();
+    }
 }

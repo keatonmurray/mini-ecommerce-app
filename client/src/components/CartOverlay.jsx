@@ -1,7 +1,6 @@
 import React from 'react'
-import Size from './partials/Size'
+import Attribute from './partials/Attribute'
 import { useState } from 'react';
-import Color from './partials/Color';
 
 const CartOverlay = () => {
     const [isSizeSelected, setIsSizeSelected] = useState('XS');
@@ -37,17 +36,17 @@ const CartOverlay = () => {
               <p className="fw-bold text-small">Size:</p>
               <div className="d-flex gap-1 sizes flex-wrap">
                 {['XS', 'S', 'M', 'L'].map((size) => (
-                  <Size
+                  <Attribute
                     key={size}  
                     className={`size ${isSizeSelected === size ? 'size-active-selected' : ''}`}
                     onClick={() => sizeSelected(size)}
                   >
                     {size}
-                  </Size>
+                  </Attribute>
                 ))}
               </div>
               <p className="fw-bold text-small mt-3">Color:</p>
-              <div className="colors d-flex gap-1">
+              {/* <div className="colors d-flex gap-1">
                 {['lavender', 'black', 'green'].map((color) => (
                   <Color
                     key={color}
@@ -57,7 +56,7 @@ const CartOverlay = () => {
                     onClick={() => colorSelected(color)}
                   />
                 ))}
-              </div>
+              </div> */}
           </div>
           <div className="col-6 text-end cart-overlay-product-preview-container">
               <img

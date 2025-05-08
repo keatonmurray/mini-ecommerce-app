@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Size from '../components/partials/Size';
-import Color from '../components/partials/Color';
+import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const SingleProduct = () => {
   const [attributes, setAttribute] = useState();
-  const [isSizeSelected, setIsSizeSelected] = useState();
-  const [isColorSelected, setIsColorSelected] = useState();
+  const [isAttributeSelected, setIsAttributeSelected] = useState();
 
   const { id } = useParams();
 
@@ -88,33 +86,15 @@ const SingleProduct = () => {
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-             {attributes.map((attr) => (
-                <Size
-                  key={attr.attribute_value}
-                  className={`size ${isSizeSelected === attr.attribute_value ? 'size-active-selected' : ''}`}
-                  onClick={() => setIsSizeSelected(attr.attribute_value)}
+             {attributes.map((attr, index) => (
+                <Attribute
+                key={attr.attribute_value ?? index} 
+                  className={`size ${isAttributeSelected === attr.attribute_value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsAttributeSelected(attr.attribute_value)}
                 >
                   {attr.attribute_display_value}
-                </Size>
+                </Attribute>
               ))}
-            </div>
-
-            <p className="fw-bold text-uppercase mt-4">Color:</p>
-            <div
-              className="colors d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-color"
-            >
-
-            {attributes.map((attr) => {
-              const product = attr.attribute_value; 
-              return (
-                <Color
-                  key={product}
-                  className={`color color-${product} ${isColorSelected === product ? 'color-active-selected' : ''}`}
-                  onClick={() => setIsColorSelected(product)}
-                />
-              );
-            })}
             </div>
 
             <p className="fw-bold text-uppercase mt-4">Price:</p>

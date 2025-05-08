@@ -7,9 +7,9 @@ use GraphQL\Type\Schema;
 use Throwable;
 use GraphQL\Type\Definition\ObjectType;
 
-use App\GraphQL\ProductSchema;
-use App\GraphQL\SingleProductSchema;
-use App\GraphQL\AttributeSchema;
+use App\Resolvers\ProductSchema;
+use App\Resolvers\AttributeTypes\Attributes;
+use App\Resolvers\AttributeTypes\SizeSchema;
 
 class GraphQL {
     static public function handle() {
@@ -24,10 +24,13 @@ class GraphQL {
     
             if (strpos($query, 'products') !== false) {
                 $queryType = ProductSchema::getObjectType();
-                $schema = self::createProductSchema($queryType);
+                $schema = self::createSchema($queryType);
             } elseif (strpos($query, 'attributes') !== false) {
-                $queryType = AttributeSchema::getObjectType();
-                $schema = self::createAttributeSchema($queryType);
+                $queryType = Attributes::getObjectType();
+                $schema = self::createSchema($queryType);
+            } elseif(strpos($query, 'size') !== false) {
+                $queryType = SizeSchema::getObjectType();
+                $schema = self::createSchema($queryType);
             } else {
                 throw new \Exception("No matching schema found in query.");
             }
@@ -47,24 +50,10 @@ class GraphQL {
         return json_encode($output);
     }
 
-    private static function createProductSchema(ObjectType $queryType): Schema
+    private static function createSchema(ObjectType $queryType): Schema
     {
         return new Schema([
             'query' => $queryType,
-        ]);
-    }
-
-    private static function createSingleProductSchema(ObjectType $queryType): Schema
-    {
-        return new Schema([
-            'query' => $queryType,
-        ]);
-    }
-
-    private static function createAttributeSchema(ObjectType $queryType): Schema 
-    {
-        return new Schema([
-            'query' => $queryType
         ]);
     }
 }
