@@ -7,9 +7,9 @@ use GraphQL\Type\Schema;
 use Throwable;
 use GraphQL\Type\Definition\ObjectType;
 
-use App\Resolvers\ProductSchema;
-use App\Resolvers\AttributeTypes\Attributes;
-use App\Resolvers\AttributeTypes\SizeSchema;
+use App\Resolvers\Products\ProductSchema;
+use App\Resolvers\Attributes\Attribute;
+use App\Resolvers\Attributes\SizeSchema;
 
 class GraphQL {
     static public function handle() {
@@ -26,7 +26,7 @@ class GraphQL {
                 $queryType = ProductSchema::getObjectType();
                 $schema = self::createSchema($queryType);
             } elseif (strpos($query, 'attributes') !== false) {
-                $queryType = Attributes::getObjectType();
+                $queryType = Attribute::getObjectType();
                 $schema = self::createSchema($queryType);
             } elseif(strpos($query, 'size') !== false) {
                 $queryType = SizeSchema::getObjectType();

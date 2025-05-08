@@ -1,14 +1,14 @@
 <?php 
 
-namespace App\Resolvers\AttributeTypes;
+namespace App\Resolvers\Attributes;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 
 use App\Controller\Products\AttributesController;
-use App\Resolvers\AttributeSchema;
+use App\Resolvers\BaseSchema;
 
 
-class SizeSchema extends AttributeSchema
+class SizeSchema extends BaseSchema
 {
     public static function getObjectType(): ObjectType
     {
