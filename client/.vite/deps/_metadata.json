@@ -1,40 +1,8 @@
 {
-  "hash": "d6b4a1dc",
-  "configHash": "5ce4e0dd",
-  "lockfileHash": "2a00cb17",
-  "browserHash": "4c908c33",
-  "optimized": {
-    "react": {
-      "src": "../../node_modules/react/index.js",
-      "file": "react.js",
-      "fileHash": "63acb806",
-      "needsInterop": true
-    },
-    "react-dom/client": {
-      "src": "../../node_modules/react-dom/client.js",
-      "file": "react-dom_client.js",
-      "fileHash": "f21bf72e",
-      "needsInterop": true
-    },
-    "@apollo/client": {
-      "src": "../../node_modules/@apollo/client/index.js",
-      "file": "@apollo_client.js",
-      "fileHash": "4a341b42",
-      "needsInterop": false
-    },
-    "axios": {
-      "src": "../../node_modules/axios/index.js",
-      "file": "axios.js",
-      "fileHash": "717a3dab",
-      "needsInterop": false
-    }
-  },
-  "chunks": {
-    "chunk-TVFQMRVC": {
-      "file": "chunk-TVFQMRVC.js"
-    },
-    "chunk-G3PMV62Z": {
-      "file": "chunk-G3PMV62Z.js"
-    }
-  }
+  "hash": "e94a9d46",
+  "configHash": "0f99ec95",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "45e74e4d",
+  "optimized": {},
+  "chunks": {}
 }
