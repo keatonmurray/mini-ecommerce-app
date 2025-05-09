@@ -57,7 +57,7 @@ const SingleProduct = () => {
   if (!data) {
     return <div>Loading...</div>;
   }
-  
+
   const { attributes, size, color } = data;
 
   return (
@@ -111,15 +111,19 @@ const SingleProduct = () => {
                 </Attribute>
               ))}
 
-              {color.map((attr, index) => (
-                <Attribute
-                  key={attr.value ?? index}
-                  className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
-                  onClick={() => setIsAttributeSelected(attr.value)}
-                >
-                  {attr.display_value}
-                </Attribute>
-              ))}
+              {color.map((attr, index) => {
+                const isSelected = isAttributeSelected === attr.value;
+                return (
+                  <Attribute
+                    key={attr.value ?? index}
+                    className={`${isSelected ? attr.value : ''}`}
+                    onClick={() => setIsAttributeSelected(attr.value)}
+                    style={isSelected ? { border:"2px solid #000"} : {}}
+                  >
+                    <div className="color" style={{ backgroundColor: attr.value }} />
+                  </Attribute>
+                );
+              })}
 
             </div>
 

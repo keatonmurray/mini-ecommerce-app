@@ -100,24 +100,12 @@
     color: #fff;
 }
 
-.single-product .colors .color {
-    padding: 20px;
+
+.color {
+    padding: 25px;
     border: 0;
     cursor: pointer;
-}   
-
-.color-lavender {
-   background: rgb(238, 208, 238);
-}   
-
-
-.color-black {
-    background: #000;
-}   
-
-.color-green {
-    background: rgb(1, 53, 1);
-}   
+}
 
 .single-product .price {
     font-size: 22px;
