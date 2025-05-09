@@ -36,9 +36,10 @@ The backend features a **GraphQL API** designed from scratch to enable clean sep
 - **Frontend:** React, Apollo Client, Booststrap, CSS, Axios, Bootstrap Icons, Dotenv, React Router Dom
 
 ---
+## 📁 Folder Structure Overview
 
-## Folder Structure Overview
-
+```plaintext
+.
 ├── api
 │   ├── App
 │   │   ├── public
