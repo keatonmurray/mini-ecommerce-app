@@ -52,6 +52,13 @@ const SingleProduct = () => {
               attribute_id
               value
             }
+            keyboard(product_id: "${id}") {
+              attribute_name
+              product_id
+              display_value
+              attribute_id
+              value
+            }
           }`
       });
       setData({
@@ -59,7 +66,8 @@ const SingleProduct = () => {
         size: response.data.data.size,
         color: response.data.data.color,
         capacity: response.data.data.capacity,
-        usb: response.data.data.usb
+        usb: response.data.data.usb,
+        keyboard: response.data.data.keyboard
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -79,7 +87,8 @@ const SingleProduct = () => {
     size, 
     color, 
     capacity, 
-    usb 
+    usb,
+    keyboard 
   } = data;
 
   return (
@@ -162,6 +171,23 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
               {capacity.map((attr, index) => (
+                  <Attribute
+                    key={attr.value ?? index}
+                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsAttributeSelected(attr.value)}
+                  >
+                  {attr.display_value}
+                </Attribute>
+              ))}
+            </div>
+
+            <p className="fw-bold text-uppercase mt-4">{keyboard[0]?.attribute_name}</p>
+
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-size"
+            >
+              {keyboard.map((attr, index) => (
                   <Attribute
                     key={attr.value ?? index}
                     className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}

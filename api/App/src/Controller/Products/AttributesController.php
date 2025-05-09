@@ -30,4 +30,9 @@ class AttributesController extends Attribute {
     {
         return $this->usb($id);
     }
+
+    public function getTouchIdKeyboard($id)
+    {
+        return $this->touchIdKeyboard($id);
+    }
 }
