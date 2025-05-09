@@ -9,6 +9,7 @@ use App\Resolvers\Attributes\SizeSchema;
 use App\Resolvers\Products\ProductSchema;
 use App\Controller\Products\AttributesController;
 use App\Controller\Products\ProductsController;
+use App\Resolvers\Attributes\ColorSchema;
 
 abstract class BaseSchema {
     abstract static function getObjectType(): ObjectType;
@@ -42,6 +43,16 @@ abstract class BaseSchema {
                     'resolve' => function ($root, $args) {
                         $controller = new AttributesController;
                         return $controller->getSize($args['product_id']);
+                    }
+                ],
+                'color' => [
+                    'type' => Type::listOf(ColorSchema::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getColor($args['product_id']);
                     }
                 ]
             ]

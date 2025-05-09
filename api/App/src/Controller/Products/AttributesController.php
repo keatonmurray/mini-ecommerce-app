@@ -15,4 +15,9 @@ class AttributesController extends Attribute {
     {
         return $this->size($id);
     }
+
+    public function getColor($id) 
+    {
+        return $this->colors($id);
+    }
 }

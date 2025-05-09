@@ -31,11 +31,19 @@ const SingleProduct = () => {
               value
               attribute_id
             }
+            color(product_id: "${id}") {
+              attribute_name
+              product_id
+              display_value
+              attribute_id
+              value
+            }
           }`
       });
       setData({
         attributes: response.data.data.attributes,
-        size: response.data.data.size
+        size: response.data.data.size,
+        color: response.data.data.color
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -49,8 +57,8 @@ const SingleProduct = () => {
   if (!data) {
     return <div>Loading...</div>;
   }
-
-  const { attributes, size } = data;
+  
+  const { attributes, size, color } = data;
 
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
@@ -93,11 +101,21 @@ const SingleProduct = () => {
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-             {size.map((attr, index) => (
+              {size.map((attr, index) => (
                 <Attribute
-                  key={attr.attribute_value ?? index}
-                  className={`size ${isAttributeSelected === attr.attribute_value ? 'size-active-selected' : ''}`}
-                  onClick={() => setIsAttributeSelected(attr.attribute_value)}
+                  key={attr.value ?? index}
+                  className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsAttributeSelected(attr.value)}
+                >
+                  {attr.display_value}
+                </Attribute>
+              ))}
+
+              {color.map((attr, index) => (
+                <Attribute
+                  key={attr.value ?? index}
+                  className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsAttributeSelected(attr.value)}
                 >
                   {attr.display_value}
                 </Attribute>
