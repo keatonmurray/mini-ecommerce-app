@@ -6,10 +6,7 @@ use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Schema;
 use Throwable;
 use GraphQL\Type\Definition\ObjectType;
-
-use App\Resolvers\Products\ProductSchema;
-use App\Resolvers\Attributes\Attribute;
-use App\Resolvers\Attributes\SizeSchema;
+use App\Resolvers\QuerySchema;
 
 class GraphQL {
     static public function handle() {
@@ -21,19 +18,9 @@ class GraphQL {
             $variableValues = $input['variables'] ?? null;
     
             $rootValue = ['prefix' => 'You said: '];
-    
-            if (strpos($query, 'products') !== false) {
-                $queryType = ProductSchema::getObjectType();
-                $schema = self::createSchema($queryType);
-            } elseif (strpos($query, 'attributes') !== false) {
-                $queryType = Attribute::getObjectType();
-                $schema = self::createSchema($queryType);
-            } elseif(strpos($query, 'size') !== false) {
-                $queryType = SizeSchema::getObjectType();
-                $schema = self::createSchema($queryType);
-            } else {
-                throw new \Exception("No matching schema found in query.");
-            }
+
+            $queryType = QuerySchema::getQuery();
+            $schema = self::createSchema($queryType);
     
             $result = GraphQLBase::executeQuery($schema, $query, $rootValue, null, $variableValues);
             $output = $result->toArray();

@@ -3,10 +3,7 @@
 namespace App\Resolvers\Attributes;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
-
-use App\Controller\Products\AttributesController;
 use App\Resolvers\BaseSchema;
-
 
 class SizeSchema extends BaseSchema
 {
@@ -23,19 +20,7 @@ class SizeSchema extends BaseSchema
             ]
         ]); 
 
-        $queryType = new ObjectType([
-            'name' => 'Query',
-            'fields' => [
-                'size' => [
-                    'type' => Type::listOf($attributeType),
-                    'resolve' => function () {
-                        $controller = new AttributesController;
-                        return $controller->getSize();
-                    }
-                ]
-            ]
-        ]);
-
-       return $queryType;
+       return $attributeType;
     }
+    
 }

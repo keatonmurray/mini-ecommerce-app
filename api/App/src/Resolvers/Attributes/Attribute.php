@@ -4,7 +4,6 @@ namespace App\Resolvers\Attributes;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
-use App\Controller\Products\AttributesController;
 use App\Resolvers\BaseSchema;
 
 class Attribute extends BaseSchema
@@ -19,7 +18,6 @@ class Attribute extends BaseSchema
                 'symbol' => Type::string(),
             ]
         ]);
-
 
         $attributeType = new ObjectType([
             'name' => 'Attributes',
@@ -36,20 +34,6 @@ class Attribute extends BaseSchema
             ]
         ]);
 
-        return new ObjectType([
-            'name' => 'Query',
-            'fields' => [
-                'attributes' => [
-                    'type' => Type::listOf($attributeType),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getAttributes($args['product_id']);
-                    }
-                ]
-            ]
-        ]);
+        return $attributeType;
     }
 }
