@@ -11,6 +11,8 @@ use App\Controller\Products\AttributesController;
 use App\Controller\Products\ProductsController;
 use App\Resolvers\Attributes\CapacitySchema;
 use App\Resolvers\Attributes\ColorSchema;
+use App\Controller\Products\CategoriesController;
+use App\Resolvers\Categories\ClothesSchema;
 
 abstract class BaseSchema {
     abstract static function getObjectType(): ObjectType;
@@ -84,6 +86,16 @@ abstract class BaseSchema {
                     'resolve' => function ($root, $args) {
                         $controller = new AttributesController;
                         return $controller->getTouchIdKeyboard($args['product_id']);
+                    }
+                ],
+                'clothes' => [
+                    'type' => Type::listOf(ClothesSchema::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new CategoriesController;
+                        return $controller->getClothes($args['product_id']);
                     }
                 ]
             ]

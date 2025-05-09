@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CartOverlay from './CartOverlay';
 
-const Header = () => {
-  const [activeCategory, setActiveCategory] = useState('All'); 
+const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
 
   const handleCategoryClick = (category) => {
