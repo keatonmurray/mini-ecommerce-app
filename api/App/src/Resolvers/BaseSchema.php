@@ -9,6 +9,7 @@ use App\Resolvers\Attributes\SizeSchema;
 use App\Resolvers\Products\ProductSchema;
 use App\Controller\Products\AttributesController;
 use App\Controller\Products\ProductsController;
+use App\Resolvers\Attributes\CapacitySchema;
 use App\Resolvers\Attributes\ColorSchema;
 
 abstract class BaseSchema {
@@ -53,6 +54,16 @@ abstract class BaseSchema {
                     'resolve' => function ($root, $args) {
                         $controller = new AttributesController;
                         return $controller->getColor($args['product_id']);
+                    }
+                ],
+                'capacity' => [
+                    'type' => Type::listOf(CapacitySchema::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getCapacity($args['product_id']);
                     }
                 ]
             ]

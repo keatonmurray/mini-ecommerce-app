@@ -38,12 +38,20 @@ const SingleProduct = () => {
               attribute_id
               value
             }
+            capacity(product_id: "${id}") {
+              attribute_name
+              product_id
+              display_value
+              attribute_id
+              value
+            }
           }`
       });
       setData({
         attributes: response.data.data.attributes,
         size: response.data.data.size,
-        color: response.data.data.color
+        color: response.data.data.color,
+        capacity: response.data.data.capacity
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -58,7 +66,7 @@ const SingleProduct = () => {
     return <div>Loading...</div>;
   }
 
-  const { attributes, size, color } = data;
+  const { attributes, size, color, capacity } = data;
 
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
@@ -111,6 +119,13 @@ const SingleProduct = () => {
                 </Attribute>
               ))}
 
+            </div>
+            
+            <p className="fw-bold text-uppercase mt-4">{color[0]?.attribute_name}</p>
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-size"
+            >
               {color.map((attr, index) => {
                 const isSelected = isAttributeSelected === attr.value;
                 return (
@@ -124,7 +139,23 @@ const SingleProduct = () => {
                   </Attribute>
                 );
               })}
+            </div>
 
+            <p className="fw-bold text-uppercase mt-4">{capacity[0]?.attribute_name}</p>
+
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-size"
+            >
+              {capacity.map((attr, index) => (
+                  <Attribute
+                    key={attr.value ?? index}
+                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsAttributeSelected(attr.value)}
+                  >
+                  {attr.display_value}
+                </Attribute>
+              ))}
             </div>
 
             <p className="fw-bold text-uppercase mt-4">Price:</p>

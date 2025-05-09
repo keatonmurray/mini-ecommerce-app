@@ -20,4 +20,9 @@ class AttributesController extends Attribute {
     {
         return $this->colors($id);
     }
+
+    public function getCapacity($id)
+    {
+        return $this->capacity($id);
+    }
 }
