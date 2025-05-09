@@ -33,6 +33,6 @@ The backend features a **GraphQL API** designed from scratch to enable clean sep
 ## 🛠️ Tech Stack
 
 - **Backend:** Vanilla PHP, GraphQL (Webonyx), OOP, MVC, Polymorphism, PSR-4 Autoloading  
-- **Frontend:** React, Apollo Client, Booststrap, CSS
+- **Frontend:** React, Apollo Client, Booststrap, CSS, Axios, Bootstrap Icons, Dotenv, React Router Dom
 
 ---
