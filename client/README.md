@@ -1,12 +1,38 @@
-# React + Vite
+# 🛒 E-Commerce GraphQL API (Vanilla PHP + React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Project Summary
 
-Currently, two official plugins are available:
+A full-stack e-commerce platform built with **vanilla PHP** and **React**, following core **Object-Oriented Programming (OOP)** principles, **MVC architecture**, and leveraging **polymorphism** to support modular, scalable code. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The backend features a **GraphQL API** designed from scratch to enable clean separation of concerns and efficient resolution of product and attribute data.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Features
+
+- ✅ **GraphQL Schema Design**  
+  Defined distinct `Product`, `Attribute`, and `Size` types, each resolved through dedicated controller and resolver classes.
+
+- 🔁 **Schema Abstraction & Polymorphism**  
+  Shared logic is abstracted in a reusable `BaseSchema` class, supporting polymorphic schema behavior across entity types.
+
+- 🔧 **Dynamic Schema Initialization**  
+  Eliminated hardcoded conditional checks in favor of a dynamic schema entry point for cleaner and more scalable query resolution.
+
+- ⚙️ **Custom GraphQL Handler**  
+  Implemented robust error handling, JSON request parsing, and PSR-4 autoloading in a lightweight custom PHP handler.
+
+- ⚛️ **React Frontend**  
+  Built a React-based frontend using Apollo Client to fetch and render data from the GraphQL API dynamically.
+
+- 🧩 **Modular Attribute Resolution**  
+  Backend structure supports future expansion: attribute types are resolved independently from products and can be queried as standalone entities.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Vanilla PHP, GraphQL (Webonyx), OOP, MVC, Polymorphism, PSR-4 Autoloading  
+- **Frontend:** React, Apollo Client
+
+---
