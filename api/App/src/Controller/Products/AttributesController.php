@@ -25,4 +25,9 @@ class AttributesController extends Attribute {
     {
         return $this->capacity($id);
     }
+
+    public function getUsb($id)
+    {
+        return $this->usb($id);
+    }
 }

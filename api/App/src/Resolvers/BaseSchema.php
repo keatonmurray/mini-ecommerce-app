@@ -65,6 +65,16 @@ abstract class BaseSchema {
                         $controller = new AttributesController;
                         return $controller->getCapacity($args['product_id']);
                     }
+                ],
+                'usb' => [
+                    'type' => Type::listOf(CapacitySchema::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getUsb($args['product_id']);
+                    }
                 ]
             ]
         ]);

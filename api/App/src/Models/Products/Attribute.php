@@ -108,4 +108,25 @@ class Attribute
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    protected function usb($id)
+    {
+        $query = "SELECT
+            attributes.name AS attribute_name,
+            attributes.product_id,
+            attribute_values.display_value,
+            attribute_values.attribute_id,
+            attribute_values.value
+            FROM attributes
+            INNER JOIN 
+            attribute_values 
+            ON attributes.id = attribute_values.attribute_id
+            WHERE attributes.name = 'With USB 3 ports' && product_id = :id";
+
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':id', $id, \PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

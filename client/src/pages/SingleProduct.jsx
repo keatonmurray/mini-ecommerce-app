@@ -45,13 +45,21 @@ const SingleProduct = () => {
               attribute_id
               value
             }
+            usb(product_id: "${id}") {
+              attribute_name
+              product_id
+              display_value
+              attribute_id
+              value
+            }
           }`
       });
       setData({
         attributes: response.data.data.attributes,
         size: response.data.data.size,
         color: response.data.data.color,
-        capacity: response.data.data.capacity
+        capacity: response.data.data.capacity,
+        usb: response.data.data.usb
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -66,7 +74,13 @@ const SingleProduct = () => {
     return <div>Loading...</div>;
   }
 
-  const { attributes, size, color, capacity } = data;
+  const { 
+    attributes, 
+    size, 
+    color, 
+    capacity, 
+    usb 
+  } = data;
 
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
@@ -158,7 +172,25 @@ const SingleProduct = () => {
               ))}
             </div>
 
+            <p className="fw-bold text-uppercase mt-4">{usb[0]?.attribute_name}</p>
+
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-size"
+            >
+              {usb.map((attr, index) => (
+                  <Attribute
+                    key={attr.value ?? index}
+                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsAttributeSelected(attr.value)}
+                  >
+                  {attr.display_value}
+                </Attribute>
+              ))}
+            </div>
+
             <p className="fw-bold text-uppercase mt-4">Price:</p>
+
             <h6 className="price fw-bold">
               {attributes[0]?.currency?.symbol}{attributes[0]?.amount} {attributes[0]?.currency?.label}
             </h6>
