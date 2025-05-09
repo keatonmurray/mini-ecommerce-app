@@ -47,7 +47,7 @@ class Attribute
         return $attributes;
     }
 
-    protected function size()
+    protected function size($id)
     {
         $query = "SELECT
             attributes.name AS attribute_name,
@@ -58,10 +58,11 @@ class Attribute
             FROM attributes
             INNER JOIN 
             attribute_values 
-            ON attributes.id = attribute_values. 	attribute_id 	
-            WHERE name = 'Size'";
+            ON attributes.id = attribute_values.attribute_id
+            WHERE name = 'Size' && product_id = :id";
 
         $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':id', $id, \PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }

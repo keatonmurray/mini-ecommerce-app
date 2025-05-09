@@ -36,9 +36,12 @@ abstract class BaseSchema {
                 ],
                 'size' => [
                     'type' => Type::listOf(SizeSchema::getObjectType()),
-                    'resolve' => function () {
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
                         $controller = new AttributesController;
-                        return $controller->getSize();
+                        return $controller->getSize($args['product_id']);
                     }
                 ]
             ]

@@ -22,5 +22,5 @@ class SizeSchema extends BaseSchema
 
        return $attributeType;
     }
-    
+
 }

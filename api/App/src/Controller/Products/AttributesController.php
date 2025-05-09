@@ -11,8 +11,8 @@ class AttributesController extends Attribute {
         return $this->attributes($id);
     }
 
-    public function getSize()
+    public function getSize($id)
     {
-        return $this->size();
+        return $this->size($id);
     }
 }

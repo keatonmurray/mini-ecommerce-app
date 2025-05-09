@@ -22,10 +22,6 @@ class Attribute extends BaseSchema
         $attributeType = new ObjectType([
             'name' => 'Attributes',
             'fields' => [
-                'attribute_name' => Type::string(),
-                'attribute_value' => Type::int(),
-                'product_slug' => Type::string(),
-                'attribute_display_value' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
                 'product_name' => Type::string(),
                 'description' => Type::string(),

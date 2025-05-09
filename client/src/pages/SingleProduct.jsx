@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const SingleProduct = () => {
-  const [attributes, setAttribute] = useState();
-  const [isAttributeSelected, setIsAttributeSelected] = useState();
+  const [data, setData] = useState();
+  const [isAttributeSelected, setIsAttributeSelected] = useState(null);
 
   const { id } = useParams();
 
@@ -13,25 +13,30 @@ const SingleProduct = () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: `
-        {
-          attributes(product_id: "${id}")
-          {
-            attribute_name
-            attribute_value
-            attribute_display_value
-            product_slug
-            gallery
-            amount
-            product_name
-            description
-            currency {
-                  label
-                  symbol 
+          query {
+            attributes(product_id: "${id}") {
+              product_name
+              gallery
+              description
+              amount
+              currency {
+                label
+                symbol
               }
-          }
-        }`
+            }
+            size(product_id: "${id}") {
+              attribute_name
+              product_id
+              display_value
+              value
+              attribute_id
+            }
+          }`
       });
-      setAttribute(response.data.data.attributes);
+      setData({
+        attributes: response.data.data.attributes,
+        size: response.data.data.size
+      });
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -41,9 +46,11 @@ const SingleProduct = () => {
     fetchProduct();
   }, []);
 
-  if (!attributes) {
+  if (!data) {
     return <div>Loading...</div>;
   }
+
+  const { attributes, size } = data;
 
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
@@ -81,20 +88,21 @@ const SingleProduct = () => {
           </h4>
 
           <div className="attributes text-lg-start text-center w-100">
-            <p className="fw-bold text-uppercase mt-4">{attributes[0]?.attribute_name}</p>
+            <p className="fw-bold text-uppercase mt-4">{size[0]?.attribute_name}</p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-             {attributes.map((attr, index) => (
+             {size.map((attr, index) => (
                 <Attribute
-                key={attr.attribute_value ?? index} 
+                  key={attr.attribute_value ?? index}
                   className={`size ${isAttributeSelected === attr.attribute_value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsAttributeSelected(attr.attribute_value)}
                 >
-                  {attr.attribute_display_value}
+                  {attr.display_value}
                 </Attribute>
               ))}
+
             </div>
 
             <p className="fw-bold text-uppercase mt-4">Price:</p>
