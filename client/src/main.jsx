@@ -28,6 +28,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route index element={<SingleProduct />} />
           </Route>
 
+          {/* Category Route */}
+          <Route path="/category/:id" element={<App />}>
+            <Route index element={<Home />} />
+          </Route>
+
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

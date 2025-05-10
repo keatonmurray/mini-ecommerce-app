@@ -1,78 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useOutletContext } from 'react-router-dom';
+import { Link, useParams, useOutletContext, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const Home = () => {
 
-  const { activeCategory } = useOutletContext();
+  const {id} = useParams()
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   const [data, setData] = useState({
     product: [],
-    clothes: []
+    category: []
   });
-
-  const { id } = useParams();
 
   const fetchProducts = async () => {
     try {
-      const query = `
-        query {
-          products {
-            slug
-            name
-            gallery
-            amount
-            currency {
-              label
-              symbol
-            }
-          }
-          clothes(product_id: "huarache-x-stussy-le") {
-            product_name
-            product_id
-            gallery
-            amount
-            currency {
-              label
-              symbol
-            }
-          }
-        }
-      `;
-  
       const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query
+        query: `
+          query {
+            products {
+              slug
+              name
+              gallery
+              amount
+              currency {
+                label
+                symbol
+              }
+            }
+            category(product_id: "${id}") {
+              product_name
+              product_id
+              category_name
+              gallery
+              amount
+              currency {
+                label
+                symbol
+              }
+            }
+          }
+        `
       });
-  
-      console.log(response.data);
-  
       setData({
         product: response.data.data.products,
-        clothes: response.data.data.clothes || []
+        category: response.data.data.category
       });
-  
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
   
-
   useEffect(() => {
     fetchProducts();
   }, [id]);
 
-  const { product, clothes } = data;
+  const { product, category } = data;
 
   return (
     <div className="home">
       <h4 className="page-title mt-4 px-md-auto px-3">Products</h4>
-
       <div className="row text-center">
-        {product
-          .filter((item) => {
-            if (activeCategory === 'All') return true;
-            return item.name.toLowerCase().includes(activeCategory.toLowerCase());
-          })
-          .map((item, index) => (
+        
+      {isHomePage ? (
+        product.map((item, index) => (
           <div
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
@@ -97,14 +88,14 @@ const Home = () => {
               </div>
             </Link>
           </div>
-        ))}
-
-        {activeCategory === 'Clothes' && clothes.map((item, index) => (
+        ))
+      ) : (
+        category.map((item, index) => (
           <div
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
-            <Link to={`product/${item.product_id}`} className="text-decoration-none w-100">
+            <Link to={`product/${item.slug}`} className="text-decoration-none w-100">
               <div className="item mt-4 w-100">
                 <div className="m-0 w-100 px-md-auto px-3">
                   <img
@@ -124,7 +115,8 @@ const Home = () => {
               </div>
             </Link>
           </div>
-        ))}
+        ))
+      )}
       </div>
     </div>
   );

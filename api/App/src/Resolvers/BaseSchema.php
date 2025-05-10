@@ -12,6 +12,7 @@ use App\Controller\Products\ProductsController;
 use App\Resolvers\Attributes\CapacitySchema;
 use App\Resolvers\Attributes\ColorSchema;
 use App\Controller\Products\CategoriesController;
+use App\Resolvers\Categories\CategorySchema;
 use App\Resolvers\Categories\ClothesSchema;
 
 abstract class BaseSchema {
@@ -88,14 +89,21 @@ abstract class BaseSchema {
                         return $controller->getTouchIdKeyboard($args['product_id']);
                     }
                 ],
-                'clothes' => [
-                    'type' => Type::listOf(ClothesSchema::getObjectType()),
+                'category' => [
+                    'type' => Type::listOf(CategorySchema::getObjectType()),
                     'args' => [
                         'product_id' => Type::string()
                     ],
                     'resolve' => function ($root, $args) {
                         $controller = new CategoriesController;
-                        return $controller->getClothes($args['product_id']);
+                        return $controller->getCategory($args['product_id']);
+                    }
+                ],
+                'categories' => [
+                    'type' => Type::listOf(CategorySchema::getObjectType()),
+                    'resolve' => function () {
+                        $controller = new CategoriesController;
+                        return $controller->getAllCategories();
                     }
                 ]
             ]

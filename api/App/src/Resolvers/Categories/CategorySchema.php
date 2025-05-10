@@ -6,7 +6,7 @@ use App\Resolvers\BaseSchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class ClothesSchema extends BaseSchema
+class CategorySchema extends BaseSchema
 {
     public  static function getObjectType(): ObjectType 
     {
@@ -19,12 +19,13 @@ class ClothesSchema extends BaseSchema
             ]);
 
         $categoryType = new ObjectType ([
-            'name' => 'Clothes',
+            'name' => 'Category',
             'fields' => [
                 'product_name' => Type::string(),
                 'product_id' => Type::string(),
+                'amount' => Type::float(),
+                'category_name' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
-                'amount' => Type::int(),
                 'currency' => $currencyType
             ]
         ]);
