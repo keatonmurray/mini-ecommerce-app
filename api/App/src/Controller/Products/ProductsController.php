@@ -10,8 +10,9 @@ class ProductsController extends Product
         return $this->products();
     }
 
-    public function addToCart()
+    public function addToCart($orderDetails, $orderStatus, $orderTotal)
     {
-        return $this->addProduct();
+        $orderDetailsJson = json_encode($orderDetails);
+        return $this->addProduct($orderDetailsJson, $orderStatus, $orderTotal);
     }
 }

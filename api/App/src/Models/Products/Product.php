@@ -33,20 +33,18 @@
             return $products;
         }
 
-        protected function addProduct()
+        protected function addProduct($order_details, $order_status, $total)
         {
             $query = "INSERT INTO orders (order_details, order_status, total, created_at) 
                     VALUES (:order_details, :order_status, :total, NOW())";
+
             $stmt = $this->database->prepare($query);
-            
-            $order_details = '{"item": "test item", "quantity": 1}';
-            $order_status = 'received';
-            $total = 100;
-            
             $stmt->bindParam(':order_details', $order_details);
             $stmt->bindParam(':order_status', $order_status);
             $stmt->bindParam(':total', $total);
-            
+
             $stmt->execute();
+
+            return "Order inserted successfully";
         }
     }
