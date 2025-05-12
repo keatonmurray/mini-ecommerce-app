@@ -68,15 +68,16 @@ const Home = () => {
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
-            <Link to={`product/${item.slug}`} className="text-decoration-none w-100">
+            <div className="text-decoration-none w-100">
               <div className="item mt-4 w-100">
                 <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
-                  <img
-                    src={item.gallery[0]}
-                    alt={item.name}
-                    className="img-fluid w-100"
-                  />
-                  
+                  <Link to={`product/${item.slug}`}>
+                    <img
+                      src={item.gallery[0]}
+                      alt={item.name}
+                      className="img-fluid w-100"
+                    />
+                  </Link>
                   <div className="text-start my-1">
                     <p className="product-name m-0">
                       {item.name}
@@ -90,7 +91,7 @@ const Home = () => {
                   </button>
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         ))
       ) : (
@@ -99,15 +100,16 @@ const Home = () => {
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
-            <Link to={`/product/${item.product_id}`} className="text-decoration-none w-100">
+            <div className="text-decoration-none w-100">
               <div className="item mt-4 w-100">
                 <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
-                  <img
-                    src={item.gallery[0]}
-                    alt={item.product_name}
-                    className="img-fluid w-100"
-                  />
-                  
+                  <Link to={`/product/${item.product_id}`}> 
+                    <img
+                      src={item.gallery[0]}
+                      alt={item.product_name}
+                      className="img-fluid w-100"
+                    />
+                  </Link>
                  <div className="text-start mt-3">
                     <p className="product-name m-0">
                       {item.product_name}
@@ -116,12 +118,12 @@ const Home = () => {
                       </span>
                     </p>
                   </div>
-                  <button className="btn btn-success add-to-cart-btn-overlay">
+                  <button type="submit" className="btn btn-success add-to-cart-btn-overlay">
                     <i className="bi bi-cart"></i>
                   </button>
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         ))
       )}
