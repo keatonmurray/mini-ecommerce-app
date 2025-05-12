@@ -99,7 +99,7 @@ const Home = () => {
             key={index}
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
-            <Link to={`product/${item.product_id}`} className="text-decoration-none w-100">
+            <Link to={`/product/${item.product_id}`} className="text-decoration-none w-100">
               <div className="item mt-4 w-100">
                 <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
                   <img
