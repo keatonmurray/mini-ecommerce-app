@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Resolvers\Attributes;
-
+namespace App\Resolvers\Queries\Attributes;
+use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
-use App\Resolvers\BaseSchema;
 use GraphQL\Type\Definition\Type;
 
-class TouchIdKeyboardSchema extends BaseSchema
+class ColorSchema extends QuerySchema
 {
-    public static function getObjectType(): ObjectType 
+    public static function getObjectType(): ObjectType
     {
         $attributeType = new ObjectType([
-            'name' => "Touch ID with Keyboard",
+            'name' => 'Color',
             'fields' => [
                 'attribute_name' => Type::string(),
                 'product_id' => Type::string(),
                 'display_value' => Type::string(),
-                'attribute_id' => Type::string(),
-                'value' => Type::string()
+                'value' => Type::string(),
+                'attribute_id' => Type::int()
             ]
         ]);
 

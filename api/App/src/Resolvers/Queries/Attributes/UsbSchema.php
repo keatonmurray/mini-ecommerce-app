@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Resolvers\Attributes;
-use App\Resolvers\BaseSchema;
+namespace App\Resolvers\Queries\Attributes;
+use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class ColorSchema extends BaseSchema
+class UsbSchema extends QuerySchema 
 {
     public static function getObjectType(): ObjectType
     {
         $attributeType = new ObjectType([
-            'name' => 'Color',
+            'name' => 'Usb',
             'fields' => [
                 'attribute_name' => Type::string(),
                 'product_id' => Type::string(),
                 'display_value' => Type::string(),
-                'value' => Type::string(),
-                'attribute_id' => Type::int()
+                'attribute_id' => Type::string(),
+                'value' => Type::string()
             ]
         ]);
 

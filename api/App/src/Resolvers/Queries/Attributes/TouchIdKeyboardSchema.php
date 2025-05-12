@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Resolvers\Attributes;
-use App\Resolvers\BaseSchema;
+namespace App\Resolvers\Queries\Attributes;
+
 use GraphQL\Type\Definition\ObjectType;
+use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\Type;
 
-class UsbSchema extends BaseSchema 
+class TouchIdKeyboardSchema extends QuerySchema
 {
-    public static function getObjectType(): ObjectType
+    public static function getObjectType(): ObjectType 
     {
         $attributeType = new ObjectType([
-            'name' => 'Usb',
+            'name' => "Touch ID with Keyboard",
             'fields' => [
                 'attribute_name' => Type::string(),
                 'product_id' => Type::string(),

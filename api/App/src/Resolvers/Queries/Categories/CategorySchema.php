@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Resolvers\Categories;
+namespace App\Resolvers\Queries\Categories;
 
-use App\Resolvers\BaseSchema;
+use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class CategorySchema extends BaseSchema
+class CategorySchema extends QuerySchema
 {
     public  static function getObjectType(): ObjectType 
     {

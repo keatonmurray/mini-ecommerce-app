@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Resolvers\Attributes;
+namespace App\Resolvers\Queries\Attributes;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
-use App\Resolvers\BaseSchema;
+use App\Resolvers\QuerySchema;
 
-class Attribute extends BaseSchema
+class Attribute extends QuerySchema
 {
     public static function getObjectType(): ObjectType
     {   

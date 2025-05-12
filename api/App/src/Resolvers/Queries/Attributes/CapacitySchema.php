@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Resolvers\Attributes;
-use App\Resolvers\BaseSchema;
+namespace App\Resolvers\Queries\Attributes;
+use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class CapacitySchema extends BaseSchema
+class CapacitySchema extends QuerySchema
 {
     public static function getObjectType(): ObjectType
     {
