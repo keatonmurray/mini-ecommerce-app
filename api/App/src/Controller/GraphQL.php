@@ -7,6 +7,7 @@ use GraphQL\Type\Schema;
 use Throwable;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
+use App\Resolvers\MutationSchema;
 use App\Resolvers\Mutations\Orders\OrderMutation;
 
 class GraphQL {
@@ -21,7 +22,7 @@ class GraphQL {
             $rootValue = ['prefix' => 'You said: '];
 
             $queryType = QuerySchema::getQuery();
-            $mutationType = OrderMutation::getMutationType(); 
+            $mutationType = MutationSchema::getMutation(); 
 
             $schema = self::createSchema($queryType, $mutationType);
 

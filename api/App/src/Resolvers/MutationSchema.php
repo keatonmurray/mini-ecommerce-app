@@ -10,7 +10,7 @@ abstract class MutationSchema
 
     abstract static function getMutationType(): ObjectType;
 
-    public function getMutation() {
+    public static function getMutation() {
         return OrderMutation::getMutationType();
     }
 }
