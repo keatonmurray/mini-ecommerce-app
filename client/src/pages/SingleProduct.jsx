@@ -5,8 +5,12 @@ import { useParams } from 'react-router-dom';
 
 const SingleProduct = () => {
   const [data, setData] = useState();
-  const [isAttributeSelected, setIsAttributeSelected] = useState(null);
-
+  const [isSizeSelected, setIsSizeSelected] = useState(null);
+  const [isColorSelected, setIsColorSelected] = useState(null);
+  const [isCapacitySelected, setIsCapacitySelected] = useState(null);
+  const [isKeyboardSelected, setIsKeyboardSelected] = useState(null);
+  const [isUsbSelected, setIsUsbSelected] = useState(null)
+ 
   const { id } = useParams();
 
   const fetchProduct = async () => {
@@ -135,8 +139,8 @@ const SingleProduct = () => {
               {size.map((attr, index) => (
                 <Attribute
                   key={attr.value ?? index}
-                  className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
-                  onClick={() => setIsAttributeSelected(attr.value)}
+                  className={`size ${isSizeSelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsSizeSelected(attr.value)}
                 >
                   {attr.display_value}
                 </Attribute>
@@ -150,12 +154,12 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
               {color.map((attr, index) => {
-                const isSelected = isAttributeSelected === attr.value;
+                const isSelected = isColorSelected === attr.value;
                 return (
                   <Attribute
                     key={attr.value ?? index}
                     className={`${isSelected ? attr.value : ''}`}
-                    onClick={() => setIsAttributeSelected(attr.value)}
+                    onClick={() => setIsColorSelected(attr.value)}
                     style={isSelected ? { border:"2px solid #000"} : {}}
                   >
                     <div className="color" style={{ backgroundColor: attr.value }} />
@@ -173,8 +177,8 @@ const SingleProduct = () => {
               {capacity.map((attr, index) => (
                   <Attribute
                     key={attr.value ?? index}
-                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsAttributeSelected(attr.value)}
+                    className={`size ${isCapacitySelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsCapacitySelected(attr.value)}
                   >
                   {attr.display_value}
                 </Attribute>
@@ -190,8 +194,8 @@ const SingleProduct = () => {
               {keyboard.map((attr, index) => (
                   <Attribute
                     key={attr.value ?? index}
-                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsAttributeSelected(attr.value)}
+                    className={`size ${isKeyboardSelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsKeyboardSelected(attr.value)}
                   >
                   {attr.display_value}
                 </Attribute>
@@ -207,8 +211,8 @@ const SingleProduct = () => {
               {usb.map((attr, index) => (
                   <Attribute
                     key={attr.value ?? index}
-                    className={`size ${isAttributeSelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsAttributeSelected(attr.value)}
+                    className={`size ${isUsbSelected === attr.value ? 'size-active-selected' : ''}`}
+                    onClick={() => setIsUsbSelected(attr.value)}
                   >
                   {attr.display_value}
                 </Attribute>
