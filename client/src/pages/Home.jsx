@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useOutletContext, useLocation } from 'react-router-dom';
+import Form from '../components/partials/Form'
 import axios from 'axios';
 
 const Home = () => {
@@ -55,6 +56,28 @@ const Home = () => {
     fetchProducts();
   }, [id]);
 
+  const addToCart = async(e) => {
+    e.preventDefault();
+
+    const mutation = `
+      //mutation
+    `
+
+    const formValues = {
+
+    }
+
+    try {
+      response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: mutation,
+        variables: variables
+      })
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
   const { product, category } = data;
 
   return (
@@ -69,28 +92,30 @@ const Home = () => {
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
             <div className="text-decoration-none w-100">
-              <div className="item mt-4 w-100">
-                <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
-                  <Link to={`product/${item.slug}`}>
-                    <img
-                      src={item.gallery[0]}
-                      alt={item.name}
-                      className="img-fluid w-100"
-                    />
-                  </Link>
-                  <div className="text-start my-1">
-                    <p className="product-name m-0">
-                      {item.name}
-                      <span className="d-block fw-bold">
-                        {item.currency?.symbol} {item.amount}
-                      </span>
-                    </p>
+              <Form onSubmit={addToCart} method="POST">
+                  <div className="item mt-4 w-100">
+                    <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
+                      <Link to={`product/${item.slug}`}>
+                        <img
+                          src={item.gallery[0]}
+                          alt={item.name}
+                          className="img-fluid w-100"
+                        />
+                      </Link>
+                      <div className="text-start my-1">
+                        <p className="product-name m-0">
+                          {item.name}
+                          <span className="d-block fw-bold">
+                            {item.currency?.symbol} {item.amount}
+                          </span>
+                        </p>
+                      </div>
+                      <button type="submit" className="btn btn-success add-to-cart-btn-overlay">
+                        <i className="bi bi-cart"></i>
+                      </button>
+                    </div>
                   </div>
-                  <button className="btn btn-success add-to-cart-btn-overlay">
-                    <i className="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
+              </Form>
             </div>
           </div>
         ))
@@ -118,7 +143,11 @@ const Home = () => {
                       </span>
                     </p>
                   </div>
-                  <button type="submit" className="btn btn-success add-to-cart-btn-overlay">
+                  <input type="hidden" name="productId" value={item.id} />
+                  <input type="hidden" name="name" value={item.name} />
+                  <input type="hidden" name="amount" value={item.amount} />
+                  <input type="hidden" name="currency" value={item.currency?.symbol} />
+                  <button type="button" className="btn btn-success add-to-cart-btn-overlay">
                     <i className="bi bi-cart"></i>
                   </button>
                 </div>
