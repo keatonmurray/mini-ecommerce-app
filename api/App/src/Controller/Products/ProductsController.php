@@ -9,4 +9,9 @@ class ProductsController extends Product
     {
         return $this->products();
     }
+
+    public function addToCart()
+    {
+        return $this->addProduct();
+    }
 }

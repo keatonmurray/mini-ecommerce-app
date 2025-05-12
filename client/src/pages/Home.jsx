@@ -115,6 +115,10 @@ const Home = () => {
                       </button>
                     </div>
                   </div>
+                  <input type="hidden" name="productId" value={item.id} />
+                  <input type="hidden" name="name" value={item.name} />
+                  <input type="hidden" name="amount" value={item.amount} />
+                  <input type="hidden" name="currency" value={item.currency?.symbol} />
               </Form>
             </div>
           </div>
