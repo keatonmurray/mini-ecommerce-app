@@ -78,7 +78,9 @@ const Home = () => {
       if (response.data.errors) {
         console.error('Error adding to cart:', response.data.errors);
       } else {
-        toast.success("Item added successfully!")
+        toast.success("Item added successfully!", {
+          position: "top-center"
+        });
       }
     } catch (error) {
       console.error('GraphQL error adding product to cart:', error);

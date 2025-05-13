@@ -9,8 +9,6 @@ const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCategory, setIsCategory] = useState();
   const [cartCount, setCartCount] = useState(0);
 
-  console.log(cartCount)
-
   const cartRef = useRef(null);
   const cartButtonRef = useRef(null);
 
@@ -64,7 +62,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
 
     const interval = setInterval(() => {
       getCartCount();
-    }, 1000); 
+    }, 500); 
 
     const handleClickOutside = (event) => {
       if (
