@@ -7,6 +7,8 @@ import './assets/css/style.css';
 import './assets/css/media.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import App from './App';
 import Home from './pages/Home'; 
@@ -14,27 +16,23 @@ import SingleProduct from './pages/SingleProduct';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <Routes>
-          
-          {/* Home Route */}
-          <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
-          </Route>
-
-          {/* Product Route */}
-          <Route path="/product/:id" element={<App />}>
-            <Route index element={<SingleProduct />} />
-          </Route>
-
-          {/* Category Route */}
-          <Route path="/category/:id" element={<App />}>
-            <Route index element={<Home />} />
-          </Route>
-
-        </Routes>
-      </BrowserRouter>
-    </ApolloProvider>
+  <ApolloProvider client={client}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+        </Route>
+        <Route path="/product/:id" element={<App />}>
+          <Route index element={<SingleProduct />} />
+        </Route>
+        <Route path="/category/:id" element={<App />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Routes>
+      {/* Toast container renders notifications here */}
+      <ToastContainer position="top-right" autoClose={3000} />
+    </BrowserRouter>
+  </ApolloProvider>
   </React.StrictMode>
+
 );

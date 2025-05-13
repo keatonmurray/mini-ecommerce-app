@@ -48,4 +48,27 @@
             return "Success!"; //temporary
         }
 
+        protected function cartItems()
+        {
+            $query = "SELECT 
+                orders.products_id, 
+                orders.quantity, 
+                orders.total,
+                products.name,
+                products.gallery 
+                FROM orders
+                INNER JOIN products ON orders.products_id = products.id";
+
+            $stmt = $this->database->prepare($query);
+            $stmt->execute();
+            $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($products as &$product) {
+                $product['gallery'] = json_decode($product['gallery'], true) ?? [];
+            }
+
+            return $products;
+
+        }
+
     }

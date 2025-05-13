@@ -17,6 +17,7 @@ use App\Resolvers\Queries\Categories\CategorySchema;
 abstract class QuerySchema 
 {
     abstract static function getObjectType(): ObjectType;
+    //might declare another abstract static function for cart items fetching here
 
     public static function getQuery() : ObjectType {
         $queryType = new ObjectType([
@@ -29,13 +30,6 @@ abstract class QuerySchema
                         return $controller->getProducts();
                     }
                 ],
-                // 'orders' => [
-                //     'type' => Type::listOf(ProductSchema::getObjectType()),
-                //     'resolve' => function () {
-                //         $controller = new ProductsController;
-                //         return $controller->getCartItems();
-                //     }
-                // ],
                 'attributes' => [
                     'type' => Type::listOf(Attribute::getObjectType()),
                     'args' => [
@@ -118,4 +112,32 @@ abstract class QuerySchema
     
         return $queryType;
     }
+
+    public static function getCartItemsQuery(): ObjectType {
+        $queryType = new ObjectType([
+            'name' => 'CartQuery',
+            'fields' => [
+                'orders' => [
+                    'type' => Type::listOf(ProductSchema::getCartItemsObjectType()),
+                    'resolve' => function() {
+                        $controller = new ProductsController;
+                        return $controller->getCartItems();
+                    }
+                ]
+            ]
+        ]);
+
+        return $queryType;
+    }
+
+    public static function getMergedQuery(): ObjectType {
+        $mainQueryFields = self::getQuery()->config['fields'];
+        $cartQueryFields = self::getCartItemsQuery()->config['fields'];
+
+        return new ObjectType([
+            'name' => 'Query',
+            'fields' => array_merge($mainQueryFields, $cartQueryFields)
+        ]);
+    }
+
 }

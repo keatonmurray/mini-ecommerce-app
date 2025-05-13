@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useOutletContext, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import Form from '../components/partials/Form'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Home = () => {
 
@@ -11,7 +12,7 @@ const Home = () => {
 
   const [data, setData] = useState({
     product: [],
-    category: []
+    category: [],
   });
 
   const fetchProducts = async () => {
@@ -51,10 +52,6 @@ const Home = () => {
       console.error('Error fetching products:', error);
     }
   };
-  
-  useEffect(() => {
-    fetchProducts();
-  }, [id]);
 
   const addToCart = async (e) => {
     e.preventDefault();
@@ -81,12 +78,16 @@ const Home = () => {
       if (response.data.errors) {
         console.error('Error adding to cart:', response.data.errors);
       } else {
-        console.log('Product added to cart!');
+        toast.success("Item added successfully!")
       }
     } catch (error) {
       console.error('GraphQL error adding product to cart:', error);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [id]);
 
   const { product, category } = data;
 

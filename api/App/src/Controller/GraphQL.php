@@ -8,11 +8,10 @@ use Throwable;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
 use App\Resolvers\MutationSchema;
-use App\Resolvers\Mutations\Orders\OrderMutation;
 
 class GraphQL {
-    static public function handle() {
-    try {
+    public static function handle() {
+        try {
             $rawInput = file_get_contents('php://input');
             $input = json_decode($rawInput, true);
 
@@ -21,8 +20,8 @@ class GraphQL {
 
             $rootValue = ['prefix' => 'You said: '];
 
-            $queryType = QuerySchema::getQuery();
-            $mutationType = MutationSchema::getMutation(); 
+            $queryType = QuerySchema::getMergedQuery();
+            $mutationType = MutationSchema::getMutation();
 
             $schema = self::createSchema($queryType, $mutationType);
 
@@ -38,14 +37,14 @@ class GraphQL {
         }
 
         header('Content-Type: application/json; charset=UTF-8');
-        return json_encode($output);
+        echo json_encode($output);
     }
 
-    private static function createSchema(ObjectType $queryType): Schema
+    private static function createSchema(ObjectType $queryType, ObjectType $mutationType): Schema
     {
         return new Schema([
             'query' => $queryType,
-            'mutation' => OrderMutation::getMutationType()
+            'mutation' => $mutationType
         ]);
     }
 }
