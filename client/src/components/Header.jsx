@@ -62,6 +62,10 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     fetchCategories();
     getCartCount();
 
+    const interval = setInterval(() => {
+      getCartCount();
+    }, 1000); 
+
     const handleClickOutside = (event) => {
       if (
         cartRef.current && !cartRef.current.contains(event.target) && 
@@ -74,9 +78,11 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     document.addEventListener('mousedown', handleClickOutside); 
 
     return () => {
+      clearInterval(interval);
       document.removeEventListener('mousedown', handleClickOutside); 
     };
   }, []);
+
 
   return (
     <div className="cart-overlay">
