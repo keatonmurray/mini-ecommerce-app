@@ -47,7 +47,7 @@ const CartOverlay = () => {
 
         {orders.map((item, index) => (
           <div key={index} className="row align-items-start">
-            <div className="col-6">
+            <div className="col-9">
               <div className="d-flex">
                 <p className="product-name mb-0">{item.name}</p>
                 <div className="cart-action ms-4">
@@ -80,7 +80,7 @@ const CartOverlay = () => {
                 ))}
               </div>
             </div>
-            <div className="col-6 text-end cart-overlay-product-preview-container">
+            <div className="col-3 text-end cart-overlay-product-preview-container">
               <img
                 src={item.gallery[0]}
                 alt={item.name}

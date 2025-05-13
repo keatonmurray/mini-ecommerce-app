@@ -57,7 +57,8 @@
                 products.name,
                 products.gallery 
                 FROM orders
-                INNER JOIN products ON orders.products_id = products.id";
+                INNER JOIN products ON orders.products_id = products.id
+                ORDER BY orders.created_at DESC";
 
             $stmt = $this->database->prepare($query);
             $stmt->execute();
