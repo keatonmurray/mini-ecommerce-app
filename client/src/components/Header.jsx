@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CartOverlay from './CartOverlay';
 import axios from 'axios';
@@ -8,13 +8,16 @@ const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
 
+  const cartRef = useRef(null);
+  const cartButtonRef = useRef(null);
+
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
   };
 
   const handleCartOverlay = () => {
-    setIsCartExpanded(true)
-  }
+    setIsCartExpanded((prevState) => !prevState); 
+  };
 
   const fetchCategories = async() => {
     try {
@@ -33,11 +36,26 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     } catch (error) {
         console.error('Error fetching products:', error);
       }
-  }
+  };
 
-useEffect(() => {
+  useEffect(() => {
     fetchCategories();
-}, []);
+
+    const handleClickOutside = (event) => {
+      if (
+        cartRef.current && !cartRef.current.contains(event.target) && 
+        !cartButtonRef.current.contains(event.target)
+      ) {
+        setIsCartExpanded(false); 
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside); 
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); 
+    };
+  }, []);
 
   return (
     <div className="cart-overlay">
@@ -72,7 +90,11 @@ useEffect(() => {
                     </Link>
                 </div>
                 <div className="icons me-md-4 me-0 position-relative">
-                    <i className="bi bi-cart fs-4" onClick={handleCartOverlay}></i>
+                    <i
+                      ref={cartButtonRef}
+                      className="bi bi-cart fs-4"
+                      onClick={handleCartOverlay}
+                    ></i>
                     <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
                         3
                     </span>
@@ -80,7 +102,9 @@ useEffect(() => {
             </div>
         </div>
         {isCartExpanded && (
-            <CartOverlay/>
+            <div ref={cartRef}>
+              <CartOverlay/>
+            </div>
         )}
     </div>
   );
