@@ -12,7 +12,6 @@ class ProductsController extends Product
 
     public function addToCart($orderDetails, $orderStatus, $orderTotal)
     {
-        $orderDetailsJson = json_encode($orderDetails);
-        return $this->addProduct($orderDetailsJson, $orderStatus, $orderTotal);
+        return $this->addProduct($orderDetails, $orderStatus, $orderTotal);
     }
 }

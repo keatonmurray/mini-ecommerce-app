@@ -59,22 +59,54 @@ const Home = () => {
   const addToCart = async(e) => {
     e.preventDefault();
 
-    const mutation = `
-      //mutation
-    `
+    //Fetch form input values
+    const formData = new FormData(e.target);
 
-    const formValues = {
+    const productId = formData.get('productId');
+    const name = formData.get('name');
+    const amount = parseFloat(formData.get('amount'));
+    const currency = formData.get('currency');
 
+    //Format data into json
+    const orderDetails = [
+    {
+      id: productId,
+      name: name,
+      quantity: 1,
+      prices: [
+        {
+          amount: amount,
+          currency: {
+            symbol: currency,
+            label: currency, 
+          },
+        },
+      ],
+    },
+  ];
+
+  //Handle JSON format for mutation 
+  const orderDetailsString = JSON.stringify(orderDetails).replace(/"/g, '\\"');
+
+  //Handle Mutation
+  const mutation = `
+    mutation {
+      orders(
+        order_details: "${orderDetailsString}",
+        order_status: "pending",
+        total: ${amount}
+      )
     }
+  `
 
-    try {
-      response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: mutation,
-        variables: variables
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  //Insert to DB
+  try {
+    const response = await axios.post(import.meta.env.VITE_API_URL, {
+      query: mutation,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 
   }
 
@@ -115,7 +147,7 @@ const Home = () => {
                       </button>
                     </div>
                   </div>
-                  <input type="hidden" name="productId" value={item.id} />
+                  <input type="hidden" name="productId" value={item.slug} />
                   <input type="hidden" name="name" value={item.name} />
                   <input type="hidden" name="amount" value={item.amount} />
                   <input type="hidden" name="currency" value={item.currency?.symbol} />
