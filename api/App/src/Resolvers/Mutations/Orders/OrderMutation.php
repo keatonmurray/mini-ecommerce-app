@@ -17,13 +17,16 @@ class OrderMutation extends MutationSchema {
                 'orders' => [
                     'type' => Type::string(),
                     'args' => [
-                        'order_details' => Type::string(),
-                        'order_status' => Type::string(),
+                        'product_id' => Type::string(),
+                        'quantity' => Type::int(),
                         'total' => Type::float()
                     ],
                     'resolve' => function ($root, $args) {
                         $controller = new ProductsController;
-                        return $controller->addToCart($args['order_details'], $args['order_status'], $args['total']);
+                        return $controller->addToCart(
+                            $args['product_id'], 
+                            $args['quantity'], 
+                            $args['total']);
                     }
                 ]
             ]

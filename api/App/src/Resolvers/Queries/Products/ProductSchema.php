@@ -31,4 +31,5 @@ class ProductSchema extends QuerySchema
 
         return $productType;
     }
+
 }

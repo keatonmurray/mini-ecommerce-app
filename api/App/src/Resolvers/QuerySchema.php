@@ -29,6 +29,13 @@ abstract class QuerySchema
                         return $controller->getProducts();
                     }
                 ],
+                // 'orders' => [
+                //     'type' => Type::listOf(ProductSchema::getObjectType()),
+                //     'resolve' => function () {
+                //         $controller = new ProductsController;
+                //         return $controller->getCartItems();
+                //     }
+                // ],
                 'attributes' => [
                     'type' => Type::listOf(Attribute::getObjectType()),
                     'args' => [

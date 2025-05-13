@@ -56,59 +56,37 @@ const Home = () => {
     fetchProducts();
   }, [id]);
 
-  const addToCart = async(e) => {
+  const addToCart = async (e) => {
     e.preventDefault();
 
-    //Fetch form input values
     const formData = new FormData(e.target);
 
     const productId = formData.get('productId');
-    const name = formData.get('name');
-    const amount = parseFloat(formData.get('amount'));
-    const currency = formData.get('currency');
 
-    //Format data into json
-    const orderDetails = [
-    {
-      id: productId,
-      name: name,
-      quantity: 1,
-      prices: [
-        {
-          amount: amount,
-          currency: {
-            symbol: currency,
-            label: currency, 
-          },
-        },
-      ],
-    },
-  ];
+    const mutation = `
+      mutation {
+        orders (
+          product_id: "${productId}"
+          quantity: 1
+          total: 100
+        )
+      }
+    `;
 
-  //Handle JSON format for mutation 
-  const orderDetailsString = JSON.stringify(orderDetails).replace(/"/g, '\\"');
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: mutation
+      });
 
-  //Handle Mutation
-  const mutation = `
-    mutation {
-      orders(
-        order_details: "${orderDetailsString}",
-        order_status: "pending",
-        total: ${amount}
-      )
+      if (response.data.errors) {
+        console.error('Error adding to cart:', response.data.errors);
+      } else {
+        console.log('Product added to cart!');
+      }
+    } catch (error) {
+      console.error('GraphQL error adding product to cart:', error);
     }
-  `
-
-  //Insert to DB
-  try {
-    const response = await axios.post(import.meta.env.VITE_API_URL, {
-      query: mutation,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-
-  }
+  };
 
   const { product, category } = data;
 
@@ -148,9 +126,6 @@ const Home = () => {
                     </div>
                   </div>
                   <input type="hidden" name="productId" value={item.slug} />
-                  <input type="hidden" name="name" value={item.name} />
-                  <input type="hidden" name="amount" value={item.amount} />
-                  <input type="hidden" name="currency" value={item.currency?.symbol} />
               </Form>
             </div>
           </div>
@@ -179,10 +154,7 @@ const Home = () => {
                       </span>
                     </p>
                   </div>
-                  <input type="hidden" name="productId" value={item.id} />
-                  <input type="hidden" name="name" value={item.name} />
-                  <input type="hidden" name="amount" value={item.amount} />
-                  <input type="hidden" name="currency" value={item.currency?.symbol} />
+                  <input type="hidden" name="productId" value={item.product_id} />
                   <button type="button" className="btn btn-success add-to-cart-btn-overlay">
                     <i className="bi bi-cart"></i>
                   </button>

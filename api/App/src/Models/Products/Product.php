@@ -28,23 +28,24 @@
             
             foreach ($products as &$product) {
                 $product['gallery'] = json_decode($product['gallery'], true) ?? [];
-                $product['currency'] = json_decode($product['currency'], true) ?? [];            }
+                $product['currency'] = json_decode($product['currency'], true) ?? [];            
+            }
 
             return $products;
         }
-
-        protected function addProduct($order_details, $order_status, $total)
+        
+        protected function addProduct($productId, $quantity, $total)
         {
-            $query = "INSERT INTO orders (order_details, order_status, total, created_at) 
-                    VALUES (:order_details, :order_status, :total, NOW())";
+            $query = "INSERT INTO orders (products_id, quantity, total, created_at) VALUES (:productId, :quantity, :total, NOW())";
 
             $stmt = $this->database->prepare($query);
-            $stmt->bindParam(':order_details', $order_details);
-            $stmt->bindParam(':order_status', $order_status);
+            $stmt->bindParam(':productId', $productId);
+            $stmt->bindParam(':quantity', $quantity);
             $stmt->bindParam(':total', $total);
 
             $stmt->execute();
 
-            return "Order inserted successfully";
+            return "Success!"; //temporary
         }
+
     }
