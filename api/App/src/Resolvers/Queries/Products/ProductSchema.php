@@ -47,4 +47,16 @@ class ProductSchema extends QuerySchema
 
         return $productType;
     }
+
+    public static function getCartItemsCountObjectType(): ObjectType
+    {
+        $productType = new ObjectType([
+            'name' => 'CartCount',
+            'fields' => [
+                'cart_items' => Type::int()
+            ]
+        ]);
+
+        return $productType;
+    }
 }

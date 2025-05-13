@@ -130,13 +130,31 @@ abstract class QuerySchema
         return $queryType;
     }
 
+     public static function getCartItemsCountQuery(): ObjectType {
+        $queryType = new ObjectType([
+            'name' => 'CartCount',
+            'fields' => [
+                'count' => [
+                    'type' => Type::listOf(ProductSchema::getCartItemsCountObjectType()),
+                    'resolve' => function() {
+                        $controller = new ProductsController;
+                        return $controller->getCartItemsCount();
+                    }
+                ],
+            ]
+        ]);
+
+        return $queryType;
+    }
+
     public static function getMergedQuery(): ObjectType {
         $mainQueryFields = self::getQuery()->config['fields'];
         $cartQueryFields = self::getCartItemsQuery()->config['fields'];
+        $cartCountQueryFields = self::getCartItemsCountQuery()->config['fields'];
 
         return new ObjectType([
             'name' => 'Query',
-            'fields' => array_merge($mainQueryFields, $cartQueryFields)
+            'fields' => array_merge($mainQueryFields, $cartQueryFields, $cartCountQueryFields)
         ]);
     }
 

@@ -19,4 +19,10 @@ class ProductsController extends Product
     {
         return $this->cartItems();
     }
+
+    public function getCartItemsCount()
+    {
+        return $this->cartItemsCount(); 
+    }
+
 }

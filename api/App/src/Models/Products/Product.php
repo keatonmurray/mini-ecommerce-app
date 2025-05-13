@@ -71,4 +71,14 @@
 
         }
 
+        protected function cartItemsCount()
+        {
+            $query = "SELECT COUNT(*) AS cart_items FROM orders;";
+            
+            $stmt = $this->database->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC); 
+        }
+
     }

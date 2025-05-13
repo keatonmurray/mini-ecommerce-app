@@ -7,6 +7,9 @@ const Header = ({ activeCategory, setActiveCategory }) => {
 
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
+  const [cartCount, setCartCount] = useState(0);
+
+  console.log(cartCount)
 
   const cartRef = useRef(null);
   const cartButtonRef = useRef(null);
@@ -38,8 +41,26 @@ const Header = ({ activeCategory, setActiveCategory }) => {
       }
   };
 
+  const getCartCount = async() => {
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: `
+          query {
+              count {
+              cart_items
+            }
+          }
+        `
+      })
+      setCartCount(response.data.data.count)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchCategories();
+    getCartCount();
 
     const handleClickOutside = (event) => {
       if (
@@ -96,7 +117,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
                       onClick={handleCartOverlay}
                     ></i>
                     <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
-                        3
+                        {cartCount[0]?.cart_items}
                     </span>
                 </div>
             </div>
