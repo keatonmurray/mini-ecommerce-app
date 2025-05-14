@@ -155,7 +155,11 @@ abstract class QuerySchema
 
         return new ObjectType([
             'name' => 'Query',
-            'fields' => array_merge($mainQueryFields, $cartQueryFields, $cartCountQueryFields)
+            'fields' => array_merge(
+                $mainQueryFields, 
+                $cartQueryFields, 
+                $cartCountQueryFields
+            )
         ]);
     }
 

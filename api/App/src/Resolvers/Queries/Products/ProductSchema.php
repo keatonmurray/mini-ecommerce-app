@@ -33,7 +33,15 @@ class ProductSchema extends QuerySchema
     }
 
     public static function getCartItemsObjectType(): ObjectType
-    {
+    {   
+
+         $attributeType = new ObjectType([
+            'name' => 'AttributeType',
+            'fields' => [
+                'attribute' => Type::listOf(Type::string()) 
+            ]
+        ]);
+
         $productType = new ObjectType([
             'name' => 'Orders',
             'fields' => [
@@ -42,7 +50,8 @@ class ProductSchema extends QuerySchema
                 'total' => Type::float(),
                 'name' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
-                'amount' => Type::float()
+                'amount' => Type::float(),
+                'attribute_value_id' => $attributeType
             ]
         ]);
 

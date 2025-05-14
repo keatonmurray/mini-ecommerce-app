@@ -24,7 +24,7 @@ class OrderMutation extends MutationSchema {
                         'total' => Type::float()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new ProductsController;
+                        $controller = new OrdersController;
                         return $controller->addToCart(
                             $args['product_id'], 
                             $args['quantity'], 
@@ -52,6 +52,33 @@ class OrderMutation extends MutationSchema {
                         return $controller->getCartQuantityCount(
                             $args['quantity'],
                             $args['products_id']
+                        );
+                    }
+                ]
+            ]
+        ]);
+
+        return $productType;
+    }
+
+    public static function getCartAddItemObjectType(): ObjectType 
+    {
+        $productType = new ObjectType([
+            'name' => 'AddToCart',
+            'fields' => [
+                'add_to_cart' => [
+                    'type' => Type::string(),
+                    'args' => [
+                        'products_id' => Type::string(),
+                        'quantity' => Type::int(),
+                        'item_price' => Type::float(),
+                        'attribute_value_id' => Type::nonNull(Type::listOf(Type::string())),
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new OrdersController;
+                        return $controller->addSelectedProductsToCart(
+                            $args['products_id'],
+                            $args['attribute_value_id']
                         );
                     }
                 ]

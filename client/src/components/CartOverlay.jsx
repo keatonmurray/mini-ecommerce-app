@@ -19,11 +19,13 @@ const CartOverlay = () => {
               name
               gallery
               amount
+              attribute_value_id {
+                attribute
+              }
             }
           }
         `
       });
-
       setOrders(response.data.data.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -107,6 +109,11 @@ const CartOverlay = () => {
                     <button onClick={() => addQuantity(item.products_id)} className="plus">+</button>
                     <button onClick={() => decreaseQuantity(item.products_id)} className="minus mt-2">-</button>
                   </div>
+                </div>
+                <div className="product-attributes mt-2">
+                  {item.attribute_value_id?.attribute?.map((attribute, idx) => (
+                    <div key={idx}>{attribute}</div>
+                  ))}
                 </div>
                 <div className="d-flex justify-content-between mt-2">
                   <p className="product-price">${item.amount}</p>

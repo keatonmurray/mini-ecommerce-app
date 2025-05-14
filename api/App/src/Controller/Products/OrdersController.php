@@ -19,4 +19,15 @@ class OrdersController extends Order
     {
         return $this->cartQuantityCount($quantity, $products_id);
     }
+
+    //temporary only - might delete
+    public function addToCart($productId, $quantity, $total)
+    {
+        return $this->addProduct($productId, $quantity, $total);
+    }
+
+    public function addSelectedProductsToCart($products_id, $attribute_value_id)
+    {
+        return $this->addItemToCart($products_id, $attribute_value_id);
+    }
 }

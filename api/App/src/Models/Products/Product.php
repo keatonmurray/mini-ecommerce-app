@@ -33,17 +33,5 @@
 
             return $products;
         }
-        
-        protected function addProduct($productId, $quantity, $total)
-        {
-            $query = "INSERT INTO orders (products_id, quantity, total, created_at) VALUES (:productId, :quantity, :total, NOW())";
 
-            $stmt = $this->database->prepare($query);
-            $stmt->bindParam(':productId', $productId);
-            $stmt->bindParam(':quantity', $quantity);
-            $stmt->bindParam(':total', $total);
-
-            $stmt->execute();
-
-        }
     }
