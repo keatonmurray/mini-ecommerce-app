@@ -9,6 +9,7 @@ use App\Resolvers\Queries\Attributes\SizeSchema;
 use App\Resolvers\Queries\Products\ProductSchema;
 use App\Controller\Products\AttributesController;
 use App\Controller\Products\ProductsController;
+use App\Controller\Products\OrdersController;
 use App\Resolvers\Queries\Attributes\CapacitySchema;
 use App\Resolvers\Queries\Attributes\ColorSchema;
 use App\Controller\Products\CategoriesController;
@@ -120,7 +121,7 @@ abstract class QuerySchema
                 'orders' => [
                     'type' => Type::listOf(ProductSchema::getCartItemsObjectType()),
                     'resolve' => function() {
-                        $controller = new ProductsController;
+                        $controller = new OrdersController;
                         return $controller->getCartItems();
                     }
                 ]
@@ -137,7 +138,7 @@ abstract class QuerySchema
                 'count' => [
                     'type' => Type::listOf(ProductSchema::getCartItemsCountObjectType()),
                     'resolve' => function() {
-                        $controller = new ProductsController;
+                        $controller = new OrdersController;
                         return $controller->getCartItemsCount();
                     }
                 ],

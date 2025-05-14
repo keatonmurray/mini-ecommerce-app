@@ -6,6 +6,8 @@ use App\Resolvers\MutationSchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use App\Controller\Products\ProductsController;
+use App\Controller\Products\OrdersController;
+
 
 class OrderMutation extends MutationSchema {
 
@@ -46,7 +48,7 @@ class OrderMutation extends MutationSchema {
                         'quantity' => Type::int()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new ProductsController;
+                        $controller = new OrdersController;
                         return $controller->getCartQuantityCount(
                             $args['quantity'],
                             $args['products_id']
