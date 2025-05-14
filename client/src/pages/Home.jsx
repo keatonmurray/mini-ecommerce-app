@@ -65,7 +65,6 @@ const Home = () => {
         orders (
           product_id: "${productId}"
           quantity: 1
-          total: 100
         )
       }
     `;
@@ -140,29 +139,31 @@ const Home = () => {
             className="col-12 col-md-4 d-flex align-items-center justify-content-center"
           >
             <div className="text-decoration-none w-100">
-              <div className="item mt-4 w-100">
-                <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
-                  <Link to={`/product/${item.product_id}`}> 
-                    <img
-                      src={item.gallery[0]}
-                      alt={item.product_name}
-                      className="img-fluid w-100"
-                    />
-                  </Link>
-                 <div className="text-start mt-3">
-                    <p className="product-name m-0">
-                      {item.product_name}
-                      <span className="d-block fw-bold">
-                        {item.currency?.symbol} {item.amount}
-                      </span>
-                    </p>
+              <Form onSubmit={addToCart} method="POST">
+                <div className="item mt-4 w-100">
+                  <div className="img-overlay-hover position-relative m-0 w-100 px-md-auto py-2 px-3">
+                    <Link to={`/product/${item.product_id}`}> 
+                      <img
+                        src={item.gallery[0]}
+                        alt={item.product_name}
+                        className="img-fluid w-100"
+                      />
+                    </Link>
+                  <div className="text-start mt-3">
+                      <p className="product-name m-0">
+                        {item.product_name}
+                        <span className="d-block fw-bold">
+                          {item.currency?.symbol} {item.amount}
+                        </span>
+                      </p>
+                    </div>
+                    <input type="hidden" name="productId" value={item.product_id} />
+                    <button type="submit" className="btn btn-success add-to-cart-btn-overlay">
+                      <i className="bi bi-cart"></i>
+                    </button>
                   </div>
-                  <input type="hidden" name="productId" value={item.product_id} />
-                  <button type="button" className="btn btn-success add-to-cart-btn-overlay">
-                    <i className="bi bi-cart"></i>
-                  </button>
                 </div>
-              </div>
+              </Form>
             </div>
           </div>
         ))

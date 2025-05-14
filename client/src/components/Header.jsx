@@ -63,7 +63,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
         getCartCount();
-      }, 5000);
+      }, 100);
     }
 
     const handleClickOutside = (event) => {
