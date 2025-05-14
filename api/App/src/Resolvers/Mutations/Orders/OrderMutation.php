@@ -34,4 +34,28 @@ class OrderMutation extends MutationSchema {
 
         return $productType;
     }
+
+     public static function getCartQuantityCountObjectType(): ObjectType{
+        $productType = new ObjectType([
+            'name' => 'CartQuantity',
+            'fields' => [
+                'cart_quantity' => [
+                    'type' => Type::string(),
+                    'args' => [
+                        'products_id' => Type::string(),
+                        'quantity' => Type::int()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new ProductsController;
+                        return $controller->getCartQuantityCount(
+                            $args['quantity'],
+                            $args['products_id']
+                        );
+                    }
+                ]
+            ]
+        ]);
+
+        return $productType;
+    }
 }

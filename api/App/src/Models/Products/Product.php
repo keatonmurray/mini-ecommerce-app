@@ -45,7 +45,6 @@
 
             $stmt->execute();
 
-            return "Success!"; //temporary
         }
 
         protected function cartItems()
@@ -55,9 +54,11 @@
                 orders.quantity, 
                 orders.total,
                 products.name,
-                products.gallery 
+                products.gallery,
+                prices.amount
                 FROM orders
                 INNER JOIN products ON orders.products_id = products.id
+                INNER JOIN prices ON orders.products_id = prices.product_id
                 ORDER BY orders.created_at DESC";
 
             $stmt = $this->database->prepare($query);
@@ -80,6 +81,20 @@
             $stmt->execute();
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC); 
+        }
+
+        protected function cartQuantityCount($quantity, $products_id)
+        {
+            $query = "UPDATE orders SET quantity = :quantity 
+                WHERE products_id = :products_id";
+            
+            $stmt = $this->database->prepare($query); 
+            
+            $stmt->bindParam(':quantity', $quantity, \PDO::PARAM_INT); 
+            $stmt->bindParam(':products_id', $products_id, \PDO::PARAM_STR); 
+            
+            $stmt->execute();
+
         }
 
     }

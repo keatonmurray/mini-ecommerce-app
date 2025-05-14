@@ -25,4 +25,8 @@ class ProductsController extends Product
         return $this->cartItemsCount(); 
     }
 
+    public function getCartQuantityCount($quantity, $products_id)
+    {
+        return $this->cartQuantityCount($quantity, $products_id);
+    }
 }

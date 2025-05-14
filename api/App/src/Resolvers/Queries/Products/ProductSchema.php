@@ -41,7 +41,8 @@ class ProductSchema extends QuerySchema
                 'quantity' => Type::int(),
                 'total' => Type::float(),
                 'name' => Type::string(),
-                'gallery' => Type::listOf(Type::string())
+                'gallery' => Type::listOf(Type::string()),
+                'amount' => Type::float()
             ]
         ]);
 

@@ -13,4 +13,20 @@ abstract class MutationSchema
     public static function getMutation() {
         return OrderMutation::getMutationType();
     }
+
+    public static function getCartQuantityMutation()
+    {
+        return OrderMutation::getCartQuantityCountObjectType();
+    }
+
+    public static function getMergedMutation(): ObjectType {
+        $mainMutationFields = self::getMutation()->config['fields'];
+        $cartMutationFields = self::getCartQuantityMutation()->config['fields'];
+
+        return new ObjectType([
+            'name' => 'Mutation',
+            'fields' => array_merge($mainMutationFields, $cartMutationFields)
+        ]);
+    }
+
 }

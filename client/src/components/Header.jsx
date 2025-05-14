@@ -8,6 +8,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
   const [cartCount, setCartCount] = useState(0);
+  const intervalRef = useRef(null);
 
   const cartRef = useRef(null);
   const cartButtonRef = useRef(null);
@@ -55,29 +56,34 @@ const Header = ({ activeCategory, setActiveCategory }) => {
       console.error(error)
     }
   }
-
   useEffect(() => {
     fetchCategories();
     getCartCount();
 
-    const interval = setInterval(() => {
-      getCartCount();
-    }, 500); 
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        getCartCount();
+      }, 5000);
+    }
 
     const handleClickOutside = (event) => {
       if (
-        cartRef.current && !cartRef.current.contains(event.target) && 
-        !cartButtonRef.current.contains(event.target)
+        cartRef.current && !cartRef.current.contains(event.target) &&
+        cartButtonRef.current && !cartButtonRef.current.contains(event.target)
       ) {
-        setIsCartExpanded(false); 
+        setIsCartExpanded(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside); 
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      clearInterval(interval);
-      document.removeEventListener('mousedown', handleClickOutside); 
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
