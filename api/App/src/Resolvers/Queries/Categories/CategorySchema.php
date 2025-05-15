@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Categories;
 
-use App\Controller\Products\CategoriesController;
+use App\Controller\Categories\CategoriesController;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;

@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller\Products;
-use App\Models\Products\Category;
+namespace App\Controller\Categories;
+use App\Models\Categories\Category;
 
 class CategoriesController extends Category 
 {

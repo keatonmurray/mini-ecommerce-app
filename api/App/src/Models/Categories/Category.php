@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Products;
+namespace App\Models\Categories;
 use App\Config\Database;
 
 class Category 

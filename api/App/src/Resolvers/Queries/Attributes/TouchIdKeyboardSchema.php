@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
-use App\Controller\Products\AttributesController;
+use App\Controller\Attributes\AttributesController;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\Type;

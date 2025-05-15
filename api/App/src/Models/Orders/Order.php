@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Products;
+namespace App\Models\Orders;
 use App\Config\Database;
 
 class Order {

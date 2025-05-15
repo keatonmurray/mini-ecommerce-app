@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller\Products;
-use App\Models\Products\Attribute;
-
+namespace App\Controller\Attributes;
+use App\Models\Attributes\Attribute;
 
 class AttributesController extends Attribute {
     
