@@ -1,37 +1,48 @@
 <?php
 
 namespace App\Controller\Attributes;
-use App\Models\Attributes\Attribute;
+use App\Models\Attributes\AttributeTypes\Attribute;
+use App\Models\Attributes\AttributeTypes\Capacity;
+use App\Models\Attributes\AttributeTypes\Colors;
+use App\Models\Attributes\AttributeTypes\Keyboard;
+use App\Models\Attributes\AttributeTypes\Size;
+use App\Models\Attributes\AttributeTypes\Usb;
 
-class AttributesController extends Attribute {
+class AttributesController {
     
     public function getAttributes($id)
     {
-        return $this->attributes($id);
+        $model = new Attribute;
+        return $model->attributeType($id);
     }
 
     public function getSize($id)
     {
-        return $this->size($id);
+        $model = new Size;
+        return $model->attributeType($id);
     }
 
     public function getColor($id) 
     {
-        return $this->colors($id);
+        $model = new Colors;
+        return $model->attributeType($id);
     }
 
     public function getCapacity($id)
     {
-        return $this->capacity($id);
+        $model = new Capacity;
+        return $model->attributeType($id);
     }
 
     public function getUsb($id)
     {
-        return $this->usb($id);
+        $model = new Usb;
+        return $model->attributeType($id);
     }
 
     public function getTouchIdKeyboard($id)
     {
-        return $this->touchIdKeyboard($id);
+        $model = new Keyboard;
+        return $model->attributeType($id);
     }
 }
