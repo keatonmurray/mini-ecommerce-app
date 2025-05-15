@@ -34,6 +34,17 @@ class CategorySchema extends QuerySchema
         return $categoryType;
     }
 
+    public static function getCategories(): ObjectType
+    {
+        return new ObjectType([
+            'name' => 'CategoryBasic',
+            'fields' => [
+                'category_name' => Type::string(),
+                'product_id' => Type::int()
+            ]
+        ]);
+    }
+
     public static function getQueryType(): ObjectType
     {
         return new ObjectType([
@@ -47,6 +58,13 @@ class CategorySchema extends QuerySchema
                     'resolve' => function ($root, $args) {
                         $controller = new CategoriesController;
                         return $controller->getCategory($args['product_id']);
+                    }
+                ],
+                'categories' => [
+                    'type' => Type::listOf(self::getCategories()),
+                    'resolve' => function() {
+                        $controller = new CategoriesController;
+                        return $controller->getAllCategories();
                     }
                 ]
             ]
