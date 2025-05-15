@@ -9,7 +9,6 @@ use App\Resolvers\Queries\Attributes\SizeSchema;
 use App\Resolvers\Queries\Products\ProductSchema;
 use App\Controller\Products\AttributesController;
 use App\Controller\Products\ProductsController;
-use App\Controller\Products\OrdersController;
 use App\Resolvers\Queries\Attributes\CapacitySchema;
 use App\Resolvers\Queries\Attributes\ColorSchema;
 use App\Controller\Products\CategoriesController;
@@ -18,7 +17,6 @@ use App\Resolvers\Queries\Categories\CategorySchema;
 abstract class QuerySchema 
 {
     abstract static function getObjectType(): ObjectType;
-    //might declare another abstract static function for cart items fetching here
 
     public static function getQuery() : ObjectType {
         $queryType = new ObjectType([
@@ -114,51 +112,13 @@ abstract class QuerySchema
         return $queryType;
     }
 
-    public static function getCartItemsQuery(): ObjectType {
-        $queryType = new ObjectType([
-            'name' => 'CartQuery',
-            'fields' => [
-                'orders' => [
-                    'type' => Type::listOf(ProductSchema::getCartItemsObjectType()),
-                    'resolve' => function() {
-                        $controller = new OrdersController;
-                        return $controller->getCartItems();
-                    }
-                ]
-            ]
-        ]);
-
-        return $queryType;
-    }
-
-     public static function getCartItemsCountQuery(): ObjectType {
-        $queryType = new ObjectType([
-            'name' => 'CartCount',
-            'fields' => [
-                'count' => [
-                    'type' => Type::listOf(ProductSchema::getCartItemsCountObjectType()),
-                    'resolve' => function() {
-                        $controller = new OrdersController;
-                        return $controller->getCartItemsCount();
-                    }
-                ],
-            ]
-        ]);
-
-        return $queryType;
-    }
-
     public static function getMergedQuery(): ObjectType {
         $mainQueryFields = self::getQuery()->config['fields'];
-        $cartQueryFields = self::getCartItemsQuery()->config['fields'];
-        $cartCountQueryFields = self::getCartItemsCountQuery()->config['fields'];
 
         return new ObjectType([
             'name' => 'Query',
             'fields' => array_merge(
-                $mainQueryFields, 
-                $cartQueryFields, 
-                $cartCountQueryFields,
+                $mainQueryFields
             )
         ]);
     }
