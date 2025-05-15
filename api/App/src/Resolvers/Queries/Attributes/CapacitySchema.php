@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Resolvers\Queries\Attributes;
+
+use App\Controller\Products\AttributesController;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -9,7 +11,7 @@ class CapacitySchema extends QuerySchema
 {
     public static function getObjectType(): ObjectType
     {
-        $attributeType = new ObjectType([
+        return new ObjectType([
             'name' => 'Capacity',
             'fields' => [
                 'attribute_name' => Type::string(),
@@ -19,7 +21,24 @@ class CapacitySchema extends QuerySchema
                 'value' => Type::string()
             ]
         ]);
+    }
 
-        return $attributeType;
+    public static function getQueryType(): ObjectType
+    {
+        return new ObjectType([
+            'name' => 'Query',
+            'fields' => [
+                'capacity' => [
+                    'type' => Type::listOf(self::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getCapacity($args['product_id']);
+                    }
+                ]
+            ]
+        ]);
     }
 }

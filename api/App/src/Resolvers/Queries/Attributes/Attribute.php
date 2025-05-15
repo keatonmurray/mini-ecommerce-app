@@ -2,6 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
+use App\Controller\Products\AttributesController;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
@@ -31,5 +32,24 @@ class Attribute extends QuerySchema
         ]);
 
         return $attributeType;
+    }
+
+    public static function getQueryType(): ObjectType
+    {
+        return new ObjectType([
+            'name' => 'Query',
+            'fields' => [
+                'attributes' => [
+                    'type' => Type::listOf(self::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getAttributes($args['product_id']);
+                    }
+                ]
+            ]
+        ]);
     }
 }

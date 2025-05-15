@@ -2,125 +2,83 @@
 
 namespace App\Resolvers;
 
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
-use App\Resolvers\Queries\Attributes\Attribute;
-use App\Resolvers\Queries\Attributes\SizeSchema;
 use App\Resolvers\Queries\Products\ProductSchema;
-use App\Controller\Products\AttributesController;
-use App\Controller\Products\ProductsController;
+use App\Resolvers\Queries\Attributes\Attribute;
 use App\Resolvers\Queries\Attributes\CapacitySchema;
 use App\Resolvers\Queries\Attributes\ColorSchema;
-use App\Controller\Products\CategoriesController;
+use App\Resolvers\Queries\Attributes\SizeSchema;
+use App\Resolvers\Queries\Attributes\TouchIdKeyboardSchema;
+use App\Resolvers\Queries\Attributes\UsbSchema;
 use App\Resolvers\Queries\Categories\CategorySchema;
+use GraphQL\Type\Definition\ObjectType;
 
 abstract class QuerySchema 
 {
     abstract static function getObjectType(): ObjectType;
+    abstract static function getQueryType(): ObjectType;
 
-    public static function getQuery() : ObjectType {
-        $queryType = new ObjectType([
-            'name' => 'Query',
-            'fields' => [
-                'products' => [
-                    'type' => Type::listOf(ProductSchema::getObjectType()),
-                    'resolve' => function () {
-                        $controller = new ProductsController;
-                        return $controller->getProducts();
-                    }
-                ],
-                'attributes' => [
-                    'type' => Type::listOf(Attribute::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getAttributes($args['product_id']);
-                    }
-                ],
-                'size' => [
-                    'type' => Type::listOf(SizeSchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getSize($args['product_id']);
-                    }
-                ],
-                'color' => [
-                    'type' => Type::listOf(ColorSchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getColor($args['product_id']);
-                    }
-                ],
-                'capacity' => [
-                    'type' => Type::listOf(CapacitySchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getCapacity($args['product_id']);
-                    }
-                ],
-                'usb' => [
-                    'type' => Type::listOf(CapacitySchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getUsb($args['product_id']);
-                    }
-                ],
-                'keyboard' => [
-                    'type' => Type::listOf(CapacitySchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getTouchIdKeyboard($args['product_id']);
-                    }
-                ],
-                'category' => [
-                    'type' => Type::listOf(CategorySchema::getObjectType()),
-                    'args' => [
-                        'product_id' => Type::string()
-                    ],
-                    'resolve' => function ($root, $args) {
-                        $controller = new CategoriesController;
-                        return $controller->getCategory($args['product_id']);
-                    }
-                ],
-                'categories' => [
-                    'type' => Type::listOf(CategorySchema::getObjectType()),
-                    'resolve' => function () {
-                        $controller = new CategoriesController;
-                        return $controller->getAllCategories();
-                    }
-                ]
-            ]
-        ]);
-    
-        return $queryType;
+    public static function getProductQuery(): ObjectType 
+    {
+        return ProductSchema::getQueryType();
     }
 
-    public static function getMergedQuery(): ObjectType {
-        $mainQueryFields = self::getQuery()->config['fields'];
+    public static function getAttributeQuery(): ObjectType 
+    {
+        return Attribute::getQueryType();
+    }
+
+    public static function getSizeQuery(): ObjectType
+    {
+        return SizeSchema::getQueryType();
+    }
+
+    public static function getColorQuery(): ObjectType
+    {
+        return ColorSchema::getQueryType();
+    }
+
+    public static function getCapacityQuery(): ObjectType 
+    {
+        return CapacitySchema::getQueryType();
+    }
+
+    public static function getUsbQuery(): ObjectType
+    {
+        return UsbSchema::getQueryType();
+    }
+
+    public static function getKeyboardQuery(): ObjectType 
+    {
+        return TouchIdKeyboardSchema::getQueryType();
+    }
+
+    public static function getCategorySchema(): ObjectType
+    {
+        return CategorySchema::getQueryType();
+    }
+
+    public static function getMergedQuery(): ObjectType 
+    {
+        $schemas = [
+            self::getProductQuery(),
+            self::getAttributeQuery(),
+            self::getSizeQuery(),
+            self::getColorQuery(),
+            self::getCapacityQuery(),
+            self::getUsbQuery(),
+            self::getKeyboardQuery(),
+            self::getCategorySchema()
+        ];
+
+        $allFields = array_reduce($schemas, function ($carry, $schema) {
+            return array_merge($carry, $schema->config['fields']);
+        }, []);
 
         return new ObjectType([
             'name' => 'Query',
-            'fields' => array_merge(
-                $mainQueryFields
-            )
+            'fields' => $allFields
         ]);
     }
+
 
 }

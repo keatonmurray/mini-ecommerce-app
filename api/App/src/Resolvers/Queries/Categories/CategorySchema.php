@@ -2,6 +2,7 @@
 
 namespace App\Resolvers\Queries\Categories;
 
+use App\Controller\Products\CategoriesController;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -31,5 +32,31 @@ class CategorySchema extends QuerySchema
         ]);
 
         return $categoryType;
+    }
+
+    public static function getQueryType(): ObjectType
+    {
+        return new ObjectType([
+            'name' => 'Query',
+            'fields' => [
+                'category' => [
+                    'type' => Type::listOf(self::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new CategoriesController;
+                        return $controller->getCategory($args['product_id']);
+                    }
+                ],
+                'categories' => [
+                    'type' => Type::listOf(CategorySchema::getObjectType()),
+                    'resolve' => function () {
+                        $controller = new CategoriesController;
+                        return $controller->getAllCategories();
+                    }
+                ]
+            ]
+        ]);
     }
 }

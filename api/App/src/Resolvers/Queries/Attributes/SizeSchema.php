@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Resolvers\Queries\Attributes;
+
+use App\Controller\Products\AttributesController;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
@@ -21,6 +23,25 @@ class SizeSchema extends QuerySchema
         ]); 
 
        return $attributeType;
+    }
+
+    public static function getQueryType(): ObjectType
+    {
+        return new ObjectType([
+            'name' => 'Query',
+            'fields' => [
+                 'size' => [
+                    'type' => Type::listOf(self::getObjectType()),
+                    'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function ($root, $args) {
+                        $controller = new AttributesController;
+                        return $controller->getSize($args['product_id']);
+                    }
+                ]
+            ]
+        ]);
     }
 
 }

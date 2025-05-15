@@ -5,6 +5,14 @@ namespace App\Resolvers\Queries\Products;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
+use App\Resolvers\Queries\Attributes\Attribute;
+use App\Resolvers\Queries\Attributes\SizeSchema;
+use App\Controller\Products\AttributesController;
+use App\Controller\Products\ProductsController;
+use App\Resolvers\Queries\Attributes\CapacitySchema;
+use App\Resolvers\Queries\Attributes\ColorSchema;
+use App\Controller\Products\CategoriesController;
+use App\Resolvers\Queries\Categories\CategorySchema;
 
 class ProductSchema extends QuerySchema
 {
@@ -32,41 +40,21 @@ class ProductSchema extends QuerySchema
         return $productType;
     }
 
-    public static function getCartItemsObjectType(): ObjectType
-    {   
-
-         $attributeType = new ObjectType([
-            'name' => 'AttributeType',
-            'fields' => [
-                'attribute' => Type::listOf(Type::string()) 
-            ]
-        ]);
-
-        $productType = new ObjectType([
-            'name' => 'Orders',
-            'fields' => [
-                'products_id' => Type::string(),
-                'quantity' => Type::int(),
-                'total' => Type::float(),
-                'name' => Type::string(),
-                'gallery' => Type::listOf(Type::string()),
-                'amount' => Type::float(),
-                'selected_attribute' => $attributeType
-            ]
-        ]);
-
-        return $productType;
-    }
-
-    public static function getCartItemsCountObjectType(): ObjectType
+    public static function getQueryType() : ObjectType
     {
-        $productType = new ObjectType([
-            'name' => 'CartCount',
+        $queryType = new ObjectType([
+            'name' => 'Query',
             'fields' => [
-                'cart_items' => Type::int()
+                'products' => [
+                    'type' => Type::listOf(self::getObjectType()),
+                    'resolve' => function () {
+                        $controller = new ProductsController;
+                        return $controller->getProducts();
+                    }
+                ],
             ]
         ]);
-
-        return $productType;
+    
+        return $queryType;
     }
 }
