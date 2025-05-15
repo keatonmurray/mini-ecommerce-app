@@ -10,6 +10,7 @@ use App\Resolvers\Queries\Attributes\SizeSchema;
 use App\Resolvers\Queries\Attributes\TouchIdKeyboardSchema;
 use App\Resolvers\Queries\Attributes\UsbSchema;
 use App\Resolvers\Queries\Categories\CategorySchema;
+use App\Resolvers\Queries\Orders\OrderSchema;
 use GraphQL\Type\Definition\ObjectType;
 
 abstract class QuerySchema 
@@ -27,7 +28,8 @@ abstract class QuerySchema
             CapacitySchema::getQueryType(),
             UsbSchema::getQueryType(),
             TouchIdKeyboardSchema::getQueryType(),
-            CategorySchema::getQueryType()
+            CategorySchema::getQueryType(),
+            OrderSchema::getQueryType()
         ];
 
         $allFields = array_reduce($schemas, function ($carry, $schema) {
