@@ -48,13 +48,6 @@ class CategorySchema extends QuerySchema
                         $controller = new CategoriesController;
                         return $controller->getCategory($args['product_id']);
                     }
-                ],
-                'categories' => [
-                    'type' => Type::listOf(CategorySchema::getObjectType()),
-                    'resolve' => function () {
-                        $controller = new CategoriesController;
-                        return $controller->getAllCategories();
-                    }
                 ]
             ]
         ]);
