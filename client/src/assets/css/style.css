@@ -226,5 +226,20 @@
     cursor: pointer;
 }   
 
+.cart-overlay-container .plus:hover,
+.cart-overlay-container .minus:hover  {
+    background-color: #000 !important;
+}
+
+.cart-overlay-container .plus, 
+.cart-overlay-container .minus {
+    border-radius: 0 !important;
+    border: #000 solid 1px !important;
+}
+
+.cart-overlay-container .badge {
+    border-radius: 0 !important;
+}
+
 
 

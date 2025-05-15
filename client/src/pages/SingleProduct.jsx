@@ -3,6 +3,7 @@ import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Form from '../components/partials/Form';
+import { toast } from 'react-toastify';
 
 const SingleProduct = () => {
   const [data, setData] = useState();
@@ -96,6 +97,7 @@ const SingleProduct = () => {
     usb,
     keyboard,
   } = data;
+
 
   const addToCart = async(e) => {
   
