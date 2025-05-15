@@ -14,6 +14,7 @@ use App\Resolvers\Queries\Attributes\CapacitySchema;
 use App\Resolvers\Queries\Attributes\ColorSchema;
 use App\Controller\Products\CategoriesController;
 use App\Resolvers\Queries\Categories\CategorySchema;
+use App\Resolvers\Queries\Orders\OrderSchema;
 
 abstract class QuerySchema 
 {
@@ -119,10 +120,13 @@ abstract class QuerySchema
             'name' => 'CartQuery',
             'fields' => [
                 'orders' => [
-                    'type' => Type::listOf(ProductSchema::getCartItemsObjectType()),
-                    'resolve' => function() {
+                    'type' => Type::listOf(OrderSchema::getObjectType()),
+                     'args' => [
+                        'product_id' => Type::string()
+                    ],
+                    'resolve' => function($root, $args) {
                         $controller = new OrdersController;
-                        return $controller->getCartItems();
+                        return $controller->getCartItems($args['product_id']);
                     }
                 ]
             ]
@@ -136,7 +140,7 @@ abstract class QuerySchema
             'name' => 'CartCount',
             'fields' => [
                 'count' => [
-                    'type' => Type::listOf(ProductSchema::getCartItemsCountObjectType()),
+                    'type' => Type::listOf(OrderSchema::getCartItemsCountObjectType()),
                     'resolve' => function() {
                         $controller = new OrdersController;
                         return $controller->getCartItemsCount();
@@ -158,7 +162,7 @@ abstract class QuerySchema
             'fields' => array_merge(
                 $mainQueryFields, 
                 $cartQueryFields, 
-                $cartCountQueryFields
+                $cartCountQueryFields,
             )
         ]);
     }

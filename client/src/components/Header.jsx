@@ -8,7 +8,6 @@ const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
   const [cartCount, setCartCount] = useState(0);
-  const intervalRef = useRef(null);
 
   const cartRef = useRef(null);
   const cartButtonRef = useRef(null);
@@ -17,55 +16,58 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     setActiveCategory(category);
   };
 
-  const handleCartOverlay = () => {
-    setIsCartExpanded((prevState) => !prevState); 
+  const handleCartOverlay = async () => {
+    setIsCartExpanded((prevState) => !prevState);
+
+    // Fetch updated cart count only when opening
+    if (!isCartExpanded) {
+      await getCartCount();
+    }
   };
 
-  const fetchCategories = async() => {
+  const fetchCategories = async () => {
     try {
-        const query = `
-          query {
-            categories {
-                product_id
-                category_name
-            }
+      const query = `
+        query {
+          categories {
+              product_id
+              category_name
           }
-        `;
-        const response = await axios.post(import.meta.env.VITE_API_URL, {
-            query
-        });
-        setIsCategory(response.data.data.categories)
+        }
+      `;
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query
+      });
+      setIsCategory(response.data.data.categories);
     } catch (error) {
-        console.error('Error fetching products:', error);
-      }
+      console.error('Error fetching products:', error);
+    }
   };
 
-  const getCartCount = async() => {
+  const getCartCount = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: `
           query {
               count {
-              cart_items
-            }
+                cart_items
+              }
           }
         `
-      })
-      setCartCount(response.data.data.count)
+      });
+      const newCount = response.data.data.count;
+
+      if (JSON.stringify(newCount) !== JSON.stringify(cartCount)) {
+        setCartCount(newCount);
+      }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
+
   useEffect(() => {
     fetchCategories();
     getCartCount();
-
-    if (!intervalRef.current) {
-      intervalRef.current = setInterval(() => {
-        getCartCount();
-      }, 100);
-    }
-
     const handleClickOutside = (event) => {
       if (
         cartRef.current && !cartRef.current.contains(event.target) &&
@@ -78,15 +80,9 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
 
   return (
     <div className="cart-overlay">

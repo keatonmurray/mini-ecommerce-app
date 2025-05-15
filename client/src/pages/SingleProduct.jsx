@@ -3,6 +3,7 @@ import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Form from '../components/partials/Form';
+import { toast } from 'react-toastify';
 
 const SingleProduct = () => {
   const [data, setData] = useState();
@@ -35,6 +36,9 @@ const SingleProduct = () => {
               currency {
                 label
                 symbol
+              }
+              selected_attributes {
+                  attribute
               }
             }
             size(product_id: "${id}") {
@@ -87,7 +91,6 @@ const SingleProduct = () => {
     }
   };
 
-
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -113,16 +116,18 @@ const SingleProduct = () => {
     mutation {
       add_to_cart(
         products_id: "${id}",
-        attribute_value_id: [${selectedAttributes.map(val => `"${val}"`).join(',')}]
+        selected_attributes: [${selectedAttributes.map(val => `"${val}"`).join(',')}]
       )
     }
   `;
-
 
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: mutation
       })
+      toast.success("Item added successfully!", {
+        position: "top-center"
+      });
     } catch (error) {
       console.log(error)
     }
@@ -171,7 +176,7 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
 
-            {/* Size */}
+              {/* Size */}
               {size.map((attr, index) => (
                 <Attribute
                   key={attr.value ?? index}

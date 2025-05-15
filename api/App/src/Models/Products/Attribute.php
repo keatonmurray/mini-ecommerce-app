@@ -6,7 +6,7 @@ use App\Config\Database;
 
 class Attribute
 {
-    private $database;
+    protected $database;
 
     public function __construct()
     {
@@ -18,20 +18,27 @@ class Attribute
         $query = "SELECT 
             attributes.name AS attribute_name,
             attribute_values.value AS attribute_value,
-            attribute_values.display_value As attribute_display_value,
+            attribute_values.display_value AS attribute_display_value,
             products.id AS product_slug,
             products.gallery,
             products.name AS product_name,
             products.description,
             prices.amount,
-            prices.currency
-            FROM attributes 
-            INNER JOIN products 
+            prices.currency,
+            orders.products_id AS order_product_id,	
+            orders.selected_attributes
+        FROM attributes
+        INNER JOIN products 
             ON attributes.product_id = products.id
-            INNER JOIN attribute_values 
+        INNER JOIN attribute_values 
             ON attribute_values.attribute_id = attributes.id
-            INNER JOIN prices ON prices.product_id = products.id
-            WHERE products.id = :id";
+        INNER JOIN prices 
+            ON prices.product_id = products.id
+        LEFT JOIN orders 
+            ON orders.products_id = products.id
+        LEFT JOIN attributes AS attr_order 
+            ON orders.products_id = attr_order.product_id
+        WHERE products.id = :id";
 
         $stmt = $this->database->prepare($query);
         $stmt->bindParam(':id', $id, \PDO::PARAM_STR);
@@ -42,6 +49,8 @@ class Attribute
         foreach ($attributes as &$attribute) {
             $attribute['gallery'] = json_decode($attribute['gallery'], true) ?? [];
             $attribute['currency'] = json_decode($attribute['currency'], true) ?? [];    
+            $attribute['selected_attributes'] = json_decode($attribute['selected_attributes'], true) ?? [];    
+
         }
 
         return $attributes;

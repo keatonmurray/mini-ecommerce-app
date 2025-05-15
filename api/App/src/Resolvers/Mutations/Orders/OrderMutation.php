@@ -72,13 +72,13 @@ class OrderMutation extends MutationSchema {
                         'products_id' => Type::string(),
                         'quantity' => Type::int(),
                         'item_price' => Type::float(),
-                        'attribute_value_id' => Type::nonNull(Type::listOf(Type::string())),
+                        'selected_attributes' => Type::nonNull(Type::listOf(Type::string())),
                     ],
                     'resolve' => function ($root, $args) {
                         $controller = new OrdersController;
                         return $controller->addSelectedProductsToCart(
                             $args['products_id'],
-                            $args['attribute_value_id']
+                            $args['selected_attributes']
                         );
                     }
                 ]

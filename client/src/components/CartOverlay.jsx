@@ -2,10 +2,13 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Form from '../components/partials/Form'
+import { useParams } from 'react-router-dom';
 
 const CartOverlay = () => {
   const [orders, setOrders] = useState([]);
   const [quantities, setQuantities] = useState({});
+
+  const { id } = useParams();
 
   const getOrder = async () => {
     try {
@@ -13,15 +16,17 @@ const CartOverlay = () => {
         query: `
           query {
             orders {
-              products_id
-              quantity
-              total
-              name
-              gallery
-              amount
-              attribute_value_id {
-                attribute
-              }
+                product_name
+                gallery
+                description
+                amount
+                currency {
+                    label
+                    symbol
+                }
+                selected_attributes {
+                    attribute
+                }
             }
           }
         `
@@ -110,11 +115,9 @@ const CartOverlay = () => {
                     <button onClick={() => decreaseQuantity(item.products_id)} className="minus mt-2">-</button>
                   </div>
                 </div>
-                <div className="product-attributes mt-2">
-                  {item.attribute_value_id?.attribute?.map((attribute, idx) => (
-                    <div key={idx}>{attribute}</div>
-                  ))}
-                </div>
+
+                
+              
                 <div className="d-flex justify-content-between mt-2">
                   <p className="product-price">${item.amount}</p>
                   <p>{quantities[item.products_id] || 0}</p>
@@ -130,7 +133,7 @@ const CartOverlay = () => {
               <input
                 type="hidden"
                 name="quantity"
-                value={quantities[item.products_id] || ''}
+               value={quantities[item.products_id] ?? ''}
               />
             </div>
           ))}
