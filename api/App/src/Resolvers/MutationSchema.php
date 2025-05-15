@@ -8,7 +8,7 @@ use GraphQL\Type\Definition\ObjectType;
 abstract class MutationSchema 
 {
 
-    abstract static function getMutationType(): ObjectType;
+    // abstract static function getMutationType(): ObjectType;
 
     public static function getMutation() {
         return OrderMutation::getMutationType();
@@ -19,19 +19,12 @@ abstract class MutationSchema
         return OrderMutation::getCartQuantityCountObjectType();
     }
 
-    public static function getCartAddItemMutation()
-    {
-        return OrderMutation::getCartAddItemObjectType();
-    }
-
     public static function getMergedMutation(): ObjectType {
-        $mainMutationFields = self::getMutation()->config['fields'];
         $cartMutationFields = self::getCartQuantityMutation()->config['fields'];
-        $cartAddedItemsMutationFields = self::getCartAddItemMutation()->config['fields'];
         
         return new ObjectType([
             'name' => 'Mutation',
-            'fields' => array_merge($mainMutationFields, $cartMutationFields, $cartAddedItemsMutationFields)
+            'fields' => array_merge($cartMutationFields)
         ]);
     }
 

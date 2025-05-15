@@ -5,9 +5,9 @@ use App\Models\Products\Order;
 
 class OrdersController extends Order
 {
-    public function getCartItems($id)
+    public function getCartItems()
     {
-        return $this->cartItems($id);
+        return $this->cartItems();
     }
 
      public function getCartItemsCount()
@@ -18,16 +18,5 @@ class OrdersController extends Order
     public function getCartQuantityCount($quantity, $products_id)
     {
         return $this->cartQuantityCount($quantity, $products_id);
-    }
-
-    //temporary only - might delete
-    public function addToCart($productId, $quantity, $total)
-    {
-        return $this->addProduct($productId, $quantity, $total);
-    }
-
-    public function addSelectedProductsToCart($products_id, $attribute_value_id)
-    {
-        return $this->addItemToCart($products_id, $attribute_value_id);
     }
 }

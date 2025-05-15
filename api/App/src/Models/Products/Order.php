@@ -2,13 +2,41 @@
 
 namespace App\Models\Products;
 use App\Config\Database;
-use App\Models\Products\Attribute;
 
-class Order extends Attribute {
+class Order {
 
-    protected function cartItems($id)
+    private $database;
+
+    public function __construct()
     {
-        return $this->attributes($id);
+       $this->database = (new Database)->connect();
+    }
+
+    protected function cartItems()
+    {
+        $query = "SELECT 
+            orders.products_id, 
+            orders.quantity, 
+            orders.item_price,
+            orders.selected_attributes,
+            products.name,
+            products.gallery,
+            prices.amount
+            FROM orders
+            INNER JOIN products ON orders.products_id = products.id
+            INNER JOIN prices ON orders.products_id = prices.product_id
+            ORDER BY orders.created_at DESC";
+
+        $stmt = $this->database->prepare($query);
+        $stmt->execute();
+        $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($products as &$product) {
+            $product['gallery'] = json_decode($product['gallery'], true) ?? [];
+            $product['selected_attributes'] = json_decode($product['selected_attributes'], true) ?? [];
+        }
+
+        return $products;
     }
 
     protected function cartItemsCount()
@@ -19,20 +47,6 @@ class Order extends Attribute {
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC); 
-    }
-
-    //temporary - might delete - awaiting for scandiweb's confirmation regarding clarification
-    protected function addProduct($productId, $quantity, $total)
-    {
-        $query = "INSERT INTO orders (products_id, quantity, item_price, created_at) VALUES (:productId, :quantity, :item_price, NOW())";
-
-        $stmt = $this->database->prepare($query);
-        $stmt->bindParam(':productId', $productId);
-        $stmt->bindParam(':quantity', $quantity);
-        $stmt->bindParam(':item_price', $total);
-
-        $stmt->execute();
-
     }
 
     protected function cartQuantityCount($quantity, $products_id)
@@ -47,22 +61,6 @@ class Order extends Attribute {
         
         $stmt->execute();
 
-    }
-
-    protected function addItemToCart($products_id, $attribute_value_id, $item_price = 0)
-    {
-        $attribute_value_id = json_encode(['attribute' => $attribute_value_id]);
-
-        $query = "INSERT INTO orders (products_id, quantity, item_price, selected_attributes, created_at) 
-            VALUES (:products_id, 1, :item_price, :selected_attributes, NOW())";
-
-        $stmt = $this->database->prepare($query);
-
-        $stmt->bindParam(':products_id', $products_id, \PDO::PARAM_STR);
-        $stmt->bindParam(':item_price', $item_price);
-        $stmt->bindParam(':selected_attributes', $attribute_value_id, \PDO::PARAM_STR);
-
-        $stmt->execute();
     }
 
 }

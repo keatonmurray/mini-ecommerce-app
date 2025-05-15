@@ -13,14 +13,6 @@ const SingleProduct = () => {
   const [isKeyboardSelected, setIsKeyboardSelected] = useState(null);
   const [isUsbSelected, setIsUsbSelected] = useState(null)
 
-  const selectedAttributes = [
-    isSizeSelected,
-    isColorSelected,
-    isCapacitySelected,
-    isKeyboardSelected,
-    isUsbSelected,
-  ].filter(Boolean);
-
   const { id } = useParams();
 
   const fetchProduct = async () => {
@@ -36,9 +28,6 @@ const SingleProduct = () => {
               currency {
                 label
                 symbol
-              }
-              selected_attributes {
-                  attribute
               }
             }
             size(product_id: "${id}") {
@@ -91,6 +80,7 @@ const SingleProduct = () => {
     }
   };
 
+
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -110,27 +100,7 @@ const SingleProduct = () => {
 
 
   const addToCart = async(e) => {
-    e.preventDefault();
-
-    const mutation = `
-    mutation {
-      add_to_cart(
-        products_id: "${id}",
-        selected_attributes: [${selectedAttributes.map(val => `"${val}"`).join(',')}]
-      )
-    }
-  `;
-
-    try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: mutation
-      })
-      toast.success("Item added successfully!", {
-        position: "top-center"
-      });
-    } catch (error) {
-      console.log(error)
-    }
+  
   }
 
   return (

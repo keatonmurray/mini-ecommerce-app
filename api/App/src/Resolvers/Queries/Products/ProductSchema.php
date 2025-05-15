@@ -31,4 +31,42 @@ class ProductSchema extends QuerySchema
 
         return $productType;
     }
+
+    public static function getCartItemsObjectType(): ObjectType
+    {   
+
+         $attributeType = new ObjectType([
+            'name' => 'AttributeType',
+            'fields' => [
+                'attribute' => Type::listOf(Type::string()) 
+            ]
+        ]);
+
+        $productType = new ObjectType([
+            'name' => 'Orders',
+            'fields' => [
+                'products_id' => Type::string(),
+                'quantity' => Type::int(),
+                'total' => Type::float(),
+                'name' => Type::string(),
+                'gallery' => Type::listOf(Type::string()),
+                'amount' => Type::float(),
+                'selected_attribute' => $attributeType
+            ]
+        ]);
+
+        return $productType;
+    }
+
+    public static function getCartItemsCountObjectType(): ObjectType
+    {
+        $productType = new ObjectType([
+            'name' => 'CartCount',
+            'fields' => [
+                'cart_items' => Type::int()
+            ]
+        ]);
+
+        return $productType;
+    }
 }
