@@ -20,8 +20,8 @@ class GraphQL {
 
             $rootValue = ['prefix' => 'You said: '];
 
-            $queryType = QuerySchema::getMergedQuery();
-            $mutationType = MutationSchema::getMergedMutation();
+            $queryType = QuerySchema::getQueries();
+            $mutationType = MutationSchema::getMutations();
 
             $schema = self::createSchema($queryType, $mutationType);
 

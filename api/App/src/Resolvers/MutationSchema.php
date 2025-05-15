@@ -9,7 +9,7 @@ abstract class MutationSchema
 
     abstract static function getMutationType(): ObjectType;
 
-    public static function getMergedMutation():ObjectType 
+    public static function getMutations():ObjectType 
     {
         return new ObjectType([
             'name' => 'Query',
