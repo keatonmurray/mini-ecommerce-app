@@ -14,7 +14,7 @@ The backend features a **GraphQL API** designed from scratch to enable clean sep
   Defined distinct `Product`, `Attribute`, `Category`, `Tech`, `Clothes`, `Size`, `Capacity`, `Color`, `Usb`, `Keyboard` types, each resolved through dedicated controller and resolver classes.
 
 - 🔁 **Schema Abstraction & Polymorphism**  
-  Shared logic is abstracted in a reusable `BaseSchema` class, supporting polymorphic schema behavior across entity types.
+  Shared logic is abstracted in reusable `QuerySchema` and `MutationSchema` classes, supporting polymorphic schema behavior across entity types.
 
 - 🔧 **Dynamic Schema Initialization**  
   Eliminated hardcoded conditional checks in favor of a dynamic schema entry point for cleaner and more scalable query resolution.
