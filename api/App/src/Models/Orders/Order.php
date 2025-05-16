@@ -14,7 +14,7 @@ class Order {
 
     protected function orders()
     {
-        $query = "SELECT order_details FROM orders";
+        $query = "SELECT order_details FROM orders ORDER BY created_at DESC";
         $stmt = $this->database->prepare($query);
         $stmt->execute();
 
