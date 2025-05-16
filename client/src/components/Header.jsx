@@ -18,9 +18,11 @@ const GET_ORDERS = gql`
 const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
+  const [totalQuantity, setTotalQuantity] = useState(0);
 
-  // Apollo Query for orders
-  const { data: ordersData } = useQuery(GET_ORDERS);
+  const { data: ordersData, loading, error } = useQuery(GET_ORDERS, {
+    pollInterval: 3000, 
+  });
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
@@ -53,10 +55,13 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     fetchCategories();
   }, []);
 
-  // Calculate total quantity for the cart count badge
-  const totalQuantity = ordersData?.orders
-    ?.flatMap(order => order.order_details)
-    .reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
+  useEffect(() => {
+    const total = ordersData?.orders
+      ?.flatMap(order => order.order_details)
+      .reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
+    
+    setTotalQuantity(total);
+  }, [ordersData]);
 
   return (
     <div className="cart-overlay">
