@@ -52,6 +52,7 @@ class OrderSchema extends QuerySchema
             'fields' => [
                 'id' => Type::string(),
                 'name' => Type::string(),
+                'photo' => Type::string(),
                 'attrs' => Type::listOf($attributeType),
                 'prices' => Type::listOf($priceType),
                 'quantity' => Type::int(),

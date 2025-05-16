@@ -17,15 +17,31 @@ class Order {
         $query = "SELECT order_details FROM orders";
         $stmt = $this->database->prepare($query);
         $stmt->execute();
-        
+
         $orderDetails = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($orderDetails as &$row) {
-            $row['order_details'] = json_decode($row['order_details'], true) ?? [];
+            $decoded = json_decode($row['order_details'], true);
+
+            if (!is_array($decoded)) {
+                $row['order_details'] = [];
+                continue;
+            }
+
+            foreach ($decoded as &$product) {
+                if (isset($product['attrs']) && is_array($product['attrs'])) {
+                    $product['attrs'] = array_filter($product['attrs'], function ($attr) {
+                        return !empty($attr['items']);
+                    });
+                }
+            }
+
+            $row['order_details'] = $decoded;
         }
 
         return $orderDetails;
     }
+
 
    protected function cart($orderDetails)
     {

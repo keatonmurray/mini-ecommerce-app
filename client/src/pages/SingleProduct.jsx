@@ -162,6 +162,7 @@ const SingleProduct = () => {
       {
         id: id ?? 'product-id',
         name: attributes[0]?.product_name ?? 'Product Name',
+        photo: attributes[0]?.gallery[0] ?? '',
         attrs,
         prices: [
           {

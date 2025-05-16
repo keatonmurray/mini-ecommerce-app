@@ -8,6 +8,7 @@ const GET_ORDERS = gql`
         id
         name
         quantity
+        photo
         attrs {
           id
           name
@@ -147,7 +148,7 @@ const CartOverlay = () => {
 
             <div className="col-3 text-end cart-overlay-product-preview-container">
               <img
-                // src={item.gallery?.[0]}
+                src={item.photo}
                 alt={item.name}
                 className="img-fluid"
               />
