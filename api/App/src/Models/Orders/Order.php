@@ -26,4 +26,15 @@ class Order {
 
         return $orderDetails;
     }
+
+   protected function cart($orderDetails)
+    {
+        $json = json_encode($orderDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        $query = "INSERT INTO orders (order_details, order_status, total, created_at) VALUES (:order_details, 'received', '100', NOW())";
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':order_details', $json);
+        $stmt->execute();
+    }
+
 }

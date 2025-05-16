@@ -9,4 +9,9 @@ class OrdersController extends Order
     {
         return $this->orders();
     }
+
+    public function addToCart($orderDetails)
+    {
+        return $this->cart($orderDetails);
+    }
 }
