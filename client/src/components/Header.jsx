@@ -24,6 +24,12 @@ const Header = ({ activeCategory, setActiveCategory }) => {
     pollInterval: 3000, 
   });
 
+  const totalQuantityCount = () => {
+    if(totalQuantity !== 0) {
+      return totalQuantity
+    }
+  }
+
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
   };
@@ -101,7 +107,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
               onClick={handleCartOverlay}
             ></i>
             <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
-              {totalQuantity}
+              {totalQuantityCount()}
             </span>
           </div>
         </div>
