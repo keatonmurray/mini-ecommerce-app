@@ -33,13 +33,14 @@ const GET_ORDERS = gql`
 `;
 
 const CartOverlay = () => {
-  const { data, loading, error } = useQuery(GET_ORDERS);
-
+ const { data, loading, error } = useQuery(GET_ORDERS);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
+
+  const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
   useEffect(() => {
     if (!loading && data?.orders) {
-      const orderDetails = data.orders.flatMap(order => order.order_details);
       const initialQuantities = {};
       orderDetails.forEach(item => {
         initialQuantities[item.id] = item.quantity;
@@ -48,10 +49,9 @@ const CartOverlay = () => {
     }
   }, [loading, data]);
 
-  if (loading) return <p>Loading cart...</p>;
-  if (error) return <p>Error loading cart</p>;
-
-  const orderDetails = data.orders.flatMap(order => order.order_details);
+  useEffect(() => {
+    setIsButtonEnabled(orderDetails.length !== 0);
+  }, [orderDetails]);
 
   const handleIncrease = (id) => {
     setQuantities(prev => ({
@@ -77,6 +77,9 @@ const CartOverlay = () => {
   }, 0);
 
   const currencySymbol = orderDetails[0]?.prices[0]?.currency.symbol || '$';
+
+  if (loading) return <p>Loading cart...</p>;
+  if (error) return <p>Error loading cart</p>;
 
   return (
     <div className="position-relative px-3">
@@ -167,8 +170,14 @@ const CartOverlay = () => {
         </div>
 
         <div className="mt-1">
-          <button className="btn btn-custom-primary w-100">Place Order</button>
+          <button
+            className="btn btn-custom-primary w-100"
+            disabled={!isButtonEnabled} 
+          >
+            Place Order
+          </button>
         </div>
+
       </div>
     </div>
   );

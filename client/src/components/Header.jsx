@@ -106,7 +106,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
               className="bi bi-cart fs-4"
               onClick={handleCartOverlay}
             ></i>
-            <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+            <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" data-testid='cart-btn'>
               {totalQuantityCount()}
             </span>
           </div>
