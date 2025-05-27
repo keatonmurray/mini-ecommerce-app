@@ -345,7 +345,8 @@ const SingleProduct = () => {
             className="mt-4 w-lg-75 w-100 text-lg-start text-center"
             data-testid="product-description"
             dangerouslySetInnerHTML={{ __html: attributes[0]?.description }}
-          />
+          ></p>
+
         </div>
       </div>
       </Form>

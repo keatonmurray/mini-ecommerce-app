@@ -14,7 +14,7 @@ class Order {
 
     protected function orders()
     {
-        $query = "SELECT order_details FROM orders ORDER BY created_at DESC";
+        $query = "SELECT id AS primary_id, order_details FROM orders ORDER BY created_at DESC";
         $stmt = $this->database->prepare($query);
         $stmt->execute();
 
@@ -28,20 +28,25 @@ class Order {
                 continue;
             }
 
-            foreach ($decoded as &$product) {
+            $newDetails = [];
+
+            foreach ($decoded as $product) {
+                $product['primary_id'] = $row['primary_id'];
+
                 if (isset($product['attrs']) && is_array($product['attrs'])) {
                     $product['attrs'] = array_filter($product['attrs'], function ($attr) {
                         return !empty($attr['items']);
                     });
                 }
+
+                $newDetails[] = $product; // Add modified product
             }
 
-            $row['order_details'] = $decoded;
+            $row['order_details'] = $newDetails;
         }
 
         return $orderDetails;
     }
-
 
    protected function cart($orderDetails)
     {

@@ -50,6 +50,7 @@ class OrderSchema extends QuerySchema
         $orderDetailsType = new ObjectType([
             'name' => 'OrderDetails',
             'fields' => [
+                'primary_id' => Type::int(),
                 'id' => Type::string(),
                 'name' => Type::string(),
                 'photo' => Type::string(),
