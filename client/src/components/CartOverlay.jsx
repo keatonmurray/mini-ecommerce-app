@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import axios from 'axios';
 
-const GET_ORDERS = gql`
-  {
+const CART_ORDERS_QUERY = `
+  query {
     orders {
       order_details {
+        __typename
         id
         name
         quantity
@@ -33,14 +34,41 @@ const GET_ORDERS = gql`
 `;
 
 const CartOverlay = () => {
- const { data, loading, error } = useQuery(GET_ORDERS);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.post(import.meta.env.VITE_API_URL, {
+          query: CART_ORDERS_QUERY
+        });
+        if (response.data.errors) {
+          setError(response.data.errors);
+          setData(null);
+        } else {
+          setData(response.data.data);
+          setError(null);
+        }
+      } catch (err) {
+        setError(err);
+        setData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
   useEffect(() => {
-    if (!loading && data?.orders) {
+    if (!loading && data) {
       const initialQuantities = {};
       orderDetails.forEach(item => {
         initialQuantities[item.id] = item.quantity;
@@ -63,12 +91,48 @@ const CartOverlay = () => {
   const handleDecrease = (id) => {
     setQuantities(prev => {
       const newQty = (prev[id] || 1) - 1;
+      if (newQty <= 0) {
+        return prev;
+      }
       return {
         ...prev,
-        [id]: newQty > 0 ? newQty : 1,
+        [id]: newQty,
       };
     });
   };
+
+  const removeItem = async (id) => {
+    const deleteMutation = `
+      mutation {
+        deleteOrderDetail(id: "${id}") {
+          success
+        }
+      }
+    `;
+    try {
+      await axios.post(import.meta.env.VITE_API_URL, {
+        query: deleteMutation
+      });
+      setData(prevData => {
+        if (!prevData) return prevData;
+        const newOrders = prevData.orders.map(order => ({
+          ...order,
+          order_details: order.order_details.filter(item => item.id !== id)
+        }));
+        return { ...prevData, orders: newOrders };
+      });
+      setQuantities(prev => {
+        const newQuantities = { ...prev };
+        delete newQuantities[id];
+        return newQuantities;
+      });
+    } catch (error) {
+      console.error('Failed to remove item:', error);
+    }
+  };
+
+  if (loading) return <p>Loading cart...</p>;
+  if (error) return <p>Error loading cart</p>;
 
   const totalAmount = orderDetails.reduce((acc, item) => {
     const price = item.prices[0]?.amount || 0;
@@ -77,9 +141,6 @@ const CartOverlay = () => {
   }, 0);
 
   const currencySymbol = orderDetails[0]?.prices[0]?.currency.symbol || '$';
-
-  if (loading) return <p>Loading cart...</p>;
-  if (error) return <p>Error loading cart</p>;
 
   return (
     <div className="position-relative px-3">
@@ -100,7 +161,6 @@ const CartOverlay = () => {
                 </div>
               </div>
 
-              {/* Attributes display */}
               <div className="attributes mt-2 d-flex flex-wrap gap-2">
                 {item.attrs.map(attr => (
                   <div key={attr.id} className="attribute-group">
@@ -172,12 +232,11 @@ const CartOverlay = () => {
         <div className="mt-1">
           <button
             className="btn btn-custom-primary w-100"
-            disabled={!isButtonEnabled} 
+            disabled={!isButtonEnabled}
           >
             Place Order
           </button>
         </div>
-
       </div>
     </div>
   );

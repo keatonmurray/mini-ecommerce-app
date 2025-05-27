@@ -14,4 +14,9 @@ class OrdersController extends Order
     {
         return $this->cart($orderDetails);
     }
+
+    public function removeFromCart($id) 
+    {
+        return $this->removeItem($id);
+    }
 }
