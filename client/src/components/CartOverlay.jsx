@@ -136,7 +136,7 @@ const CartOverlay = () => {
 
   const totalAmount = orderDetails.reduce((acc, item) => {
     const price = item.prices[0]?.amount || 0;
-    const quantity = quantities[item.id] || item.quantity;
+    const quantity = quantities[item.primary_id] || item.quantity;
     return acc + price * quantity;
   }, 0);
 
