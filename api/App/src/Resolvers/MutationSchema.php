@@ -3,6 +3,7 @@
 namespace App\Resolvers;
 
 use App\Resolvers\Mutations\Orders\OrderMutation;
+use App\Resolvers\Mutations\PlacedOrders\PlacedOrdersMutation;
 use GraphQL\Type\Definition\ObjectType;
 
 abstract class MutationSchema 
@@ -13,7 +14,8 @@ abstract class MutationSchema
     public static function getMutations(): ObjectType 
     {
         $schemas = [
-            OrderMutation::getMutationType()
+            OrderMutation::getMutationType(),
+            PlacedOrdersMutation::getMutationType()
         ];
 
         $allFields = array_reduce($schemas, function ($carry, $schema) {
