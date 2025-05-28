@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Form from '../components/partials/Form';
 import { toast } from 'react-toastify';
+import { ATTRIBUTES_QUERY } from '../graphql/queries/attributes';
 
 const SingleProduct = () => {
   const [data, setData] = useState();
@@ -18,54 +19,7 @@ const SingleProduct = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: `
-          query {
-            attributes(product_id: "${id}") {
-              product_name
-              gallery
-              description
-              amount
-              currency {
-                label
-                symbol
-              }
-            }
-            size(product_id: "${id}") {
-              attribute_name
-              product_id
-              display_value
-              value
-              attribute_id
-            }
-            color(product_id: "${id}") {
-              attribute_name
-              product_id
-              display_value
-              attribute_id
-              value
-            }
-            capacity(product_id: "${id}") {
-              attribute_name
-              product_id
-              display_value
-              attribute_id
-              value
-            }
-            usb(product_id: "${id}") {
-              attribute_name
-              product_id
-              display_value
-              attribute_id
-              value
-            }
-            keyboard(product_id: "${id}") {
-              attribute_name
-              product_id
-              display_value
-              attribute_id
-              value
-            }
-          }`
+        query: ATTRIBUTES_QUERY(id)
       });
       setData({
         attributes: response.data.data.attributes,

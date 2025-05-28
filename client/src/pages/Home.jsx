@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { PRODUCTS_QUERY } from '../graphql/queries/products';
 
 const Home = () => {
 
-  const {id} = useParams()
+  const { id } = useParams(); 
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
@@ -16,31 +17,7 @@ const Home = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: `
-          query {
-            products {
-              slug
-              name
-              gallery
-              amount
-              currency {
-                label
-                symbol
-              }
-            }
-            category(product_id: "${id}") {
-              product_name
-              product_id
-              category_name
-              gallery
-              amount
-              currency {
-                label
-                symbol
-              }
-            }
-          }
-        `
+        query: PRODUCTS_QUERY(id)
       });
       setData({
         product: response.data.data.products,
