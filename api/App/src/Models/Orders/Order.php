@@ -14,7 +14,11 @@ class Order {
 
     protected function orders()
     {
-        $query = "SELECT id AS primary_id, order_details FROM orders ORDER BY created_at DESC";
+        $query = "SELECT 
+            id AS primary_id, 
+            order_details FROM orders 
+            ORDER BY created_at DESC";
+
         $stmt = $this->database->prepare($query);
         $stmt->execute();
 
@@ -39,7 +43,7 @@ class Order {
                     });
                 }
 
-                $newDetails[] = $product; // Add modified product
+                $newDetails[] = $product;
             }
 
             $row['order_details'] = $newDetails;
@@ -52,8 +56,13 @@ class Order {
     {
         $json = json_encode($orderDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         
-        $query = "INSERT INTO orders (order_details, order_status, total, created_at) 
-            VALUES (:order_details, 'placed', '100', NOW())";
+        $query = "INSERT INTO orders 
+            (
+                order_details, 
+                order_status, 
+                created_at
+            ) 
+            VALUES (:order_details, 'placed', NOW())";
         $stmt = $this->database->prepare($query);
         $stmt->bindParam(':order_details', $json);
         $stmt->execute();

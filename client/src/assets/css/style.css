@@ -24,6 +24,11 @@
     font-weight: bold !important;
 }
 
+.bg-dark {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
 
 /**Header Styles**/ 
 
@@ -195,7 +200,7 @@
 
 .cart-overlay .cart-overlay-container {
     top: -50px;
-    width: 350px;
+    width: 400px;
     z-index: 10;
 }
 
@@ -240,6 +245,4 @@
 .cart-overlay-container .badge {
     border-radius: 0 !important;
 }
-
-
 

@@ -144,7 +144,7 @@ const CartOverlay = () => {
 
   return (
     <div className="position-relative px-3">
-      <div className="cart-overlay-container position-absolute end-0 shadow-lg p-4 bg-white" style={{ width: 350 }}>
+      <div className="cart-overlay-container position-absolute end-0 shadow-lg p-4 bg-white">
         <h6 className="fw-bold text-start mb-3">
           My Bag:
           <span className="ms-2 text-small small">{orderDetails.length} item{orderDetails.length !== 1 && 's'}</span>
@@ -171,10 +171,10 @@ const CartOverlay = () => {
                 </div>
               </div>
 
-              <div className="attributes mt-2 d-flex flex-wrap gap-2">
+              <div className="attributes my-2 gap-2">
                 {item.attrs.map(attr => (
                   <div key={attr.id} className="attribute-group">
-                    <p className="mb-1 fw-semibold">{attr.name}:</p>
+                    <p className="mb-1 fw-semibold mt-3">{attr.name}:</p>
                     <div className="d-flex gap-1 flex-wrap">
                       {attr.items.map(attrItem => {
                         const isSelected = attrItem.selected;
@@ -198,9 +198,15 @@ const CartOverlay = () => {
                             <span
                               key={attrItem.id}
                               className={`badge text-wrap ${
-                                isSelected ? 'bg-primary text-white' : 'bg-light text-muted'
+                                isSelected ? 'bg-dark text-white' : 'bg-light text-muted'
                               }`}
-                              style={{ cursor: 'default', minWidth: '40px', textAlign: 'center' }}
+                              style={{ 
+                                cursor: 'default', 
+                                minWidth: '40px', 
+                                textAlign: 'center', 
+                                padding:'10px',
+                                border: '1px solid #000' 
+                              }}
                             >
                               {attrItem.display_value}
                             </span>
