@@ -71,7 +71,9 @@ const SingleProduct = () => {
     });
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, { query: mutation });
+      const response = await axios.post(import.meta.env.VITE_API_URL, { 
+        query: mutation 
+      })
       toast.success("Item was added to your cart!");
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -124,7 +126,7 @@ const SingleProduct = () => {
               {/* Size */}
               {size.map((attr, index) => (
                 <Attribute
-                  key={attr.value ?? index}
+                   key={`size-${attr.value ?? index}`}
                   className={`size ${isSizeSelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsSizeSelected(attr.value)}
                 >
@@ -145,7 +147,7 @@ const SingleProduct = () => {
                 const isSelected = isColorSelected === attr.value;
                 return (
                   <Attribute
-                    key={attr.value ?? index}
+                    key={`color-${attr.value ?? index}`}
                     className={`${isSelected ? attr.value : ''}`}
                     onClick={() => setIsColorSelected(attr.value)}
                     style={isSelected ? { border:"2px solid #000"} : {}}
@@ -166,7 +168,7 @@ const SingleProduct = () => {
               {/* Capacity */}
               {capacity.map((attr, index) => (
                   <Attribute
-                    key={attr.value ?? index}
+                    key={`capacity-${attr.value ?? index}`}
                     className={`size ${isCapacitySelected === attr.value ? 'size-active-selected' : ''}`}
                     onClick={() => setIsCapacitySelected(attr.value)}
                   >
@@ -185,7 +187,7 @@ const SingleProduct = () => {
             {/* Keyboard */}
               {keyboard.map((attr, index) => (
                   <Attribute
-                    key={attr.value ?? index}
+                    key={`keyboard-${attr.value ?? index}`}
                     className={`size ${isKeyboardSelected === attr.value ? 'size-active-selected' : ''}`}
                     onClick={() => setIsKeyboardSelected(attr.value)}
                   >
@@ -204,7 +206,7 @@ const SingleProduct = () => {
             {/* Usb */}
               {usb.map((attr, index) => (
                   <Attribute
-                    key={attr.value ?? index}
+                    key={`usb-${attr.value ?? index}`}
                     className={`size ${isUsbSelected === attr.value ? 'size-active-selected' : ''}`}
                     onClick={() => setIsUsbSelected(attr.value)}
                   >

@@ -157,12 +157,12 @@ const CartOverlay = () => {
                   <div key={attr.id} className="attribute-group">
                     <p className="mb-1 fw-semibold mt-3">{attr.name}:</p>
                     <div className="d-flex gap-1 flex-wrap">
-                      {attr.items.map(attrItem => {
+                      {attr.items.map((attrItem, index) => {
                         const isSelected = attrItem.selected;
                         if (attr.type === 'swatch') {
                           return (
                             <div
-                              key={attrItem.id}
+                              key={`swatch-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
                               title={attrItem.display_value}
                               style={{
                                 width: '24px',
@@ -177,7 +177,7 @@ const CartOverlay = () => {
                         } else {
                           return (
                             <span
-                              key={attrItem.id}
+                              key={`badge-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
                               className={`badge text-wrap ${
                                 isSelected ? 'bg-dark text-white' : 'bg-light text-muted'
                               }`}
