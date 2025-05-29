@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CART_ORDERS_QUERY } from '../graphql/queries/orders'
 import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
+import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
-
 
 const CartOverlay = () => {
   const [data, setData] = useState(null);
@@ -13,30 +13,30 @@ const CartOverlay = () => {
   const [quantities, setQuantities] = useState({});
   const [orderId, setOrderId] = useState([]);
 
-  useEffect(() => {
     const fetchOrders = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.post(import.meta.env.VITE_API_URL, {
-          query: CART_ORDERS_QUERY
-        });
-        if (response.data.errors) {
-          setError(response.data.errors);
-          setData(null);
-        } else {
-          setData(response.data.data);
-          setError(null);
-        }
-      } catch (err) {
-        setError(err);
+    setLoading(true);
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: CART_ORDERS_QUERY,
+      });
+      if (response.data.errors) {
+        setError(response.data.errors);
         setData(null);
-      } finally {
-        setLoading(false);
+      } else {
+        setData(response.data.data);
+        setError(null);
       }
+    } catch (err) {
+      setError(err);
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
     };
 
-    fetchOrders();
-  }, []);
+    useEffect(() => {
+      fetchOrders();
+    }, []);
 
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
@@ -57,7 +57,7 @@ const CartOverlay = () => {
     if (!loading && data) {
       const initialQuantities = {};
       orderDetails.forEach(item => {
-        initialQuantities[item.id] = item.quantity;
+        initialQuantities[item.primary_id] = item.quantity;
       });
       setQuantities(initialQuantities);
     }
@@ -68,24 +68,30 @@ const CartOverlay = () => {
   }, [orderDetails]);
 
   const handleIncrease = (id) => {
-    setQuantities(prev => ({
-      ...prev,
-      [id]: (prev[id] || 0) + 1,
-    }));
+    setQuantities(prev => {
+      const currentQty = prev[id] || 1; 
+      return {
+        ...prev,
+        [id]: currentQty + 1,
+      };
+    });
   };
+
 
   const handleDecrease = (id) => {
     setQuantities(prev => {
       const newQty = (prev[id] || 1) - 1;
-      if (newQty <= 0) {
-        return prev;
-      }
       return {
         ...prev,
         [id]: newQty,
       };
     });
+
+    if ((quantities[id] || 1) - 1 === 0) {
+      removeItem(id);
+    }
   };
+
 
   const placeOrder = async (e) => {
     e.preventDefault();
@@ -96,11 +102,23 @@ const CartOverlay = () => {
         });
       }
       toast.success("Order was successfully placed!")
+      fetchOrders();
     } catch (error) {
       console.error(error);
     }
   };
 
+  const removeItem = async (id) => {
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: REMOVE_ITEM(id)
+      });
+      toast.success("Item removed from cart!")
+      fetchOrders();
+    } catch (error) {
+      console.error(error.response);
+    }
+  };
 
   if (loading) return <p>Loading cart...</p>;
   if (error) return <p>Error loading cart</p>;
@@ -133,12 +151,12 @@ const CartOverlay = () => {
                   >
                     +
                   </button>
-                  <button
-                    className="minus btn btn-sm btn-outline-secondary mt-2"
-                    onClick={() => handleDecrease(item.primary_id)}
-                  >
-                    -
-                  </button>
+                   <button
+                      className="minus btn btn-sm btn-outline-secondary mt-2"
+                      onClick={() => handleDecrease(item.primary_id)}
+                    >
+                      -
+                    </button>
                 </div>
               </div>
 
