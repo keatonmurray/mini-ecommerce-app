@@ -17,8 +17,8 @@ class PlacedOrdersMutation extends MutationSchema
                 'placed_order' => [
                     'type' => Type::int(),
                     'args' => [
-                        'quantity' => Type::int(),
-                        'order_id' => Type::int()
+                        'quantity' => Type::nonNull(Type::int()),
+                        'order_id' => Type::nonNull(Type::int())
                     ],
                     'resolve' => [self::class, 'resolver']
                 ]

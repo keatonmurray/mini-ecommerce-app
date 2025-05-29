@@ -20,6 +20,13 @@ class OrderMutation extends MutationSchema {
                         'order_details' => Type::nonNull(Type::string())
                     ],
                     'resolve' => [self::class, 'resolver']
+                ],
+                'removeItem' => [
+                    'type' => Type::int(),
+                    'args' => [
+                        'id' => Type::int(),
+                    ],
+                    'resolve' => [self::class, 'resolver']
                 ]
             ]
         ]);
@@ -27,10 +34,19 @@ class OrderMutation extends MutationSchema {
 
     public static function resolver($root, $args) 
     {
-        $controller = new OrdersController();
-        $orderDetails = json_decode($args['order_details'], true);
-        $controller->addToCart($orderDetails);
+        $controller = new OrdersController;
+
+        if (isset($args['order_details'])) {
+            $orderDetails = json_decode($args['order_details'], true);
+            $controller->addToCart($orderDetails);
+        }
+
+        if (isset($args['id'])) {
+            $controller->removeFromCart($args['id'], true);
+        }
+
         return true;
     }
-    
+
+
 }

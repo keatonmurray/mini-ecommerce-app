@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CART_ORDERS_QUERY } from '../graphql/queries/orders'
+import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
+import { toast } from 'react-toastify';
+
 
 const CartOverlay = () => {
   const [data, setData] = useState(null);
@@ -8,6 +11,7 @@ const CartOverlay = () => {
   const [error, setError] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
+  const [orderId, setOrderId] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -35,6 +39,19 @@ const CartOverlay = () => {
   }, []);
 
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
+
+  useEffect(() => {
+    const ids = orderDetails.map(order_id => order_id.primary_id);
+
+    const idsAreDifferent =
+      ids.length !== orderId.length ||
+      ids.some((id, index) => id !== orderId[index]);
+
+    if (idsAreDifferent) {
+      setOrderId(ids);
+    }
+  }, [orderDetails, orderId]);
+
 
   useEffect(() => {
     if (!loading && data) {
@@ -70,35 +87,20 @@ const CartOverlay = () => {
     });
   };
 
-  const removeItem = async (id) => {
-    const deleteMutation = `
-      mutation {
-        deleteOrderDetail(id: "${id}") {
-          success
-        }
-      }
-    `;
+  const placeOrder = async (e) => {
+    e.preventDefault();
     try {
-      await axios.post(import.meta.env.VITE_API_URL, {
-        query: deleteMutation
-      });
-      setData(prevData => {
-        if (!prevData) return prevData;
-        const newOrders = prevData.orders.map(order => ({
-          ...order,
-          order_details: order.order_details.filter(item => item.id !== id)
-        }));
-        return { ...prevData, orders: newOrders };
-      });
-      setQuantities(prev => {
-        const newQuantities = { ...prev };
-        delete newQuantities[id];
-        return newQuantities;
-      });
+      for (const id of orderId) {
+        const response = await axios.post(import.meta.env.VITE_API_URL, {
+          query: PLACE_ORDER(id)
+        });
+      }
+      toast.success("Order was successfully placed!")
     } catch (error) {
-      console.error('Failed to remove item:', error);
+      console.error(error);
     }
   };
+
 
   if (loading) return <p>Loading cart...</p>;
   if (error) return <p>Error loading cart</p>;
@@ -218,14 +220,16 @@ const CartOverlay = () => {
           </h6>
         </div>
 
-        <div className="mt-1">
-          <button
-            className="btn btn-custom-primary w-100"
-            disabled={!isButtonEnabled}
-          >
-            Place Order
-          </button>
-        </div>
+        <form onSubmit={placeOrder}>
+          <div className="mt-1">
+            <button
+              className="btn btn-custom-primary w-100"
+              disabled={!isButtonEnabled}
+            >
+                Place Order
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

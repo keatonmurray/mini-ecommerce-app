@@ -70,8 +70,7 @@ class Order {
 
     protected function removeItem($id)
     {
-        $query = "DELETE FROM orders
-              WHERE JSON_CONTAINS(order_details, JSON_QUOTE(?), '$[*].id')";
+        $query = "DELETE FROM orders WHERE id = :id";
         $stmt = $this->database->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
