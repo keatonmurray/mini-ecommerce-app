@@ -2,27 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CartOverlay from './CartOverlay';
 import axios from 'axios';
-import { gql, useQuery } from '@apollo/client';
-
-const GET_ORDERS = gql`
-  {
-    orders {
-      order_details {
-        id
-        quantity
-      }
-    }
-  }
-`;
+import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
+import { PRODUCT_CATEGORIES } from '../graphql/queries/categories';
 
 const Header = ({ activeCategory, setActiveCategory }) => {
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isCategory, setIsCategory] = useState();
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [ordersData, setOrdersData] = useState(null);
 
-  const { data: ordersData, loading, error } = useQuery(GET_ORDERS, {
-    pollInterval: 3000, 
-  });
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.post(import.meta.env.VITE_API_URL, {
+          query: CART_ORDERS_QUERY
+        });
+        setOrdersData(response.data.data);
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+      }
+    };
+
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const totalQuantityCount = () => {
     if(totalQuantity !== 0) {
@@ -40,16 +44,8 @@ const Header = ({ activeCategory, setActiveCategory }) => {
 
   const fetchCategories = async () => {
     try {
-      const query = `
-        query {
-          categories {
-            product_id
-            category_name
-          }
-        }
-      `;
       const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query
+        query: PRODUCT_CATEGORIES()
       });
       setIsCategory(response.data.data.categories);
     } catch (error) {

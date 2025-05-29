@@ -13,30 +13,21 @@ const CartOverlay = () => {
   const [quantities, setQuantities] = useState({});
   const [orderId, setOrderId] = useState([]);
 
-    const fetchOrders = async () => {
-    setLoading(true);
+  const fetchOrders = async () => {
+    setLoading(false);
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: CART_ORDERS_QUERY,
       });
-      if (response.data.errors) {
-        setError(response.data.errors);
-        setData(null);
-      } else {
-        setData(response.data.data);
-        setError(null);
-      }
-    } catch (err) {
-      setError(err);
-      setData(null);
-    } finally {
-      setLoading(false);
+      setData(response.data.data);
+    } catch (error) {
+      setError(response.data.errors);
     }
-    };
+  };
 
-    useEffect(() => {
-      fetchOrders();
-    }, []);
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
@@ -77,7 +68,6 @@ const CartOverlay = () => {
     });
   };
 
-
   const handleDecrease = (id) => {
     setQuantities(prev => {
       const newQty = (prev[id] || 1) - 1;
@@ -92,33 +82,36 @@ const CartOverlay = () => {
     }
   };
 
-
   const placeOrder = async (e) => {
     e.preventDefault();
     try {
       for (const id of orderId) {
-        const response = await axios.post(import.meta.env.VITE_API_URL, {
+        await axios.post(import.meta.env.VITE_API_URL, {
           query: PLACE_ORDER(id)
         });
+        await removeItem(id, false);
       }
-      toast.success("Order was successfully placed!")
-      fetchOrders();
+      toast.success("Order was successfully placed!");
     } catch (error) {
       console.error(error);
     }
   };
 
-  const removeItem = async (id) => {
-    try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: REMOVE_ITEM(id)
-      });
-      toast.success("Item removed from cart!")
-      fetchOrders();
-    } catch (error) {
-      console.error(error.response);
+
+  const removeItem = async (id, showToast = true) => {
+  try {
+    const response = await axios.post(import.meta.env.VITE_API_URL, {
+      query: REMOVE_ITEM(id)
+    });
+    if (showToast) {
+      toast.success("Item removed from cart!");
     }
+    fetchOrders();
+  } catch (error) {
+    console.error(error.response);
+  }
   };
+
 
   if (loading) return <p>Loading cart...</p>;
   if (error) return <p>Error loading cart</p>;
