@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
       {/* Toast container renders notifications here */}
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </BrowserRouter>
   </ApolloProvider>
   </React.StrictMode>
