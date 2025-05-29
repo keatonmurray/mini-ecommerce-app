@@ -246,3 +246,6 @@
     border-radius: 0 !important;
 }
 
+.cart-overlay .attributes {
+    margin-top: -20px !important;
+}

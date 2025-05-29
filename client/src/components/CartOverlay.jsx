@@ -103,15 +103,14 @@ const CartOverlay = () => {
     const response = await axios.post(import.meta.env.VITE_API_URL, {
       query: REMOVE_ITEM(id)
     });
-    if (showToast) {
-      toast.success("Item removed from cart!");
+      if (showToast) {
+        toast.success("Item removed from cart!");
+      }
+      fetchOrders();
+    } catch (error) {
+      console.error(error.response);
     }
-    fetchOrders();
-  } catch (error) {
-    console.error(error.response);
-  }
   };
-
 
   if (loading) return <p>Loading cart...</p>;
   if (error) return <p>Error loading cart</p>;
@@ -201,11 +200,11 @@ const CartOverlay = () => {
               </div>
 
               <div className="d-flex justify-content-between mt-3">
-                <p className="product-price">
+                <p className="product-price fw-bold">
                   {currencySymbol}
                   {(item.prices[0]?.amount || 0).toFixed(2)}
                 </p>
-                <p className="product-quantity text-end">
+                <p className="product-quantity text-end fw-bold">
                   Qty: {quantities[item.primary_id] || item.quantity}
                 </p>
               </div>
