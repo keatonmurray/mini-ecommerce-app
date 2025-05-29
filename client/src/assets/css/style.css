@@ -198,34 +198,34 @@
 
 /** Cart Overlay **/
 
-.cart-overlay .cart-overlay-container {
+.cart-overlay-container {
     top: -50px;
     width: 400px;
     z-index: 10;
 }
 
-.cart-overlay .cart-overlay-product-preview-container img {
+.cart-overlay-product-preview-container img {
     max-height: 60px;
     object-fit: cover;
 }
 
-.cart-overlay .plus {
+.cart-action .plus {
     border: 1px solid #000;
     padding: 0 9px;
 }
 
-.cart-overlay .minus {
+.cart-action .minus {
     border: 1px solid #000;
     padding: 0 10px;
 }
 
-.cart-overlay .sizes .size {
+.sizes .size {
     padding: 3px 7px;
     cursor: pointer;
     border: 1px solid #000;
 }
 
-.cart-overlay .colors .color {
+.colors .color {
     padding: 15px 15px;
     border: 0;
     cursor: pointer;
@@ -246,6 +246,6 @@
     border-radius: 0 !important;
 }
 
-.cart-overlay .attributes {
+.attributes {
     margin-top: -20px !important;
 }

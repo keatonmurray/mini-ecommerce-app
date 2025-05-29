@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CartOverlay from './CartOverlay';
-import axios from 'axios';
 import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PRODUCT_CATEGORIES } from '../graphql/queries/categories';
+import axios from 'axios';
 
-const Header = ({ activeCategory, setActiveCategory }) => {
-  const [isCartExpanded, setIsCartExpanded] = useState(false);
+const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
   const [isCategory, setIsCategory] = useState();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [ordersData, setOrdersData] = useState(null);
@@ -36,10 +34,6 @@ const Header = ({ activeCategory, setActiveCategory }) => {
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
-  };
-
-  const handleCartOverlay = () => {
-    setIsCartExpanded(prev => !prev);
   };
 
   const fetchCategories = async () => {
@@ -100,7 +94,7 @@ const Header = ({ activeCategory, setActiveCategory }) => {
           <div className="icons me-md-4 me-0 position-relative">
             <i
               className="bi bi-cart fs-4"
-              onClick={handleCartOverlay}
+              onClick={setHandleCartOverlay}
             ></i>
             <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" data-testid='cart-btn'>
               {totalQuantityCount()}
@@ -108,9 +102,6 @@ const Header = ({ activeCategory, setActiveCategory }) => {
           </div>
         </div>
       </div>
-      {isCartExpanded && (
-        <CartOverlay />
-      )}
     </div>
   );
 };

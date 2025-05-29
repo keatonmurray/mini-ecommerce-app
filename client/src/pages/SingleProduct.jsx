@@ -126,7 +126,7 @@ const SingleProduct = () => {
               {/* Size */}
               {size.map((attr, index) => (
                 <Attribute
-                   key={`size-${attr.value ?? index}`}
+                  key={`size-${attr.value ?? index}`}
                   className={`size ${isSizeSelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsSizeSelected(attr.value)}
                 >
