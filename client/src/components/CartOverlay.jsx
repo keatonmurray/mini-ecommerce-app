@@ -124,7 +124,7 @@ const CartOverlay = () => {
   const currencySymbol = orderDetails[0]?.prices[0]?.currency.symbol || '$';
 
   return (
-    <div className="position-relative px-3">
+    <div className="position-relative px-3 container">
       <div className="cart-overlay-container position-absolute end-0 shadow-lg p-4 bg-white">
         <h6 className="fw-bold text-start mb-3">
           My Bag:

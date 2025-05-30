@@ -12,20 +12,26 @@ const App = () => {
   };
   
   return (
-    <div className="app container pb-5">
-     <Header
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-        setHandleCartOverlay={handleCartOverlay}
-      />
+    <div className="app pb-5">
+      {isCartExpanded && (
+        <div className="darken-bg"></div>
+      )}
+      
+      <div className="container">
+        <Header
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          setHandleCartOverlay={handleCartOverlay}
+        />
+      </div>
+    
       {isCartExpanded && (
         <CartOverlay />
       )}
-     <main>
+      <main className="container">
         <Outlet context={{ activeCategory }} />
       </main>
-      
-  </div>
+    </div>
   )
 }
 
