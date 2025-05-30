@@ -38,6 +38,12 @@
     text-shadow: unset !important;
 }
 
+.main-header {
+    position: relative;
+    z-index: 1060;
+    background-color: #fff !important;
+}
+
 .header li {
     font-weight: bold !important;
     color: var(--primary-font-color);
@@ -208,6 +214,8 @@
     top: -50px;
     width: 400px;
     z-index: 1050;
+    margin-top: 33px;
+    margin-right: 30px;
 }
 
 .cart-overlay-product-preview-container img {

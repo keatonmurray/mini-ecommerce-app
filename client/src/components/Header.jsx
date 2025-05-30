@@ -60,7 +60,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
   }, [ordersData]);
 
   return (
-    <div className="cart-overlay">
+    <div className="cart-overlay container">
       <div className="header d-flex flex-wrap flex-md-row align-items-center justify-content-between py-3 py-md-4 mb-3">
         <div className="category mb-3 mb-md-0 w-md-50-custom">
           <ul className="d-flex flex-row align-items-center m-0 p-0">

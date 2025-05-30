@@ -90,7 +90,7 @@ const SingleProduct = () => {
       <Form onSubmit={addToCart}>
         <div className="row gy-4">
           <div className="col-12 col-lg-8 product-container">
-            <div className="row">
+            <div className="row d-flex align-items-center justify-content-center">
               <div
                 className="col-12 col-md-3 col-lg-2 d-none d-lg-block me-3 thumbnail-container"
                 data-testid="product-gallery"

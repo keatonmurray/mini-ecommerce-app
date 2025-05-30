@@ -17,7 +17,7 @@ const App = () => {
         <div className="darken-bg"></div>
       )}
       
-      <div className="container">
+      <div className="main-header">
         <Header
           activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
