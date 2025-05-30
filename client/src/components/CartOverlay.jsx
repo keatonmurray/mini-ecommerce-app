@@ -112,9 +112,6 @@ const CartOverlay = () => {
     }
   };
 
-  if (loading) return <p>Loading cart...</p>;
-  if (error) return <p>Error loading cart</p>;
-
   const totalAmount = orderDetails.reduce((acc, item) => {
     const price = item.prices[0]?.amount || 0;
     const quantity = quantities[item.primary_id] || item.quantity;

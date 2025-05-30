@@ -14,6 +14,7 @@ const SingleProduct = () => {
   const [isCapacitySelected, setIsCapacitySelected] = useState(null);
   const [isKeyboardSelected, setIsKeyboardSelected] = useState(null);
   const [isUsbSelected, setIsUsbSelected] = useState(null)
+  const [isMainGalleryImage, setIsMainGalleryImage] = useState();
 
   const { id } = useParams();
 
@@ -80,36 +81,40 @@ const SingleProduct = () => {
     }
   };
 
+  const viewProductImage = (src) => {
+    setIsMainGalleryImage(src);
+  };
+
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
       <Form onSubmit={addToCart}>
         <div className="row gy-4">
           <div className="col-12 col-lg-8 product-container">
-            <div
-              className="col-12 col-lg-2 d-none d-lg-block me-3 thumbnail-container"
-              data-testid="product-gallery"
-            >
-              <div className="row">
-                {attributes[0]?.gallery.map((src, index) => (
-                  <div key={index}>
+            <div className="row">
+              <div
+                className="col-12 col-md-3 col-lg-2 d-none d-lg-block me-3 thumbnail-container"
+                data-testid="product-gallery"
+              >
+                  {attributes[0]?.gallery.map((src, index) => (
+                    <div key={index}>
                     <img
-                      src={src}
-                      alt={`Thumbnail ${index + 1}`}
-                      className="img-fluid thumbnail-img"
-                    />
-                  </div>
-                ))}
+                        src={src}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="img-fluid thumbnail-img my-1"
+                        onClick={() => viewProductImage(src)}
+                      />
+                    </div>
+                  ))}
+              </div>
+               <div className="col-12 col-md-9 product-full-preview">
+                <img
+                  src={isMainGalleryImage ?? attributes[0]?.gallery[0]}
+                  alt="Men"
+                  className="img-fluid w-100 object-fit-cover"
+                />
               </div>
             </div>
-
-            <div className="product-full-preview w-100">
-              <img
-                src={attributes[0]?.gallery[0]}
-                alt="Men"
-                className="img-fluid w-100 object-fit-cover"
-              />
-            </div>
-        </div>
+          </div>
 
         <div className="col-12 col-lg-4 d-flex flex-column align-items-lg-start align-items-center">
           <h4 className="fw-bold mt-lg-0 mt-4 text-lg-start text-center">
