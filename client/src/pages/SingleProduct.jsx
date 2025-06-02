@@ -196,7 +196,7 @@ const SingleProduct = () => {
                 <img
                   src={src}
                   alt={`Thumbnail ${index + 1}`}
-                  className="img-fluid thumbnail-img my-1"
+                  className={`img-fluid thumbnail-img my-1 ${isNotInStock ? 'grayscale' : ''}`}
                   onClick={() => viewProductImage(src)}
                 />
               </div>
