@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Form from '../components/partials/Form';
 import { toast } from 'react-toastify';
 import { ATTRIBUTES_QUERY } from '../graphql/queries/attributes';
 import { CART } from '../graphql/mutations/cart';
@@ -19,6 +18,36 @@ const SingleProduct = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
+  const { id } = useParams();
+
+  const gallery = data?.attributes?.[0]?.gallery || [];
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (e.key === 'ArrowRight') {
+        handleNextImage();
+      }
+    };
+
+    const handleWheel = (e) => {
+      if (e.deltaY > 0) {
+        handleNextImage();
+      } else if (e.deltaY < 0) {
+        handlePrevImage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('wheel', handleWheel);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [gallery.length]);
+
   useEffect(() => {
     if (
       isSizeSelected ||
@@ -31,9 +60,13 @@ const SingleProduct = () => {
     } else {
       setIsButtonEnabled(false);
     }
-  }, [isSizeSelected, isColorSelected, isCapacitySelected, isKeyboardSelected, isUsbSelected]);
-
-  const { id } = useParams();
+  }, [
+    isSizeSelected,
+    isColorSelected,
+    isCapacitySelected,
+    isKeyboardSelected,
+    isUsbSelected,
+  ]);
 
   const fetchProduct = async () => {
     try {
@@ -75,7 +108,7 @@ const SingleProduct = () => {
   const addToCart = async (e) => {
     e.preventDefault();
 
-     const requiredSelections = [
+    const requiredSelections = [
       { options: size, selected: isSizeSelected },
       { options: color, selected: isColorSelected },
       { options: capacity, selected: isCapacitySelected },
@@ -117,8 +150,6 @@ const SingleProduct = () => {
     }
   };
 
-  const gallery = attributes[0]?.gallery || [];
-
   const viewProductImage = (src) => {
     setIsMainGalleryImage(src);
     const index = gallery.indexOf(src);
@@ -140,7 +171,6 @@ const SingleProduct = () => {
     );
     setIsMainGalleryImage(null);
   };
-
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
       <div className="row">
