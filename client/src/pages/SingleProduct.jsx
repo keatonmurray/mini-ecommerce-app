@@ -6,6 +6,7 @@ import Form from '../components/partials/Form';
 import { toast } from 'react-toastify';
 import { ATTRIBUTES_QUERY } from '../graphql/queries/attributes';
 import { CART } from '../graphql/mutations/cart';
+import parse from 'html-react-parser';
 
 const SingleProduct = () => {
   const [data, setData] = useState();
@@ -13,7 +14,7 @@ const SingleProduct = () => {
   const [isColorSelected, setIsColorSelected] = useState(null);
   const [isCapacitySelected, setIsCapacitySelected] = useState(null);
   const [isKeyboardSelected, setIsKeyboardSelected] = useState(null);
-  const [isUsbSelected, setIsUsbSelected] = useState(null)
+  const [isUsbSelected, setIsUsbSelected] = useState(null);
   const [isMainGalleryImage, setIsMainGalleryImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -22,7 +23,7 @@ const SingleProduct = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: ATTRIBUTES_QUERY(id)
+        query: ATTRIBUTES_QUERY(id),
       });
       setData({
         attributes: response.data.data.attributes,
@@ -45,14 +46,16 @@ const SingleProduct = () => {
     return <div>Loading...</div>;
   }
 
-  const { 
-    attributes, 
-    size, 
-    color, 
-    capacity, 
-    usb,
-    keyboard,
-  } = data;
+  const { attributes, size, color, capacity, usb, keyboard } = data;
+
+  const cleanHtmlString = (str) => {
+    if (!str) return '';
+    return str
+      .replace(/\\n/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/\\'/g, "'")
+      .replace(/\\"/g, '"');
+  };
 
   const addToCart = async (e) => {
     e.preventDefault();
@@ -70,7 +73,7 @@ const SingleProduct = () => {
     );
 
     if (hasMissingSelection) {
-      toast.error("Please select a variation");
+      toast.error('Please select a variation');
       return;
     }
 
@@ -90,10 +93,10 @@ const SingleProduct = () => {
     });
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, { 
-        query: mutation 
-      })
-      toast.success("Item was added to your cart!");
+      await axios.post(import.meta.env.VITE_API_URL, {
+        query: mutation,
+      });
+      toast.success('Item was added to your cart!');
     } catch (error) {
       console.error('Error adding to cart:', error);
     }
@@ -125,66 +128,63 @@ const SingleProduct = () => {
 
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
-      <Form onSubmit={addToCart}>
-        <div className="row gy-4">
-          <div className="col-12 col-lg-8 product-container">
-            <div className="row d-flex align-items-center justify-content-center">
-              <div
-                className="col-12 col-md-3 col-lg-2 d-none d-lg-block me-3 thumbnail-container"
-                data-testid="product-gallery"
-              >
-                  {attributes[0]?.gallery.map((src, index) => (
-                    <div key={index}>
-                      <img
-                        src={src}
-                        alt={`Thumbnail ${index + 1}`}
-                        className="img-fluid thumbnail-img my-1"
-                        onClick={() => viewProductImage(src)}
-                      />
-                    </div>
-                  ))}
+      <div className="row">
+
+        {/* Thumbnails */}
+        <div className="col-12 col-md-2 d-none d-md-block">          
+          <div className="thumbnail-container" data-testid="product-gallery">
+            {gallery.map((src, index) => (
+              <div key={index}>
+                <img
+                  src={src}
+                  alt={`Thumbnail ${index + 1}`}
+                  className="img-fluid thumbnail-img my-1"
+                  onClick={() => viewProductImage(src)}
+                />
               </div>
-              <div className="col-12 col-md-9 product-full-preview d-flex align-items-center justify-content-center position-relative">
-                <button type="button"
-                  className="position-absolute start-0 top-50 translate-middle-y btn btn-overlay border-0"
-                  onClick={handlePrevImage}
-                  style={{ zIndex: 2 }}
-                >
-                  &#8592;
-                </button>
-
-                <div className="mx-5">
-                  <img
-                    src={isMainGalleryImage || gallery[currentIndex]}
-                    alt="Product"
-                    className="img-fluid w-100 object-fit-cover"
-                  />
-                </div>
-
-                <button type="button"
-                  className="position-absolute end-0 top-50 translate-middle-y btn btn-overlay border-0"
-                  onClick={handleNextImage}
-                  style={{ zIndex: 2 }}
-                >
-                  &#8594;
-                </button>
-              </div>
-
-            </div>
+            ))}
           </div>
+        </div>
 
-        <div className="col-12 col-lg-4 d-flex flex-column align-items-lg-start align-items-center">
-          <h4 className="fw-bold mt-lg-0 mt-4 text-lg-start text-center">
+        {/* Main Image */}
+        <div className="col-12 col-md-6">
+          <div className="full-preview position-relative d-flex justify-content-center">
+            <button
+              type="button"
+              className="position-absolute start-0 btn btn-overlay border-0 prev-image-btn"
+              onClick={handlePrevImage}
+            >
+              &#8592;
+            </button>
+            <div className="full-preview-img-container">
+              <img
+                src={isMainGalleryImage || gallery[currentIndex]}
+                alt="Product"
+                className="img-fluid full-preview-img"
+              />
+            </div>
+            <button
+              type="button"
+              className="position-absolute end-0 btn btn-overlay border-0 next-image-btn"
+              onClick={handleNextImage}
+            >
+              &#8594;
+            </button>
+          </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="col-12 col-md-4 ps-md-5 ps-0">
+          <h4 className="fw-bold mt-lg-0 mt-4 text-lg-start text-center my-5">
             {attributes[0]?.product_name}
           </h4>
 
           <div className="attributes text-lg-start text-center w-100">
-            <p className="fw-bold text-uppercase mt-4">{size[0]?.attribute_name}</p>
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-size"
-            >
-
+            {/* Size */}
+            <p className="fw-bold text-uppercase mt-4">
+              {size[0]?.attribute_name}
+            </p>
+            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
               {size.map((attr, index) => (
                 <Attribute
                   key={`size-${attr.value ?? index}`}
@@ -194,15 +194,13 @@ const SingleProduct = () => {
                   {attr.display_value}
                 </Attribute>
               ))}
-
             </div>
-            
-            <p className="fw-bold text-uppercase mt-4">{color[0]?.attribute_name}</p>
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-size"
-            >
 
+            {/* Color */}
+            <p className="fw-bold text-uppercase mt-4">
+              {color[0]?.attribute_name}
+            </p>
+            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
               {color.map((attr, index) => {
                 const isSelected = isColorSelected === attr.value;
                 return (
@@ -210,7 +208,7 @@ const SingleProduct = () => {
                     key={`color-${attr.value ?? index}`}
                     className={`${isSelected ? attr.value : ''}`}
                     onClick={() => setIsColorSelected(attr.value)}
-                    style={isSelected ? { border:"2px solid #000"} : {}}
+                    style={isSelected ? { border: '2px solid #000' } : {}}
                   >
                     <div className="color" style={{ backgroundColor: attr.value }} />
                   </Attribute>
@@ -218,79 +216,71 @@ const SingleProduct = () => {
               })}
             </div>
 
-            <p className="fw-bold text-uppercase mt-4">{capacity[0]?.attribute_name}</p>
-
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-size"
-            >
+            {/* Capacity */}
+            <p className="fw-bold text-uppercase mt-4">
+              {capacity[0]?.attribute_name}
+            </p>
+            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
               {capacity.map((attr, index) => (
-                  <Attribute
-                    key={`capacity-${attr.value ?? index}`}
-                    className={`size ${isCapacitySelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsCapacitySelected(attr.value)}
-                  >
+                <Attribute
+                  key={`capacity-${attr.value ?? index}`}
+                  className={`size ${isCapacitySelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsCapacitySelected(attr.value)}
+                >
                   {attr.display_value}
                 </Attribute>
               ))}
             </div>
 
-            <p className="fw-bold text-uppercase mt-4">{keyboard[0]?.attribute_name}</p>
-
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-size"
-            >
+            {/* Keyboard */}
+            <p className="fw-bold text-uppercase mt-4">
+              {keyboard[0]?.attribute_name}
+            </p>
+            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
               {keyboard.map((attr, index) => (
-                  <Attribute
-                    key={`keyboard-${attr.value ?? index}`}
-                    className={`size ${isKeyboardSelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsKeyboardSelected(attr.value)}
-                  >
+                <Attribute
+                  key={`keyboard-${attr.value ?? index}`}
+                  className={`size ${isKeyboardSelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsKeyboardSelected(attr.value)}
+                >
                   {attr.display_value}
                 </Attribute>
               ))}
             </div>
 
-            <p className="fw-bold text-uppercase mt-4">{usb[0]?.attribute_name}</p>
-
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-size"
-            >
+            {/* USB */}
+            <p className="fw-bold text-uppercase mt-4">
+              {usb[0]?.attribute_name}
+            </p>
+            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
               {usb.map((attr, index) => (
-                  <Attribute
-                    key={`usb-${attr.value ?? index}`}
-                    className={`size ${isUsbSelected === attr.value ? 'size-active-selected' : ''}`}
-                    onClick={() => setIsUsbSelected(attr.value)}
-                  >
+                <Attribute
+                  key={`usb-${attr.value ?? index}`}
+                  className={`size ${isUsbSelected === attr.value ? 'size-active-selected' : ''}`}
+                  onClick={() => setIsUsbSelected(attr.value)}
+                >
                   {attr.display_value}
                 </Attribute>
               ))}
             </div>
-
-            <p className="fw-bold text-uppercase mt-4">Price:</p>
-
-            <h6 className="price fw-bold">
-              {attributes[0]?.currency?.symbol}{attributes[0]?.amount} {attributes[0]?.currency?.label}
-            </h6>
           </div>
 
-          <button type="submit"
-            className="mt-4 btn btn-custom-primary text-uppercase w-lg-75 w-100 py-2"
-            data-testid="add-to-cart"
-          >
-            Add to Cart
-          </button>
-          <p
-            className="mt-4 w-lg-75 w-100 text-lg-start text-center"
-            data-testid="product-description"
-            dangerouslySetInnerHTML={{ __html: attributes[0]?.description }}
-          ></p>
+          <div className="product-description mt-4 text-lg-start text-center">
+            {parse(cleanHtmlString(attributes[0]?.description))}
+          </div>
 
+          <div className="d-flex justify-content-md-start justify-content-center">
+             <button
+              type="submit"
+              className="btn btn-custom-primary btn-lg mt-4 px-5 rounded-0"
+              data-testid="add-to-cart-btn"
+              onClick={addToCart}
+            >
+              Add to Cart
+            </button>
+          </div>
         </div>
       </div>
-      </Form>
     </div>
   );
 };
