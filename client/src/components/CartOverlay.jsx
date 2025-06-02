@@ -99,17 +99,17 @@ const CartOverlay = () => {
 
 
   const removeItem = async (id, showToast = true) => {
-  try {
-    const response = await axios.post(import.meta.env.VITE_API_URL, {
-      query: REMOVE_ITEM(id)
-    });
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: REMOVE_ITEM(id)
+      });
       if (showToast) {
         toast.success("Item removed from cart!");
       }
-      fetchOrders();
-    } catch (error) {
-      console.error(error.response);
-    }
+        fetchOrders();
+      } catch (error) {
+        console.error(error.response);
+      }
   };
 
   const totalAmount = orderDetails.reduce((acc, item) => {

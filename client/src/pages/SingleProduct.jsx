@@ -15,6 +15,7 @@ const SingleProduct = () => {
   const [isKeyboardSelected, setIsKeyboardSelected] = useState(null);
   const [isUsbSelected, setIsUsbSelected] = useState(null)
   const [isMainGalleryImage, setIsMainGalleryImage] = useState();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const { id } = useParams();
 
@@ -85,6 +86,23 @@ const SingleProduct = () => {
     setIsMainGalleryImage(src);
   };
 
+  const gallery = attributes[0]?.gallery || [];
+
+
+  const handlePrevImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? gallery.length - 1 : prevIndex - 1
+    );
+    console.log(currentIndex)
+  };
+
+  const handleNextImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === gallery.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
       <Form onSubmit={addToCart}>
@@ -97,7 +115,7 @@ const SingleProduct = () => {
               >
                   {attributes[0]?.gallery.map((src, index) => (
                     <div key={index}>
-                    <img
+                      <img
                         src={src}
                         alt={`Thumbnail ${index + 1}`}
                         className="img-fluid thumbnail-img my-1"
@@ -106,13 +124,33 @@ const SingleProduct = () => {
                     </div>
                   ))}
               </div>
-               <div className="col-12 col-md-9 product-full-preview">
-                <img
-                  src={isMainGalleryImage ?? attributes[0]?.gallery[0]}
-                  alt="Men"
-                  className="img-fluid w-100 object-fit-cover"
-                />
+              <div className="col-12 col-md-9 product-full-preview d-flex align-items-center justify-content-center position-relative">
+                <button type="button"
+                  className="position-absolute start-0 top-50 translate-middle-y btn btn-overlay border-0"
+                  onClick={handlePrevImage}
+                  style={{ zIndex: 2 }}
+                >
+                  &#8592;
+                </button>
+
+                <div className="mx-5">
+                  <img
+                    src={isMainGalleryImage || gallery[currentIndex]}
+                    alt="Product"
+                    className="img-fluid w-100 object-fit-cover"
+                  />
+                </div>
+
+                {/* Right Arrow */}
+                <button type="button"
+                  className="position-absolute end-0 top-50 translate-middle-y btn btn-overlay border-0"
+                  onClick={handleNextImage}
+                  style={{ zIndex: 2 }}
+                >
+                  &#8594;
+                </button>
               </div>
+
             </div>
           </div>
 
