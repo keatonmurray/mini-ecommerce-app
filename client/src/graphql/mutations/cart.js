@@ -88,7 +88,7 @@ export const CART = ({
       quantity: 1,
     },
   ];
-
+  
   // Escape string for GraphQL
   const orderDetailsString = JSON.stringify(orderDetails)
     .replace(/\\/g, '\\\\')

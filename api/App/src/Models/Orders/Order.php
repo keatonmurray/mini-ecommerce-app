@@ -55,7 +55,7 @@ class Order {
    protected function cart($orderDetails)
     {
         $json = json_encode($orderDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        
+
         $query = "INSERT INTO orders 
             (
                 order_details, 

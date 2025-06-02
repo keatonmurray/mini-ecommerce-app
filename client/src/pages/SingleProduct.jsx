@@ -57,6 +57,23 @@ const SingleProduct = () => {
   const addToCart = async (e) => {
     e.preventDefault();
 
+    const requiredSelections = [
+      { options: size, selected: isSizeSelected },
+      { options: color, selected: isColorSelected },
+      { options: capacity, selected: isCapacitySelected },
+      { options: keyboard, selected: isKeyboardSelected },
+      { options: usb, selected: isUsbSelected },
+    ];
+
+    const hasMissingSelection = requiredSelections.some(
+      ({ options, selected }) => options.length > 0 && !selected
+    );
+
+    if (hasMissingSelection) {
+      toast.error("Please select a variation");
+      return;
+    }
+
     const mutation = CART({
       size,
       color,
@@ -141,7 +158,6 @@ const SingleProduct = () => {
                   />
                 </div>
 
-                {/* Right Arrow */}
                 <button type="button"
                   className="position-absolute end-0 top-50 translate-middle-y btn btn-overlay border-0"
                   onClick={handleNextImage}
