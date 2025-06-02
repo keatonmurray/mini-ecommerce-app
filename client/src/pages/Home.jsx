@@ -35,6 +35,8 @@ const Home = () => {
     fetchProducts();
   }, [id]);
 
+  const { product, category } = data;
+
   const fetchAttributes = async (slug) => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
@@ -93,9 +95,6 @@ const Home = () => {
       toast.error("There was an error adding the item.");
     }
   };
-
-  const { product, category } = data;
-
   return (
     <div className="home">
       <h4 className="page-title mt-4 px-md-auto px-3">Products</h4>
@@ -106,11 +105,12 @@ const Home = () => {
           const image = item.gallery?.[0] || '';
           const currency = item.currency?.symbol || '';
           const amount = item.amount;
+          const isInStock = item.in_stock === 1;
 
-          return (
+        return (
             <div
               key={index}
-              className="col-12 col-md-4 d-flex align-items-center justify-content-center"
+              className={`col-12 col-md-4 d-flex align-items-center justify-content-center ${!isInStock ? 'opacity-50' : ''}`}
             >
               <div className="text-decoration-none w-100">
                 <div className="item mt-4 w-100">
@@ -123,6 +123,12 @@ const Home = () => {
                       )}
                     </Link>
 
+                    {!isInStock && (
+                      <div className="out-of-stock-overlay d-flex justify-content-center align-items-center">
+                        <span>Out of Stock</span>
+                      </div>
+                    )}
+
                     <div className={`text-start ${isHomePage ? 'my-1' : 'mt-3'}`}>
                       <p className="product-name m-0">
                         {name}
@@ -132,17 +138,21 @@ const Home = () => {
                       </p>
                     </div>
 
-                    <button
-                      type="button"
-                      className="btn btn-success add-to-cart-btn-overlay"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        const attributesData = await fetchAttributes(slug);
-                        await addToCart(e, item, attributesData);
-                      }}
-                    >
-                      <i className="bi bi-cart"></i>
-                    </button>
+                    {isInStock && (
+                      <button
+                        type="button"
+                        className="btn btn-success add-to-cart-btn-overlay"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          const attributesData = await fetchAttributes(slug);
+                          await addToCart(e, item, attributesData);
+                        }}
+                        disabled={!isInStock}
+                        title={isInStock ? 'Add to Cart' : 'Out of Stock'}
+                      >
+                        <i className="bi bi-cart"></i>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

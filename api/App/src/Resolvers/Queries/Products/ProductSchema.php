@@ -26,6 +26,7 @@ class ProductSchema extends QuerySchema
                 'name' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
                 'amount' => Type::float(),
+                'in_stock' => Type::int(),
                 'currency' => $currencyType
             ]
         ]);

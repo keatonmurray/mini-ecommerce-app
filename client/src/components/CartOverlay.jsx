@@ -4,6 +4,7 @@ import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
 import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
+import { useOutletContext } from 'react-router-dom';
 
 const CartOverlay = () => {
   const [data, setData] = useState(null);

@@ -16,7 +16,8 @@
             $query = "SELECT
                 products.id AS slug, 
                 products.name, 
-                products.gallery, 
+                products.gallery,
+                products.in_stock, 
                 prices.amount, 
                 prices.currency 
             FROM products 

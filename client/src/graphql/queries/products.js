@@ -5,6 +5,7 @@ export const PRODUCTS_QUERY = (id) => `
       name
       gallery
       amount
+      in_stock
       currency {
         label
         symbol
