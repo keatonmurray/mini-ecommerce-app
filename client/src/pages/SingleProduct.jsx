@@ -17,6 +17,21 @@ const SingleProduct = () => {
   const [isUsbSelected, setIsUsbSelected] = useState(null);
   const [isMainGalleryImage, setIsMainGalleryImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+
+  useEffect(() => {
+    if (
+      isSizeSelected ||
+      isColorSelected ||
+      isCapacitySelected ||
+      isKeyboardSelected ||
+      isUsbSelected
+    ) {
+      setIsButtonEnabled(true);
+    } else {
+      setIsButtonEnabled(false);
+    }
+  }, [isSizeSelected, isColorSelected, isCapacitySelected, isKeyboardSelected, isUsbSelected]);
 
   const { id } = useParams();
 
@@ -60,7 +75,7 @@ const SingleProduct = () => {
   const addToCart = async (e) => {
     e.preventDefault();
 
-    const requiredSelections = [
+     const requiredSelections = [
       { options: size, selected: isSizeSelected },
       { options: color, selected: isColorSelected },
       { options: capacity, selected: isCapacitySelected },
@@ -73,7 +88,7 @@ const SingleProduct = () => {
     );
 
     if (hasMissingSelection) {
-      toast.error('Please select a variation');
+      toast.error('All variations must be filled');
       return;
     }
 
@@ -270,11 +285,12 @@ const SingleProduct = () => {
           </div>
 
           <div className="d-flex justify-content-md-start justify-content-center">
-             <button
+            <button
               type="submit"
               className="btn btn-custom-primary btn-lg mt-4 px-5 rounded-0"
               data-testid="add-to-cart-btn"
               onClick={addToCart}
+              disabled={!isButtonEnabled}
             >
               Add to Cart
             </button>
