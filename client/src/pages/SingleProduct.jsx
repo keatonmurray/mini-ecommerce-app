@@ -99,24 +99,28 @@ const SingleProduct = () => {
     }
   };
 
-  const viewProductImage = (src) => {
-    setIsMainGalleryImage(src);
-  };
-
   const gallery = attributes[0]?.gallery || [];
 
+  const viewProductImage = (src) => {
+    setIsMainGalleryImage(src);
+    const index = gallery.indexOf(src);
+    if (index !== -1) {
+      setCurrentIndex(index);
+    }
+  };
 
   const handlePrevImage = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? gallery.length - 1 : prevIndex - 1
     );
-    console.log(currentIndex)
+    setIsMainGalleryImage(null);
   };
 
   const handleNextImage = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === gallery.length - 1 ? 0 : prevIndex + 1
     );
+    setIsMainGalleryImage(null);
   };
 
   return (
@@ -181,7 +185,6 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
 
-              {/* Size */}
               {size.map((attr, index) => (
                 <Attribute
                   key={`size-${attr.value ?? index}`}
@@ -200,7 +203,6 @@ const SingleProduct = () => {
               data-testid="product-attribute-size"
             >
 
-            {/* Color */}
               {color.map((attr, index) => {
                 const isSelected = isColorSelected === attr.value;
                 return (
@@ -222,8 +224,6 @@ const SingleProduct = () => {
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-
-              {/* Capacity */}
               {capacity.map((attr, index) => (
                   <Attribute
                     key={`capacity-${attr.value ?? index}`}
@@ -241,8 +241,6 @@ const SingleProduct = () => {
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-
-            {/* Keyboard */}
               {keyboard.map((attr, index) => (
                   <Attribute
                     key={`keyboard-${attr.value ?? index}`}
@@ -260,8 +258,6 @@ const SingleProduct = () => {
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
               data-testid="product-attribute-size"
             >
-
-            {/* Usb */}
               {usb.map((attr, index) => (
                   <Attribute
                     key={`usb-${attr.value ?? index}`}
