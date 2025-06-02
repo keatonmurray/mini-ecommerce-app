@@ -37,6 +37,8 @@ const Home = () => {
 
   const { product, category } = data;
 
+  console.log(category)
+
   const fetchAttributes = async (slug) => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {

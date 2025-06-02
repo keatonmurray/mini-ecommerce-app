@@ -28,6 +28,7 @@ class Category
             $query = "SELECT 
                 products.name AS product_name,
                 products.id AS product_id,
+                products.in_stock,
                 categories.name AS category_name,
                 products.gallery,
                 prices.amount,

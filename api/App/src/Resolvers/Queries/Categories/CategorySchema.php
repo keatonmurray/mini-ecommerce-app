@@ -27,6 +27,7 @@ class CategorySchema extends QuerySchema
                 'amount' => Type::float(),
                 'category_name' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
+                'in_stock' => Type::int(),
                 'currency' => $currencyType
             ]
         ]);
