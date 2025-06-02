@@ -166,7 +166,6 @@
   pointer-events: none;
   z-index: 10;
   user-select: none;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -236,6 +235,26 @@
     cursor: pointer;
 }
 
+.single-product .out-of-stock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
 .size-active-selected {
     background-color: #000;
     color: #fff;
@@ -254,6 +273,12 @@
 .color-active-selected {
     border: 3px solid var(--primary-color) !important;
 }
+
+.grayscale {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
 
 /** Cart Overlay **/
 

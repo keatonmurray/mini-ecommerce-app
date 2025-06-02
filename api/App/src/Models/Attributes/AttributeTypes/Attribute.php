@@ -20,6 +20,7 @@ class Attribute extends AttributeModel
             products.gallery,
             products.name AS product_name,
             products.description,
+            products.in_stock,
             prices.amount,
             prices.currency
             FROM attributes 

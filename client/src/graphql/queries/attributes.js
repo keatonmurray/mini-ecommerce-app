@@ -5,6 +5,7 @@ export const ATTRIBUTES_QUERY = (id) => `
             gallery
             description
             amount
+            in_stock
             currency {
                 label
                 symbol

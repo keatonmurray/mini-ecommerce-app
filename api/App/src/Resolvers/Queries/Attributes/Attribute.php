@@ -27,6 +27,7 @@ class Attribute extends QuerySchema
                 'product_name' => Type::string(),
                 'description' => Type::string(),
                 'amount' => Type::int(),
+                'in_stock' => Type::int(),
                 'currency' => $currencyType
             ]
         ]);

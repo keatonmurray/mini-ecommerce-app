@@ -22,7 +22,9 @@ const SingleProduct = () => {
 
   const { id } = useParams();
 
-  const gallery = data?.attributes?.[0]?.gallery || [];
+  const attributes = data?.attributes || [];
+
+  const gallery = attributes[0]?.gallery || [];
 
   const handlePrevImage = () => {
     setCurrentIndex((prevIndex) =>
@@ -66,26 +68,6 @@ const SingleProduct = () => {
     };
   }, [gallery.length, isCartExpanded, handlePrevImage, handleNextImage]);
 
-  useEffect(() => {
-    if (
-      isSizeSelected ||
-      isColorSelected ||
-      isCapacitySelected ||
-      isKeyboardSelected ||
-      isUsbSelected
-    ) {
-      setIsButtonEnabled(true);
-    } else {
-      setIsButtonEnabled(false);
-    }
-  }, [
-    isSizeSelected,
-    isColorSelected,
-    isCapacitySelected,
-    isKeyboardSelected,
-    isUsbSelected,
-  ]);
-
   const fetchProduct = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
@@ -108,11 +90,37 @@ const SingleProduct = () => {
     fetchProduct();
   }, []);
 
+  useEffect(() => {
+    const isAnyInStock = attributes.some(attr => attr.in_stock == 1);
+
+    if (
+      isAnyInStock &&
+      (isSizeSelected ||
+      isColorSelected ||
+      isCapacitySelected ||
+      isKeyboardSelected ||
+      isUsbSelected)
+    ) {
+      setIsButtonEnabled(true);
+    } else {
+      setIsButtonEnabled(false);
+    }
+  }, [
+    attributes,
+    isSizeSelected,
+    isColorSelected,
+    isCapacitySelected,
+    isKeyboardSelected,
+    isUsbSelected,
+  ]);
+
   if (!data) {
     return <div>Loading...</div>;
   }
 
-  const { attributes, size, color, capacity, usb, keyboard } = data;
+  const { size, color, capacity, usb, keyboard } = data;
+
+  const isNotInStock = attributes.some(attr => attr.in_stock !== 1);
 
   const cleanHtmlString = (str) => {
     if (!str) return '';
@@ -210,9 +218,14 @@ const SingleProduct = () => {
               <img
                 src={isMainGalleryImage || gallery[currentIndex]}
                 alt="Product"
-                className="img-fluid full-preview-img"
+                className={`img-fluid full-preview-img ${isNotInStock ? 'grayscale' : ''}`}
               />
             </div>
+             {isNotInStock && (
+                <div className="out-of-stock-overlay d-flex justify-content-center align-items-center">
+                  <span>Out of Stock</span>
+                </div>
+              )}
             <button
               type="button"
               className="position-absolute end-0 btn btn-overlay border-0 next-image-btn"
