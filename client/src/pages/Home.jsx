@@ -25,7 +25,6 @@ const Home = () => {
         product: response.data.data.products,
         category: response.data.data.category,
       });
-      console.log(data)
     } catch (error) {
       console.error('Error fetching products:', error);
       toast.error("Error fetching products.");

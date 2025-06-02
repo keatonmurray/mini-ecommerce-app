@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -17,12 +18,29 @@ const SingleProduct = () => {
   const [isMainGalleryImage, setIsMainGalleryImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const { isCartExpanded } = useOutletContext();
 
   const { id } = useParams();
 
   const gallery = data?.attributes?.[0]?.gallery || [];
 
+  const handlePrevImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? gallery.length - 1 : prevIndex - 1
+    );
+    setIsMainGalleryImage(null);
+  };
+
+  const handleNextImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === gallery.length - 1 ? 0 : prevIndex + 1
+    );
+    setIsMainGalleryImage(null);
+  };
+
   useEffect(() => {
+    if (isCartExpanded) return;
+
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') {
         handlePrevImage();
@@ -46,7 +64,7 @@ const SingleProduct = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [gallery.length]);
+  }, [gallery.length, isCartExpanded, handlePrevImage, handleNextImage]);
 
   useEffect(() => {
     if (
@@ -158,19 +176,6 @@ const SingleProduct = () => {
     }
   };
 
-  const handlePrevImage = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? gallery.length - 1 : prevIndex - 1
-    );
-    setIsMainGalleryImage(null);
-  };
-
-  const handleNextImage = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === gallery.length - 1 ? 0 : prevIndex + 1
-    );
-    setIsMainGalleryImage(null);
-  };
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
       <div className="row">
