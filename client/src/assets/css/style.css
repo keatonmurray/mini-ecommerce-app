@@ -226,7 +226,7 @@
 
 .color {
     padding: 25px;
-    border: 0;
+    border: 1px solid #000;
     cursor: pointer;
 }
 
