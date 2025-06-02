@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CART_ORDERS_QUERY } from '../graphql/queries/orders'
+import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
 import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
@@ -12,16 +12,19 @@ const CartOverlay = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
   const [orderId, setOrderId] = useState([]);
+  const [removingIds, setRemovingIds] = useState(new Set());
 
   const fetchOrders = async () => {
-    setLoading(false);
+    setLoading(true);
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: CART_ORDERS_QUERY,
       });
       setData(response.data.data);
+      setLoading(false);
     } catch (error) {
-      setError(response.data.errors);
+      setError(error.response?.data?.errors || error.message);
+      setLoading(false);
     }
   };
 
@@ -32,7 +35,7 @@ const CartOverlay = () => {
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
   useEffect(() => {
-    const ids = orderDetails.map(order_id => order_id.primary_id);
+    const ids = orderDetails.map(order => order.primary_id);
 
     const idsAreDifferent =
       ids.length !== orderId.length ||
@@ -43,16 +46,26 @@ const CartOverlay = () => {
     }
   }, [orderDetails, orderId]);
 
-
   useEffect(() => {
     if (!loading && data) {
-      const initialQuantities = {};
-      orderDetails.forEach(item => {
-        initialQuantities[item.primary_id] = item.quantity;
-      });
-      setQuantities(initialQuantities);
+      const savedQuantities = localStorage.getItem('cart_quantities');
+      if (savedQuantities) {
+        setQuantities(JSON.parse(savedQuantities));
+      } else {
+        const initialQuantities = {};
+        orderDetails.forEach(item => {
+          initialQuantities[item.primary_id] = item.quantity;
+        });
+        setQuantities(initialQuantities);
+      }
     }
   }, [loading, data]);
+
+  useEffect(() => {
+    if (Object.keys(quantities).length > 0) {
+      localStorage.setItem('cart_quantities', JSON.stringify(quantities));
+    }
+  }, [quantities]);
 
   useEffect(() => {
     setIsButtonEnabled(orderDetails.length !== 0);
@@ -60,7 +73,7 @@ const CartOverlay = () => {
 
   const handleIncrease = (id) => {
     setQuantities(prev => {
-      const currentQty = prev[id] || 1; 
+      const currentQty = prev[id] || 1;
       return {
         ...prev,
         [id]: currentQty + 1,
@@ -69,16 +82,21 @@ const CartOverlay = () => {
   };
 
   const handleDecrease = (id) => {
-    setQuantities(prev => {
-      const newQty = (prev[id] || 1) - 1;
-      return {
+  const currentQty = quantities[id] || 1;
+    const newQty = currentQty - 1;
+
+    if (newQty <= 0) {
+      setQuantities(prev => {
+        const { [id]: _, ...rest } = prev;
+        return rest;
+      });
+      removeItem(id);
+      toast.success("Item removed from cart!")
+    } else {
+      setQuantities(prev => ({
         ...prev,
         [id]: newQty,
-      };
-    });
-
-    if ((quantities[id] || 1) - 1 === 0) {
-      removeItem(id);
+      }));
     }
   };
 
@@ -91,25 +109,40 @@ const CartOverlay = () => {
         });
         await removeItem(id, false);
       }
+      localStorage.removeItem('cart_quantities'); 
       toast.success("Order was successfully placed!");
+      fetchOrders();
     } catch (error) {
       console.error(error);
+      toast.error("Failed to place order.");
     }
   };
 
+  const removeItem = async (id) => {
+    if (removingIds.has(id)) return; 
 
-  const removeItem = async (id, showToast = true) => {
+    setRemovingIds(prev => new Set(prev).add(id));
+
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, {
-        query: REMOVE_ITEM(id)
+      await axios.post(import.meta.env.VITE_API_URL, {
+        query: REMOVE_ITEM(id),
       });
-      if (showToast) {
-        toast.success("Item removed from cart!");
-      }
-        fetchOrders();
-      } catch (error) {
-        console.error(error.response);
-      }
+      setQuantities(prev => {
+        const { [id]: _, ...rest } = prev;
+        localStorage.setItem('cart_quantities', JSON.stringify(rest));
+        return rest;
+      });
+      fetchOrders();
+    } catch (error) {
+      console.error(error.response || error);
+      toast.error("Failed to remove item.");
+    } finally {
+      setRemovingIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }
   };
 
   const totalAmount = orderDetails.reduce((acc, item) => {
@@ -128,7 +161,7 @@ const CartOverlay = () => {
           <span className="ms-2 text-small small">{orderDetails.length} item{orderDetails.length !== 1 && 's'}</span>
         </h6>
 
-       {orderDetails.map(item => (
+        {orderDetails.map(item => (
           <div className="row align-items-start mb-3" key={item.primary_id}>
             <div className="col-9">
               <div className="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
@@ -140,12 +173,12 @@ const CartOverlay = () => {
                   >
                     +
                   </button>
-                   <button
-                      className="minus btn btn-sm btn-outline-secondary mt-2"
-                      onClick={() => handleDecrease(item.primary_id)}
-                    >
-                      -
-                    </button>
+                  <button
+                    className="minus btn btn-sm btn-outline-secondary mt-2"
+                    onClick={() => handleDecrease(item.primary_id)}
+                  >
+                    -
+                  </button>
                 </div>
               </div>
 
@@ -178,12 +211,12 @@ const CartOverlay = () => {
                               className={`badge text-wrap ${
                                 isSelected ? 'bg-dark text-white' : 'bg-light text-muted'
                               }`}
-                              style={{ 
-                                cursor: 'default', 
-                                minWidth: '40px', 
-                                textAlign: 'center', 
-                                padding:'10px',
-                                border: '1px solid #000' 
+                              style={{
+                                cursor: 'default',
+                                minWidth: '40px',
+                                textAlign: 'center',
+                                padding: '10px',
+                                border: '1px solid #000'
                               }}
                             >
                               {attrItem.display_value}
@@ -233,7 +266,7 @@ const CartOverlay = () => {
               className="btn btn-custom-primary w-100"
               disabled={!isButtonEnabled}
             >
-                Place Order
+              Place Order
             </button>
           </div>
         </form>
