@@ -3,7 +3,6 @@
 namespace App\Models\Attributes\AttributeTypes;
 use App\Models\Attributes\AttributeModel;
 
-
 class Attribute extends AttributeModel
 {
     public function __construct()

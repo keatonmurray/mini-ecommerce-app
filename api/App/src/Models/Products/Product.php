@@ -13,7 +13,7 @@
         }
 
         protected function products() {
-            $query = "SELECT 
+            $query = "SELECT
                 products.id AS slug, 
                 products.name, 
                 products.gallery, 

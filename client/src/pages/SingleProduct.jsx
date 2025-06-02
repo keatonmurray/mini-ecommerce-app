@@ -119,7 +119,6 @@ const SingleProduct = () => {
     );
   };
 
-
   return (
     <div className="single-product mt-5 px-lg-auto px-3 pb-lg-5 pb-3">
       <Form onSubmit={addToCart}>
