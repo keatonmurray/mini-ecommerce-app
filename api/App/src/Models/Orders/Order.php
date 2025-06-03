@@ -31,7 +31,7 @@ class Order {
         $query = "SELECT id, order_details 
                 FROM orders 
                 WHERE order_status = 'placed' 
-                ORDER BY created_at DESC 
+                ORDER BY updated_at DESC 
                 LIMIT 1";
         $stmt = $this->database->prepare($query);
         $stmt->execute();
@@ -41,8 +41,8 @@ class Order {
     public function updateQuantity($orderId, $updatedJson)
     {
         $query = "UPDATE orders 
-                  SET order_details = :order_details 
-                  WHERE id = :id";
+                SET order_details = :order_details, updated_at = NOW()
+                WHERE id = :id";
 
         $stmt = $this->database->prepare($query);
         $stmt->bindParam(':order_details', $updatedJson);
