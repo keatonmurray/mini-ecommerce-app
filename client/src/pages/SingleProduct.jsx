@@ -53,7 +53,7 @@ const SingleProduct = () => {
     };
 
     const handleWheel = (e) => {
-      e.preventDefault(); // optional: stop page scrolling
+      e.preventDefault();
       if (e.deltaY > 0) {
         handleNextImage();
       } else if (e.deltaY < 0) {

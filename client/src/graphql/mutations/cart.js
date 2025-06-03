@@ -11,10 +11,10 @@ export const CART = ({
   isKeyboardSelected,
   isUsbSelected,
   id,
+  quantity = 1
 } = {}) => {
   const attrs = [
     {
-      //size
       id: size[0]?.id ?? 'size-id',
       name: size[0]?.attribute_name ?? 'Size',
       type: size[0]?.type ?? 'text',
@@ -26,7 +26,6 @@ export const CART = ({
       })),
     },
     {
-      //color
       id: color[0]?.id ?? 'color-id',
       name: color[0]?.attribute_name ?? 'Color',
       type: color[0]?.type ?? 'swatch',
@@ -38,7 +37,6 @@ export const CART = ({
       })),
     },
     {
-      //capacity
       id: capacity[0]?.id ?? 'capacity-id',
       name: capacity[0]?.attribute_name ?? 'Capacity',
       type: capacity[0]?.type ?? 'text',
@@ -50,7 +48,6 @@ export const CART = ({
       })),
     },
     {
-      //keyboard
       id: keyboard[0]?.id ?? 'keyboard-id',
       name: keyboard[0]?.attribute_name ?? 'Keyboard',
       type: keyboard[0]?.type ?? 'text',
@@ -62,7 +59,6 @@ export const CART = ({
       })),
     },
     {
-      //usb
       id: usb[0]?.id ?? 'usb-id',
       name: usb[0]?.attribute_name ?? 'USB',
       type: usb[0]?.type ?? 'text',
@@ -78,7 +74,7 @@ export const CART = ({
   const orderDetails = [
     {
       id: id ?? 'product-id',
-      name: attributes[0]?.product_name ??  attributes[0]?.name ?? 'Product Name',
+      name: attributes[0]?.product_name ?? attributes[0]?.name ?? 'Product Name',
       photo: attributes[0]?.gallery?.[0] ?? '',
       attrs,
       prices: [
@@ -90,11 +86,10 @@ export const CART = ({
           },
         },
       ],
-      quantity: 1,
+      quantity,
     },
   ];
-  
-  // Escape string for GraphQL
+
   const orderDetailsString = JSON.stringify(orderDetails)
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"');

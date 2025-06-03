@@ -22,50 +22,49 @@ class Order {
         $stmt = $this->database->prepare($query);
         $stmt->execute();
 
-        $orderDetails = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($orderDetails as &$row) {
-            $decoded = json_decode($row['order_details'], true);
-
-            if (!is_array($decoded)) {
-                $row['order_details'] = [];
-                continue;
-            }
-
-            $newDetails = [];
-
-            foreach ($decoded as $product) {
-                $product['primary_id'] = $row['primary_id'];
-
-                if (isset($product['attrs']) && is_array($product['attrs'])) {
-                    $product['attrs'] = array_filter($product['attrs'], function ($attr) {
-                        return !empty($attr['items']);
-                    });
-                }
-
-                $newDetails[] = $product;
-            }
-
-            $row['order_details'] = $newDetails;
-        }
-
-        return $orderDetails;
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-   protected function cart($orderDetails)
+
+    public function getLatestOrder()
+    {
+        $query = "SELECT id, order_details 
+                FROM orders 
+                WHERE order_status = 'placed' 
+                ORDER BY created_at DESC 
+                LIMIT 1";
+        $stmt = $this->database->prepare($query);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function updateQuantity($orderId, $updatedJson)
+    {
+        $query = "UPDATE orders 
+                  SET order_details = :order_details 
+                  WHERE id = :id";
+
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':order_details', $updatedJson);
+        $stmt->bindParam(':id', $orderId);
+        return $stmt->execute();
+    }
+
+    protected function cart($orderDetails)
     {
         $json = json_encode($orderDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-        $query = "INSERT INTO orders 
+        {
+             $query = "INSERT INTO orders 
             (
                 order_details, 
                 order_status, 
                 created_at
             ) 
             VALUES (:order_details, 'placed', NOW())";
-        $stmt = $this->database->prepare($query);
-        $stmt->bindParam(':order_details', $json);
-        $stmt->execute();
+            $stmt = $this->database->prepare($query);
+            $stmt->bindParam(':order_details', $json);
+            $stmt->execute();
+        } 
     }
 
     protected function removeItem($id)
