@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
-use App\Controller\Attributes\AttributesController;
+use App\Controller\Attributes\AttributeTypes\Attributes;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
@@ -46,8 +46,8 @@ class Attribute extends QuerySchema
                         'product_id' => Type::string()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getAttributes($args['product_id']);
+                        $controller = new Attributes;
+                        return $controller->attributeType($args['product_id']);
                     }
                 ]
             ]

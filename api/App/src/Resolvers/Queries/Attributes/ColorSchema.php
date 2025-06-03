@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
-use App\Controller\Attributes\AttributesController;
+use App\Controller\Attributes\AttributeTypes\Color;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -35,8 +35,8 @@ class ColorSchema extends QuerySchema
                         'product_id' => Type::string()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getColor($args['product_id']);
+                        $controller = new Color;
+                        return $controller->attributeType($args['product_id']);
                     }
                 ]
             ]

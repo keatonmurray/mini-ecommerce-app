@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
-use App\Controller\Attributes\AttributesController;
+use App\Controller\Attributes\AttributeTypes\Keyboard;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\Type;
@@ -34,8 +34,8 @@ class TouchIdKeyboardSchema extends QuerySchema
                         'product_id' => Type::string()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getTouchIdKeyboard($args['product_id']);
+                        $controller = new Keyboard;
+                        return $controller->attributeType($args['product_id']);
                     }
                 ],
             ]

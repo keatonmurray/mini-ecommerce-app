@@ -2,7 +2,7 @@
 
 namespace App\Resolvers\Queries\Attributes;
 
-use App\Controller\Attributes\AttributesController;
+use App\Controller\Attributes\AttributeTypes\Size;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
@@ -36,8 +36,8 @@ class SizeSchema extends QuerySchema
                         'product_id' => Type::string()
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new AttributesController;
-                        return $controller->getSize($args['product_id']);
+                        $controller = new Size;
+                        return $controller->attributeType($args['product_id']);
                     }
                 ]
             ]
