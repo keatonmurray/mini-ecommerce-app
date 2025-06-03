@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Attribute from '../components/partials/Attribute';
 import axios from 'axios';
@@ -18,6 +18,7 @@ const SingleProduct = () => {
   const [isMainGalleryImage, setIsMainGalleryImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const galleryScroll = useRef(null)
   const { isCartExpanded } = useOutletContext();
 
   const { id } = useParams();
@@ -41,7 +42,7 @@ const SingleProduct = () => {
   };
 
   useEffect(() => {
-    if (isCartExpanded) return;
+    if (isCartExpanded || !galleryScroll.current) return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') {
@@ -52,6 +53,7 @@ const SingleProduct = () => {
     };
 
     const handleWheel = (e) => {
+      e.preventDefault(); // optional: stop page scrolling
       if (e.deltaY > 0) {
         handleNextImage();
       } else if (e.deltaY < 0) {
@@ -59,14 +61,15 @@ const SingleProduct = () => {
       }
     };
 
+    const galleryElement = galleryScroll.current;
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('wheel', handleWheel);
+    galleryElement.addEventListener('wheel', handleWheel);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('wheel', handleWheel);
+      galleryElement.removeEventListener('wheel', handleWheel);
     };
-  }, [gallery.length, isCartExpanded, handlePrevImage, handleNextImage]);
+  }, [isCartExpanded, handlePrevImage, handleNextImage]);
 
   const fetchProduct = async () => {
     try {
@@ -216,6 +219,7 @@ const SingleProduct = () => {
             </button>
             <div className="full-preview-img-container">
               <img
+                ref={galleryScroll}
                 src={isMainGalleryImage || gallery[currentIndex]}
                 alt="Product"
                 className={`img-fluid full-preview-img ${isNotInStock ? 'grayscale' : ''}`}
