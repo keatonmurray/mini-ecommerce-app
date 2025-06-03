@@ -4,7 +4,7 @@ import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PRODUCT_CATEGORIES } from '../graphql/queries/categories';
 import axios from 'axios';
 
-const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
+const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIsCartExpanded}) => {
   const [isCategory, setIsCategory] = useState();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [ordersData, setOrdersData] = useState(null);
@@ -34,6 +34,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
+     setIsCartExpanded(false);
   };
 
   const fetchCategories = async () => {
@@ -58,6 +59,10 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
     
     setTotalQuantity(total);
   }, [ordersData]);
+
+  const hideCartOverlay = () => {
+    setIsCartExpanded(false)
+  }
 
   return (
     <div className="cart-overlay container">
@@ -87,7 +92,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay}) => {
 
         <div className="d-flex flex-nowrap justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
           <div className="icons">
-            <Link to="/">
+            <Link to="/" onClick={hideCartOverlay}>
               <i className="bi bi-bag-heart-fill"></i>
             </Link>
           </div>

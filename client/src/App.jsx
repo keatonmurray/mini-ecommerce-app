@@ -22,6 +22,7 @@ const App = () => {
           activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
           setHandleCartOverlay={handleCartOverlay}
+          setIsCartExpanded={setIsCartExpanded}
         />
       </div>
     

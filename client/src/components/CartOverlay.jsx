@@ -162,7 +162,7 @@ const CartOverlay = () => {
         </h6>
 
         {orderDetails.map(item => (
-          <div className="row align-items-start mb-3" key={item.primary_id}>
+          <div className="row align-items-start mb-3" key={`${item.primary_id}-${JSON.stringify(item.attrs)}`}>
             <div className="col-9">
               <div className="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
                 <p className="product-name mb-0 me-2">{item.name}</p>
