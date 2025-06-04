@@ -6,19 +6,13 @@ use App\Controller\Attributes\AttributeTypes\Attributes;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
+use App\Resolvers\Types\CurrencyType; 
 
 class Attribute extends QuerySchema
 {
     public static function getObjectType(): ObjectType
-    {   
-
-        $currencyType = new ObjectType([
-            'name' => 'Currency',
-            'fields' => [
-                'label' => Type::string(),
-                'symbol' => Type::string(),
-            ]
-        ]);
+    {
+        $currencyType = CurrencyType::currency();
 
         $attributeType = new ObjectType([
             'name' => 'Attributes',
@@ -28,8 +22,8 @@ class Attribute extends QuerySchema
                 'description' => Type::string(),
                 'amount' => Type::int(),
                 'in_stock' => Type::int(),
-                'currency' => $currencyType
-            ]
+                'currency' => $currencyType,
+            ],
         ]);
 
         return $attributeType;
@@ -43,14 +37,14 @@ class Attribute extends QuerySchema
                 'attributes' => [
                     'type' => Type::listOf(self::getObjectType()),
                     'args' => [
-                        'product_id' => Type::string()
+                        'product_id' => Type::string(),
                     ],
                     'resolve' => function ($root, $args) {
-                        $controller = new Attributes;
+                        $controller = new Attributes();
                         return $controller->attributeType($args['product_id']);
-                    }
-                ]
-            ]
+                    },
+                ],
+            ],
         ]);
     }
 }

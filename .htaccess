@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^$ api/App/public/ [L]
+RewriteRule (.*) api/App/public/$1 [L]

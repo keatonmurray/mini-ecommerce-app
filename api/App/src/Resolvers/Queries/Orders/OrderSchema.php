@@ -6,18 +6,13 @@ use App\Controller\Orders\OrdersController;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use App\Resolvers\QuerySchema;
+use App\Resolvers\Types\CurrencyType; 
 
 class OrderSchema extends QuerySchema
 {
     public static function getObjectType(): ObjectType 
     {
-        $currencyType = new ObjectType([
-            'name' => 'Currency',
-            'fields' => [
-                'label' => Type::string(),
-                'symbol' => Type::string(),
-            ],
-        ]);
+        $currencyType = CurrencyType::currency();
 
         $priceType = new ObjectType([
             'name' => 'Price',
@@ -78,7 +73,7 @@ class OrderSchema extends QuerySchema
                     'type' => Type::listOf(self::getObjectType()),
                     'resolve' => function ($root, $args) {
                         $controller = new OrdersController;
-                        return $orders = $controller->getOrders();
+                        return $controller->getOrders();
                     }
                 ]
             ]

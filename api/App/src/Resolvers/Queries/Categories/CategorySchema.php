@@ -6,20 +6,15 @@ use App\Controller\Categories\CategoriesController;
 use App\Resolvers\QuerySchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use App\Resolvers\Types\CurrencyType;  
 
 class CategorySchema extends QuerySchema
 {
-    public  static function getObjectType(): ObjectType 
+    public static function getObjectType(): ObjectType 
     {
-        $currencyType = new ObjectType([
-            'name' => 'Currency',
-            'fields' => [
-                'label' => Type::string(),
-                'symbol' => Type::string()
-            ]
-            ]);
+        $currencyType = CurrencyType::currency();
 
-        $categoryType = new ObjectType ([
+        $categoryType = new ObjectType([
             'name' => 'Category',
             'fields' => [
                 'product_name' => Type::string(),
@@ -28,8 +23,8 @@ class CategorySchema extends QuerySchema
                 'category_name' => Type::string(),
                 'gallery' => Type::listOf(Type::string()),
                 'in_stock' => Type::int(),
-                'currency' => $currencyType
-            ]
+                'currency' => $currencyType,
+            ],
         ]);
 
         return $categoryType;
@@ -41,8 +36,8 @@ class CategorySchema extends QuerySchema
             'name' => 'CategoryBasic',
             'fields' => [
                 'category_name' => Type::string(),
-                'product_id' => Type::int()
-            ]
+                'product_id' => Type::int(),
+            ],
         ]);
     }
 
@@ -54,21 +49,21 @@ class CategorySchema extends QuerySchema
                 'category' => [
                     'type' => Type::listOf(self::getObjectType()),
                     'args' => [
-                        'product_id' => Type::string()
+                        'product_id' => Type::string(),
                     ],
                     'resolve' => function ($root, $args) {
                         $controller = new CategoriesController;
                         return $controller->getCategory($args['product_id']);
-                    }
+                    },
                 ],
                 'categories' => [
                     'type' => Type::listOf(self::getCategories()),
-                    'resolve' => function() {
+                    'resolve' => function () {
                         $controller = new CategoriesController;
                         return $controller->getAllCategories();
-                    }
-                ]
-            ]
+                    },
+                ],
+            ],
         ]);
     }
 }
