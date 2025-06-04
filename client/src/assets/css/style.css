@@ -267,7 +267,11 @@
 }
 
 .single-product .price {
-    font-size: 22px;
+    margin-top: -50px;
+}
+
+.single-product .price span {
+    font-size: 25px;
 }
 
 .color-active-selected {

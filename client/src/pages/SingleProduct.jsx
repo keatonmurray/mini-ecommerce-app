@@ -347,6 +347,13 @@ const SingleProduct = () => {
             </div>
           </div>
 
+          <div className="price">
+            <p className="fw-bold text-uppercase mt-4">Price</p>
+            <span>
+              {attributes[0].currency.symbol} {attributes[0]?.amount}  {attributes[0].currency.label}
+            </span>
+          </div>
+
           <div
             className="product-description mt-4 text-lg-start text-center"
             data-testid="product-description"
