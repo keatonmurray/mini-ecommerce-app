@@ -266,10 +266,6 @@
     cursor: pointer;
 }
 
-.single-product .price {
-    margin-top: -50px;
-}
-
 .single-product .price span {
     font-size: 25px;
 }
