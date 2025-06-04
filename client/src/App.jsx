@@ -29,7 +29,7 @@ const App = () => {
       {isCartExpanded && (
         <CartOverlay />
       )}
-      <main className="container">
+      <main className="px-5">
         <Outlet context={{ activeCategory, isCartExpanded }} />
       </main>
     </div>

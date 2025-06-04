@@ -287,7 +287,7 @@
     width: 400px;
     z-index: 1050;
     margin-top: 33px;
-    margin-right: 30px;
+    margin-right: -50px;
 }
 
 .cart-overlay-product-preview-container img {
