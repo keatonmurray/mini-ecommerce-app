@@ -225,11 +225,11 @@ const SingleProduct = () => {
                 className={`img-fluid full-preview-img ${isNotInStock ? 'grayscale' : ''}`}
               />
             </div>
-             {isNotInStock && (
-                <div className="out-of-stock-overlay d-flex justify-content-center align-items-center">
-                  <span>Out of Stock</span>
-                </div>
-              )}
+            {isNotInStock && (
+              <div className="out-of-stock-overlay d-flex justify-content-center align-items-center">
+                <span>Out of Stock</span>
+              </div>
+            )}
             <button
               type="button"
               className="position-absolute end-0 btn btn-overlay border-0 next-image-btn"
@@ -251,7 +251,10 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {size[0]?.attribute_name}
             </p>
-            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-size"
+            >
               {size.map((attr, index) => (
                 <Attribute
                   key={`size-${attr.value ?? index}`}
@@ -267,7 +270,10 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {color[0]?.attribute_name}
             </p>
-            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-color"
+            >
               {color.map((attr, index) => {
                 const isSelected = isColorSelected === attr.value;
                 return (
@@ -287,7 +293,10 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {capacity[0]?.attribute_name}
             </p>
-            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-capacity"
+            >
               {capacity.map((attr, index) => (
                 <Attribute
                   key={`capacity-${attr.value ?? index}`}
@@ -303,7 +312,10 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {keyboard[0]?.attribute_name}
             </p>
-            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-keyboard"
+            >
               {keyboard.map((attr, index) => (
                 <Attribute
                   key={`keyboard-${attr.value ?? index}`}
@@ -319,7 +331,10 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {usb[0]?.attribute_name}
             </p>
-            <div className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap" data-testid="product-attribute-size">
+            <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-usb"
+            >
               {usb.map((attr, index) => (
                 <Attribute
                   key={`usb-${attr.value ?? index}`}
@@ -332,7 +347,10 @@ const SingleProduct = () => {
             </div>
           </div>
 
-          <div className="product-description mt-4 text-lg-start text-center">
+          <div
+            className="product-description mt-4 text-lg-start text-center"
+            data-testid="product-description"
+          >
             {parse(cleanHtmlString(attributes[0]?.description))}
           </div>
 
@@ -350,6 +368,7 @@ const SingleProduct = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

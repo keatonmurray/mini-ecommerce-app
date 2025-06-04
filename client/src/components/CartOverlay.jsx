@@ -121,12 +121,14 @@ const CartOverlay = () => {
                   <button
                     className="plus btn btn-sm btn-outline-secondary"
                     onClick={() => handleIncrease(item.uuid)}
+                    data-testid="cart-item-amount-increase"
                   >
                     +
                   </button>
                   <button
                     className="minus btn btn-sm btn-outline-secondary mt-2"
                     onClick={() => handleDecrease(item.primary_id, item.uuid)}
+                    data-testid="cart-item-amount-decrease"
                   >
                     -
                   </button>
@@ -134,50 +136,60 @@ const CartOverlay = () => {
               </div>
 
               <div className="attributes my-2 gap-2">
-                {item.attrs.map(attr => (
-                  <div key={attr.id} className="attribute-group">
-                    <p className="mb-1 fw-semibold mt-3">{attr.name}:</p>
-                    <div className="d-flex gap-1 flex-wrap">
-                      {attr.items.map((attrItem, index) => {
-                        const isSelected = attrItem.selected;
-                        if (attr.type === 'swatch') {
-                          return (
-                            <div
-                              key={`swatch-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
-                              title={attrItem.display_value}
-                              style={{
-                                width: '24px',
-                                height: '24px',
-                                backgroundColor: attrItem.value,
-                                border: isSelected ? '2px solid black' : '1px solid #ccc',
-                                borderRadius: '0',
-                                cursor: 'default',
-                              }}
-                            />
-                          );
-                        } else {
-                          return (
-                            <span
-                              key={`badge-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
-                              className={`badge text-wrap ${
-                                isSelected ? 'bg-dark text-white' : 'bg-light text-muted'
-                              }`}
-                              style={{
-                                cursor: 'default',
-                                minWidth: '40px',
-                                textAlign: 'center',
-                                padding: '10px',
-                                border: '1px solid #000'
-                              }}
-                            >
-                              {attrItem.display_value}
-                            </span>
-                          );
-                        }
-                      })}
+                {item.attrs.map(attr => {
+                  const kebabAttrName = attr.name.toLowerCase().replace(/\s+/g, '-');
+                  return (
+                    <div key={attr.id} className="attribute-group">
+                      <p className="mb-1 fw-semibold mt-3">{attr.name}:</p>
+                      <div
+                        className="d-flex gap-1 flex-wrap"
+                        data-testid={`cart-item-attribute-${kebabAttrName}`}
+                      >
+                        {attr.items.map((attrItem, index) => {
+                          const isSelected = attrItem.selected;
+                          const kebabAttrValue = attrItem.display_value.toLowerCase().replace(/\s+/g, '-');
+                          const testId = `cart-item-attribute-${kebabAttrName}-${kebabAttrValue}${isSelected ? '-selected' : ''}`;
+                          if (attr.type === 'swatch') {
+                            return (
+                              <div
+                                key={`swatch-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
+                                title={attrItem.display_value}
+                                style={{
+                                  width: '24px',
+                                  height: '24px',
+                                  backgroundColor: attrItem.value,
+                                  border: isSelected ? '2px solid black' : '1px solid #ccc',
+                                  borderRadius: '0',
+                                  cursor: 'default',
+                                }}
+                                data-testid={testId}
+                              />
+                            );
+                          } else {
+                            return (
+                              <span
+                                key={`badge-${attrItem.id || attrItem.value || attrItem.display_value || index}`}
+                                className={`badge text-wrap ${
+                                  isSelected ? 'bg-dark text-white' : 'bg-light text-muted'
+                                }`}
+                                style={{
+                                  cursor: 'default',
+                                  minWidth: '40px',
+                                  textAlign: 'center',
+                                  padding: '10px',
+                                  border: '1px solid #000'
+                                }}
+                                data-testid={testId}
+                              >
+                                {attrItem.display_value}
+                              </span>
+                            );
+                          }
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="d-flex justify-content-between mt-3">
@@ -185,7 +197,10 @@ const CartOverlay = () => {
                   {currencySymbol}
                   {(item.prices[0]?.amount || 0).toFixed(2)}
                 </p>
-                <p className="product-quantity text-end fw-bold">
+                <p
+                  className="product-quantity text-end fw-bold"
+                  data-testid="cart-item-amount"
+                >
                   Qty: {quantities[item.uuid] || item.quantity}
                 </p>
               </div>
@@ -203,7 +218,7 @@ const CartOverlay = () => {
           </div>
         ))}
 
-        <div className="total-price d-flex justify-content-between">
+        <div className="total-price d-flex justify-content-between" data-testid="cart-total">
           <h6>Total</h6>
           <h6 className="fw-bold">
             {currencySymbol}
@@ -225,6 +240,7 @@ const CartOverlay = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

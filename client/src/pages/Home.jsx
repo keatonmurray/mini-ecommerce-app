@@ -106,11 +106,13 @@ const Home = () => {
           const currency = item.currency?.symbol || '';
           const amount = item.amount;
           const isInStock = item.in_stock === 1;
+          const kebabName = name.toLowerCase().replace(/\s+/g, '-');
 
-        return (
+          return (
             <div
               key={index}
               className={`col-12 col-md-4 d-flex align-items-center justify-content-center ${!isInStock ? 'opacity-50' : ''}`}
+              data-testid={`product-${kebabName}`}
             >
               <div className="text-decoration-none w-100">
                 <div className="item mt-4 w-100">
