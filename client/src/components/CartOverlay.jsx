@@ -7,24 +7,17 @@ import { toast } from 'react-toastify';
 
 const CartOverlay = () => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
-  const [orderId, setOrderId] = useState([]);
-  const [removingIds, setRemovingIds] = useState(new Set());
 
   const fetchOrders = async () => {
-    setLoading(true);
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: CART_ORDERS_QUERY,
       });
       setData(response.data.data);
-      setLoading(false);
     } catch (error) {
-      setError(error.response?.data?.errors || error.message);
-      setLoading(false);
+      console.log(error)
     }
   };
 
@@ -35,119 +28,77 @@ const CartOverlay = () => {
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
   useEffect(() => {
-    const ids = orderDetails.map(order => order.primary_id);
-
-    const idsAreDifferent =
-      ids.length !== orderId.length ||
-      ids.some((id, index) => id !== orderId[index]);
-
-    if (idsAreDifferent) {
-      setOrderId(ids);
-    }
-  }, [orderDetails, orderId]);
-
-  useEffect(() => {
-    if (!loading && data) {
-      const savedQuantities = localStorage.getItem('cart_quantities');
-      if (savedQuantities) {
-        setQuantities(JSON.parse(savedQuantities));
-      } else {
-        const initialQuantities = {};
-        orderDetails.forEach(item => {
-          initialQuantities[item.primary_id] = item.quantity || 1; 
-        });
-        setQuantities(initialQuantities);
-      }
-    }
-  }, [loading, data]);
-
-  useEffect(() => {
-    if (Object.keys(quantities).length > 0) {
-      localStorage.setItem('cart_quantities', JSON.stringify(quantities));
-    }
-  }, [quantities]);
-
-  useEffect(() => {
     setIsButtonEnabled(orderDetails.length !== 0);
   }, [orderDetails]);
 
-  const handleIncrease = (id) => {
+  const handleIncrease = (uuid) => {
     setQuantities(prev => {
-      const currentQty = prev[id] || 1;
+      const currentQty = prev[uuid] || 1;
       return {
         ...prev,
-        [id]: currentQty + 1,
+        [uuid]: currentQty + 1,
       };
     });
   };
 
-  const handleDecrease = (id) => {
-    const currentQty = quantities[id] || 1;
+  const handleDecrease = (primaryId, uuid) => {
+    const currentQty = quantities[uuid] !== undefined ? quantities[uuid] : orderDetails.find(order => order.uuid === uuid).quantity;
+
     const newQty = currentQty - 1;
 
-    if (newQty <= 0) {
+    if (newQty < 1) {
       setQuantities(prev => {
-        const { [id]: _, ...rest } = prev;
+        const { [uuid]: _, ...rest } = prev;
         return rest;
       });
-      removeItem(id);
-      toast.success("Item removed from cart!")
+
+      removeItem(primaryId, uuid);
+      toast.success("Item removed from cart!");
     } else {
       setQuantities(prev => ({
         ...prev,
-        [id]: newQty,
+        [uuid]: newQty,
       }));
     }
   };
 
-  const placeOrder = async (e) => {
-    e.preventDefault();
+  const placeOrder = async () => {
     try {
-      for (const id of orderId) {
-        await axios.post(import.meta.env.VITE_API_URL, {
-          query: PLACE_ORDER(id)
+      for (const order of orderDetails) {
+        const response = await axios.post(import.meta.env.VITE_API_URL, {
+          query: PLACE_ORDER(order.primary_id),
         });
-        await removeItem(id, false);
+        await removeItem(order.primary_id, order.uuid);
       }
-      localStorage.removeItem('cart_quantities'); 
-      toast.success("Order was successfully placed!");
-      fetchOrders();
+      toast.success("Order successfully placed!");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to place order.");
+      toast.error("Failed to place orders.");
     }
   };
 
-  const removeItem = async (id) => {
-    if (removingIds.has(id)) return; 
-
-    setRemovingIds(prev => new Set(prev).add(id));
-
+  const removeItem = async (id, productId) => {
     try {
-      await axios.post(import.meta.env.VITE_API_URL, {
-        query: REMOVE_ITEM(id),
+       const response = await axios.post(import.meta.env.VITE_API_URL, {
+        query: REMOVE_ITEM(id, productId),
       });
+
       setQuantities(prev => {
         const { [id]: _, ...rest } = prev;
         localStorage.setItem('cart_quantities', JSON.stringify(rest));
         return rest;
       });
+
       fetchOrders();
     } catch (error) {
       console.error(error.response || error);
       toast.error("Failed to remove item.");
-    } finally {
-      setRemovingIds(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(id);
-        return newSet;
-      });
     }
   };
 
   const totalAmount = orderDetails.reduce((acc, item) => {
     const price = item.prices[0]?.amount || 0;
-    const quantity = quantities[item.primary_id] || item.quantity;
+    const quantity = quantities[item.uuid] || item.quantity;
     return acc + price * quantity;
   }, 0);
 
@@ -169,13 +120,13 @@ const CartOverlay = () => {
                 <div className="cart-action d-flex flex-column align-items-center mt-2 mt-md-0">
                   <button
                     className="plus btn btn-sm btn-outline-secondary"
-                    onClick={() => handleIncrease(item.primary_id)}
+                    onClick={() => handleIncrease(item.uuid)}
                   >
                     +
                   </button>
                   <button
                     className="minus btn btn-sm btn-outline-secondary mt-2"
-                    onClick={() => handleDecrease(item.primary_id)}
+                    onClick={() => handleDecrease(item.primary_id, item.uuid)}
                   >
                     -
                   </button>
@@ -235,7 +186,7 @@ const CartOverlay = () => {
                   {(item.prices[0]?.amount || 0).toFixed(2)}
                 </p>
                 <p className="product-quantity text-end fw-bold">
-                  Qty: {quantities[item.primary_id] || item.quantity}
+                  Qty: {quantities[item.uuid] || item.quantity}
                 </p>
               </div>
             </div>
@@ -247,7 +198,7 @@ const CartOverlay = () => {
             <input
               type="hidden"
               name="quantity"
-              value={quantities[item.primary_id] || item.quantity}
+              value={quantities[item.uuid] || item.quantity}
             />
           </div>
         ))}
@@ -260,16 +211,18 @@ const CartOverlay = () => {
           </h6>
         </div>
 
-        <form onSubmit={placeOrder}>
-          <div className="mt-1">
+        <div className="d-flex justify-content-center mt-4">
+          <div className="mt-1 w-100">
             <button
-              className="btn btn-custom-primary w-100"
+              className="btn btn-lg btn-custom-primary w-100 mb-2"
               disabled={!isButtonEnabled}
+              onClick={() => placeOrder()}
+              type="button"
             >
               Place Order
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

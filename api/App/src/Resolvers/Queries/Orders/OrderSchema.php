@@ -51,6 +51,7 @@ class OrderSchema extends QuerySchema
             'name' => 'OrderDetails',
             'fields' => [
                 'primary_id' => Type::int(),
+                'uuid' => Type::string(),
                 'id' => Type::string(),
                 'name' => Type::string(),
                 'photo' => Type::string(),

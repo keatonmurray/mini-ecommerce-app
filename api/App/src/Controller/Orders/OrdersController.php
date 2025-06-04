@@ -40,8 +40,16 @@ class OrdersController extends Order
         return $this->instance->mergeAndUpdateExistingOrder($existing, $orderDetails);
     }
 
-    public function removeFromCart($id)
+    public function removeFromCart($orderId, $uuidToDelete)
     {
-        return $this->removeItem($id);
+        $data = $this->getProductDataByOrderId($orderId);
+
+        if (!$data) return false;
+
+        $filtered = array_filter($data, function ($item) use ($uuidToDelete) {
+            return !isset($item['uuid']) || $item['uuid'] !== $uuidToDelete;
+        });
+
+        return $this->updateProductDataByOrderId($orderId, array_values($filtered));
     }
 }

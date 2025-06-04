@@ -17,7 +17,6 @@ class PlacedOrdersMutation extends MutationSchema
                 'placed_order' => [
                     'type' => Type::int(),
                     'args' => [
-                        'quantity' => Type::nonNull(Type::int()),
                         'order_id' => Type::nonNull(Type::int())
                     ],
                     'resolve' => [self::class, 'resolver']
@@ -29,6 +28,6 @@ class PlacedOrdersMutation extends MutationSchema
     public static function resolver($root, $args)
     {
         $controller = new PlacedOrdersController;
-        $controller->complete_order($args['quantity'], $args['order_id']);
+        $controller->complete_order($args['order_id']);
     }
 }

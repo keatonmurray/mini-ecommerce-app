@@ -1,5 +1,5 @@
-export const PLACE_ORDER = (orderId, quantity = 5) => `
+export const PLACE_ORDER = (orderId) => `
   mutation {
-    placed_order(quantity: ${quantity}, order_id: ${orderId})
+    placed_order(order_id: ${orderId})
   }
 `;

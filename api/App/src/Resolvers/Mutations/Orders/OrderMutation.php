@@ -7,9 +7,9 @@ use App\Resolvers\MutationSchema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class OrderMutation extends MutationSchema {
-
-    public static function getMutationType(): ObjectType 
+class OrderMutation extends MutationSchema
+{
+    public static function getMutationType(): ObjectType
     {
         return new ObjectType([
             'name' => 'OrderMutation',
@@ -22,9 +22,10 @@ class OrderMutation extends MutationSchema {
                     'resolve' => [self::class, 'resolver']
                 ],
                 'removeItem' => [
-                    'type' => Type::int(),
+                    'type' => Type::boolean(),
                     'args' => [
-                        'id' => Type::int(),
+                        'id' => Type::nonNull(Type::int()),
+                        'uuid' => Type::nonNull(Type::string())
                     ],
                     'resolve' => [self::class, 'resolver']
                 ]
@@ -32,21 +33,20 @@ class OrderMutation extends MutationSchema {
         ]);
     }
 
-    public static function resolver($root, $args) 
+    public static function resolver($root, $args)
     {
         $controller = new OrdersController;
 
         if (isset($args['order_details'])) {
             $orderDetails = json_decode($args['order_details'], true);
             $controller->addToCart($orderDetails);
+            return true;
         }
 
-        if (isset($args['id'])) {
-            $controller->removeFromCart($args['id'], true);
-        }
+        $orderId = $args['id'];
+        $uuid = $args['uuid'];
 
+        $controller->removeFromCart($orderId, $uuid);
         return true;
     }
-
-
 }

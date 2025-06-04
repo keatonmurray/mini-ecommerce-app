@@ -7,6 +7,7 @@ export const CART_ORDERS_QUERY = `
         name
         quantity
         photo
+        uuid
         attrs {
           id
           name

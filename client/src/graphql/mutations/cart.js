@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const CART = ({
   size = [],
   color = [],
@@ -11,8 +13,11 @@ export const CART = ({
   isKeyboardSelected,
   isUsbSelected,
   id,
-  quantity = 1
+  quantity = 1,
+  uuid
 } = {}) => {
+  const dynamicUuid = uuid || uuidv4();
+
   const attrs = [
     {
       id: size[0]?.id ?? 'size-id',
@@ -87,6 +92,7 @@ export const CART = ({
         },
       ],
       quantity,
+      uuid: dynamicUuid,
     },
   ];
 

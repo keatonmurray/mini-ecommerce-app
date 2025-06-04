@@ -67,10 +67,23 @@ class Order {
         } 
     }
 
-    protected function removeItem($id)
+    protected function getProductDataByOrderId($id)
     {
-        $query = "DELETE FROM orders WHERE id = :id";
+        $query = "SELECT order_details FROM orders WHERE id = :id";
         $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row ? json_decode($row['order_details'], true) : null;
+    }
+
+    protected function updateProductDataByOrderId($id, array $productData)
+    {
+        $json = json_encode($productData, JSON_UNESCAPED_SLASHES);
+        $query = "UPDATE orders SET order_details = :productData WHERE id = :id";
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':productData', $json);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }

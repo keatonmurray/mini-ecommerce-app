@@ -1,4 +1,10 @@
-export const REMOVE_ITEM = (id) => `
-  mutation {
-    removeItem(id: ${id})
-}`
+export const REMOVE_ITEM = (id, uuid) => {
+  return `
+    mutation {
+      removeItem(
+        id: ${id},
+        uuid: "${uuid}"
+      )
+    }
+  `;
+};
