@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/product/:id" element={<App />}>
           <Route index element={<SingleProduct />} />
         </Route>
-        <Route path="/category/:id" element={<App />}>
+        <Route path="/:id" element={<App />}>
           <Route index element={<Home />} />
         </Route>
       </Routes>

@@ -6,6 +6,7 @@ export const ATTRIBUTES_QUERY = (id) => `
             description
             amount
             in_stock
+            product_slug
             currency {
                 label
                 symbol

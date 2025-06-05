@@ -282,6 +282,14 @@
 
 /** Cart Overlay **/
 
+.cart-overlay {
+  display: block !important;
+  z-index: 1070;
+  position: relative;
+  opacity: 1 !important;
+  min-height: 100px;
+}
+
 .cart-overlay-container {
     top: -50px;
     width: 400px;

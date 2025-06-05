@@ -78,7 +78,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
                   data-testid={activeCategory === category ? 'active-category-link' : 'category-link'}
                 >
                   <Link
-                    to={isAll ? '/' : `/category/${category.toLowerCase()}`}
+                    to={isAll ? '/' : `/${category.toLowerCase()}`}
                     onClick={() => handleCategoryClick(category)}
                     className="text-decoration-none text-reset"
                   >
@@ -99,9 +99,10 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
           <div className="icons me-md-4 me-0 position-relative">
             <i
               className="bi bi-cart fs-4"
-              onClick={setHandleCartOverlay}
+              onClick={() => setHandleCartOverlay()}
+              data-testid='cart-btn'
             ></i>
-            <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" data-testid='cart-btn'>
+            <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
               {totalQuantityCount()}
             </span>
           </div>

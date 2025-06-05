@@ -272,7 +272,6 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-color"
             >
               {color.map((attr, index) => {
                 const isSelected = isColorSelected === attr.value;
@@ -282,6 +281,7 @@ const SingleProduct = () => {
                     className={`${isSelected ? attr.value : ''}`}
                     onClick={() => setIsColorSelected(attr.value)}
                     style={isSelected ? { border: '2px solid #000' } : {}}
+                    data-testid={`product-attribute-color-${attr.value}`}
                   >
                     <div className="color" style={{ backgroundColor: attr.value }} />
                   </Attribute>
@@ -295,13 +295,13 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-capacity"
             >
               {capacity.map((attr, index) => (
                 <Attribute
                   key={`capacity-${attr.value ?? index}`}
                   className={`size ${isCapacitySelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsCapacitySelected(attr.value)}
+                  data-testid={`product-attribute-capacity-${attr.value}`}
                 >
                   {attr.display_value}
                 </Attribute>
@@ -314,13 +314,13 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-keyboard"
             >
               {keyboard.map((attr, index) => (
                 <Attribute
                   key={`keyboard-${attr.value ?? index}`}
                   className={`size ${isKeyboardSelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsKeyboardSelected(attr.value)}
+                  data-testid={`product-attribute-touch-id-in-keyboard-${attr.value}`}
                 >
                   {attr.display_value}
                 </Attribute>
@@ -333,13 +333,13 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
-              data-testid="product-attribute-usb"
             >
               {usb.map((attr, index) => (
                 <Attribute
                   key={`usb-${attr.value ?? index}`}
                   className={`size ${isUsbSelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsUsbSelected(attr.value)}
+                  data-testid={`product-attribute-with-usb-3-ports-${attr.value}`}
                 >
                   {attr.display_value}
                 </Attribute>

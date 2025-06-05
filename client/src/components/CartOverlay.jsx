@@ -10,6 +10,7 @@ const CartOverlay = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
 
+  // Fetch Orders in Cart Overlay
   const fetchOrders = async () => {
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL, {
@@ -27,10 +28,12 @@ const CartOverlay = () => {
 
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
+  //Enable/Disable Place Order Button
   useEffect(() => {
     setIsButtonEnabled(orderDetails.length !== 0);
   }, [orderDetails]);
 
+  //Increase Cart Quantity
   const handleIncrease = (uuid) => {
     setQuantities(prev => {
       const currentQty = prev[uuid] || 1;
@@ -41,6 +44,7 @@ const CartOverlay = () => {
     });
   };
 
+  //Decrease Cart Quantity
   const handleDecrease = (primaryId, uuid) => {
     const currentQty = quantities[uuid] !== undefined ? quantities[uuid] : orderDetails.find(order => order.uuid === uuid).quantity;
 
@@ -62,6 +66,7 @@ const CartOverlay = () => {
     }
   };
 
+  // Place Order 
   const placeOrder = async () => {
     try {
       for (const order of orderDetails) {
@@ -77,6 +82,7 @@ const CartOverlay = () => {
     }
   };
 
+  //Delete Cart Item
   const removeItem = async (id, productId) => {
     try {
        const response = await axios.post(import.meta.env.VITE_API_URL, {
@@ -96,17 +102,19 @@ const CartOverlay = () => {
     }
   };
 
+  //Display Total Amount
   const totalAmount = orderDetails.reduce((acc, item) => {
     const price = item.prices[0]?.amount || 0;
     const quantity = quantities[item.uuid] || item.quantity;
     return acc + price * quantity;
   }, 0);
 
+  //Get Currency Symbol
   const currencySymbol = orderDetails[0]?.prices[0]?.currency.symbol || '$';
 
   return (
-    <div className="cart-overlay position-relative px-3 container">
-      <div className="cart-overlay-container position-absolute end-0 shadow-lg p-4 bg-white">
+    <div className="cart-overlay position-relative px-3 container" data-testid="cart-overlay">
+      <div className="cart-overlay-container position-absolute end-0 p-4 bg-white">
         <h6 className="fw-bold text-start mb-3">
           My Bag:
           <span className="ms-2 text-small small">{orderDetails.length} item{orderDetails.length !== 1 && 's'}</span>
