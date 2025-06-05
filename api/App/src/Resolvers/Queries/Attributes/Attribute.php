@@ -20,7 +20,7 @@ class Attribute extends QuerySchema
                 'gallery' => Type::listOf(Type::string()),
                 'product_name' => Type::string(),
                 'description' => Type::string(),
-                'amount' => Type::int(),
+                'amount' => Type::float(),
                 'in_stock' => Type::int(),
                 'product_slug' => Type::string(),
                 'currency' => $currencyType,

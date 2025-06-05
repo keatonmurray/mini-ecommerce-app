@@ -5,11 +5,13 @@ import { PRODUCTS_QUERY } from '../graphql/queries/products';
 import { ATTRIBUTES_QUERY } from '../graphql/queries/attributes';
 import { CART } from '../graphql/mutations/cart';
 import { toast } from 'react-toastify';
+import { useOutletContext } from 'react-router-dom';
 
 const Home = () => {
   const { id } = useParams();
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const isHomePage = location.pathname === '/' || location.pathname === '/all';
+  const { isCartExpanded, setIsCartExpanded } = useOutletContext();
 
   const [data, setData] = useState({
     product: [],
@@ -90,6 +92,7 @@ const Home = () => {
     try {
       await axios.post(import.meta.env.VITE_API_URL, { query: mutation });
       toast.success("Item was added to your cart!");
+      setIsCartExpanded(true)
     } catch (error) {
       console.error('Error adding to cart:', error);
       toast.error("There was an error adding the item.");

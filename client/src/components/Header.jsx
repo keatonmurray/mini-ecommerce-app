@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PRODUCT_CATEGORIES } from '../graphql/queries/categories';
 import axios from 'axios';
@@ -8,6 +8,8 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
   const [isCategory, setIsCategory] = useState();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [ordersData, setOrdersData] = useState(null);
+  const location = useLocation();
+  const [isHomepage, setIsHomepage] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -34,7 +36,13 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
-     setIsCartExpanded(false);
+    setIsCartExpanded(false);
+
+    if (category.toLowerCase() === 'all') {
+      setIsHomepage(true);
+    } else {
+      setIsHomepage(false);
+    }
   };
 
   const fetchCategories = async () => {
@@ -75,12 +83,12 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
                 <li
                   key={category}
                   className={`list-unstyled text-uppercase mx-2 px-2 ${activeCategory === category ? 'active-category' : ''}`}
-                  data-testid={activeCategory === category ? 'active-category-link' : 'category-link'}
                 >
                   <Link
-                    to={isAll ? '/' : `/${category.toLowerCase()}`}
+                    to={isAll ? '/all' : `/${category.toLowerCase()}`}
                     onClick={() => handleCategoryClick(category)}
                     className="text-decoration-none text-reset"
+                    data-testid={activeCategory === category ? 'active-category-link' : 'category-link'}
                   >
                     {category}
                   </Link>

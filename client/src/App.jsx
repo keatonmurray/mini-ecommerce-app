@@ -4,7 +4,7 @@ import Header from './components/Header';
 import CartOverlay from './components/CartOverlay';
 
 const App = () => {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isCartExpanded, setIsCartExpanded] = useState(false);
 
   const handleCartOverlay = () => {
@@ -27,10 +27,11 @@ const App = () => {
       </div>
     
       {isCartExpanded && (
-        <CartOverlay />
+        <CartOverlay setIsCartExpanded={setIsCartExpanded} />
       )}
+
       <main className="px-5">
-        <Outlet context={{ activeCategory, isCartExpanded }} />
+        <Outlet context={{ activeCategory, setIsCartExpanded, isCartExpanded }} />
       </main>
     </div>
   )

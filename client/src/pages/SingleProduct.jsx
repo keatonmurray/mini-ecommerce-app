@@ -19,12 +19,11 @@ const SingleProduct = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const galleryScroll = useRef(null)
-  const { isCartExpanded } = useOutletContext();
+  const { isCartExpanded, setIsCartExpanded } = useOutletContext();
 
   const { id } = useParams();
 
   const attributes = data?.attributes || [];
-
   const gallery = attributes[0]?.gallery || [];
 
   const handlePrevImage = () => {
@@ -173,6 +172,7 @@ const SingleProduct = () => {
       await axios.post(import.meta.env.VITE_API_URL, {
         query: mutation,
       });
+      setIsCartExpanded(true)
       toast.success('Item was added to your cart!');
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -260,6 +260,7 @@ const SingleProduct = () => {
                   key={`size-${attr.value ?? index}`}
                   className={`size ${isSizeSelected === attr.value ? 'size-active-selected' : ''}`}
                   onClick={() => setIsSizeSelected(attr.value)}
+                  data-testid={`product-attribute-size-${attr.value}`}
                 >
                   {attr.display_value}
                 </Attribute>
@@ -272,6 +273,7 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-color"
             >
               {color.map((attr, index) => {
                 const isSelected = isColorSelected === attr.value;
@@ -295,6 +297,7 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-capacity"
             >
               {capacity.map((attr, index) => (
                 <Attribute
@@ -314,6 +317,7 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-touch-id-in-keyboard"
             >
               {keyboard.map((attr, index) => (
                 <Attribute
@@ -333,6 +337,7 @@ const SingleProduct = () => {
             </p>
             <div
               className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              data-testid="product-attribute-with-usb-3-ports"
             >
               {usb.map((attr, index) => (
                 <Attribute
@@ -365,7 +370,7 @@ const SingleProduct = () => {
             <button
               type="submit"
               className="btn btn-custom-primary btn-lg mt-4 px-5 rounded-0"
-              data-testid="add-to-cart-btn"
+              data-testid="add-to-cart"
               onClick={addToCart}
               disabled={!isButtonEnabled}
             >

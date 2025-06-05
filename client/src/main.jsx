@@ -16,23 +16,19 @@ import SingleProduct from './pages/SingleProduct';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-  <ApolloProvider client={client}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Home />} />
-        </Route>
-        <Route path="/product/:id" element={<App />}>
-          <Route index element={<SingleProduct />} />
-        </Route>
-        <Route path="/:id" element={<App />}>
-          <Route index element={<Home />} />
-        </Route>
-      </Routes>
-      {/* Toast container renders notifications here */}
-      <ToastContainer position="top-center" autoClose={3000} />
-    </BrowserRouter>
-  </ApolloProvider>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Home />} />
+            <Route path="all" element={<Home />} />
+            <Route path="product/:id" element={<SingleProduct />} />
+            <Route path=":id" element={<Home />} />
+          </Route>
+        </Routes>
+        <ToastContainer position="top-center" autoClose={3000} />
+      </BrowserRouter>
+    </ApolloProvider>
   </React.StrictMode>
 
 );

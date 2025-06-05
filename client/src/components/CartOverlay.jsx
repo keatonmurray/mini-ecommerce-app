@@ -5,7 +5,7 @@ import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
 import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
 
-const CartOverlay = () => {
+const CartOverlay = ({setIsCartExpanded}) => {
   const [data, setData] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [quantities, setQuantities] = useState({});
@@ -58,6 +58,8 @@ const CartOverlay = () => {
 
       removeItem(primaryId, uuid);
       toast.success("Item removed from cart!");
+      setIsCartExpanded(false)
+      
     } else {
       setQuantities(prev => ({
         ...prev,
