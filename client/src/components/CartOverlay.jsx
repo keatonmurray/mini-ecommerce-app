@@ -8,7 +8,10 @@ import { toast } from 'react-toastify';
 const CartOverlay = ({setIsCartExpanded}) => {
   const [data, setData] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [quantities, setQuantities] = useState({});
+  const [quantities, setQuantities] = useState(() => {
+  const stored = localStorage.getItem('quantities');
+    return stored ? JSON.parse(stored) : {};
+  });
 
   // Fetch Orders in Cart Overlay
   const fetchOrders = async () => {
@@ -32,6 +35,11 @@ const CartOverlay = ({setIsCartExpanded}) => {
   useEffect(() => {
     setIsButtonEnabled(orderDetails.length !== 0);
   }, [orderDetails]);
+
+  //Save Quantity to Local Storage For Persistent Rendering
+  useEffect(() => {
+    localStorage.setItem('quantities', JSON.stringify(quantities));
+  }, [quantities]);
 
   //Increase Cart Quantity
   const handleIncrease = (uuid) => {
