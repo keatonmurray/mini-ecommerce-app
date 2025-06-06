@@ -28,6 +28,15 @@ class OrderMutation extends MutationSchema
                         'uuid' => Type::nonNull(Type::string())
                     ],
                     'resolve' => [self::class, 'resolver']
+                ],
+                'updateItemQuantity' => [
+                    'type' => Type::int(),
+                    'args' => [
+                        'order_id' => Type::int(),
+                        'item_id' => Type::string(),
+                        'newQuantity' => Type::int() 
+                    ],
+                    'resolve' => [self::class, 'resolver']
                 ]
             ]
         ]);
@@ -43,10 +52,14 @@ class OrderMutation extends MutationSchema
             return true;
         }
 
-        $orderId = $args['id'];
-        $uuid = $args['uuid'];
+        if (isset($args['order_id'], $args['item_id'], $args['newQuantity'])) {
+            return $controller->updateItemQuantity($args['order_id'], $args['item_id'], $args['newQuantity']);
+        }
 
-        $controller->removeFromCart($orderId, $uuid);
-        return true;
+        if (isset($args['id'], $args['uuid'])) {
+            $controller->removeFromCart($args['id'], $args['uuid']);
+            return true;
+        }
     }
+
 }

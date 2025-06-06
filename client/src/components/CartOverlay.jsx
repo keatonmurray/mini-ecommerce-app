@@ -4,6 +4,7 @@ import { CART_ORDERS_QUERY } from '../graphql/queries/orders';
 import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
 import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
+import { UPDATE_CART_ITEM_QUANTITY } from '../graphql/mutations/updateItemQuantity';
 
 const CartOverlay = ({setIsCartExpanded}) => {
   const [data, setData] = useState(null);
@@ -21,7 +22,7 @@ const CartOverlay = ({setIsCartExpanded}) => {
       });
       setData(response.data.data);
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   };
 
@@ -29,6 +30,7 @@ const CartOverlay = ({setIsCartExpanded}) => {
     fetchOrders();
   }, []);
 
+  //Create Order Details Mapping
   const orderDetails = data?.orders?.flatMap(order => order.order_details || []) || [];
 
   //Enable/Disable Place Order Button
@@ -36,25 +38,23 @@ const CartOverlay = ({setIsCartExpanded}) => {
     setIsButtonEnabled(orderDetails.length !== 0);
   }, [orderDetails]);
 
-  //Save Quantity to Local Storage For Persistent Rendering
-  useEffect(() => {
-    localStorage.setItem('quantities', JSON.stringify(quantities));
-  }, [quantities]);
+  const handleIncrease = async (uuid, orderId) => {
+    const currentQty = quantities[uuid] || 1;
+    const newQty = currentQty + 1;
 
-  //Increase Cart Quantity
-  const handleIncrease = (uuid) => {
-    setQuantities(prev => {
-      const currentQty = prev[uuid] || 1;
-      return {
-        ...prev,
-        [uuid]: currentQty + 1,
-      };
-    });
+    setQuantities(prev => ({
+      ...prev,
+      [uuid]: newQty,
+    }));
+
+    await syncItemQuantity(orderId, uuid, newQty);
   };
 
   //Decrease Cart Quantity
-  const handleDecrease = (primaryId, uuid) => {
-    const currentQty = quantities[uuid] !== undefined ? quantities[uuid] : orderDetails.find(order => order.uuid === uuid).quantity;
+  const handleDecrease = async (orderId, uuid) => {
+    const currentQty = quantities[uuid] !== undefined
+      ? quantities[uuid]
+      : orderDetails.find(order => order.uuid === uuid)?.quantity || 1;
 
     const newQty = currentQty - 1;
 
@@ -64,15 +64,27 @@ const CartOverlay = ({setIsCartExpanded}) => {
         return rest;
       });
 
-      removeItem(primaryId, uuid);
+      await removeItem(orderId, uuid);
       toast.success("Item removed from cart!");
-      setIsCartExpanded(false)
-      
+      setIsCartExpanded(false);
     } else {
       setQuantities(prev => ({
         ...prev,
         [uuid]: newQty,
       }));
+
+      await syncItemQuantity(orderId, uuid, newQty);
+    }
+  };
+
+  //Sync Cart Item Quantity 
+  const syncItemQuantity = async (orderId, uuid, quantity) => {
+    try {
+      await axios.post(import.meta.env.VITE_API_URL, {
+        query: UPDATE_CART_ITEM_QUANTITY(orderId, uuid, quantity),
+      });
+    } catch (error) {
+      console.error('Failed to update quantity:', error);
     }
   };
 
@@ -138,7 +150,7 @@ const CartOverlay = ({setIsCartExpanded}) => {
                 <div className="cart-action d-flex flex-column align-items-center mt-2 mt-md-0">
                   <button
                     className="plus btn btn-sm btn-outline-secondary"
-                    onClick={() => handleIncrease(item.uuid)}
+                    onClick={() => handleIncrease(item.uuid, item.primary_id)}
                     data-testid="cart-item-amount-increase"
                   >
                     +

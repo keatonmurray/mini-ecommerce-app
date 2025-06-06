@@ -25,6 +25,18 @@ class Order {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function updateQuantity($orderId, $updatedJson)
+    {
+        $query = "UPDATE orders 
+                SET order_details = :order_details, updated_at = NOW()
+                WHERE id = :id";
+
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':order_details', $updatedJson);
+        $stmt->bindParam(':id', $orderId);
+        return $stmt->execute();
+    }
+
 
     public function getLatestOrder()
     {
@@ -38,12 +50,22 @@ class Order {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function updateQuantity($orderId, $updatedJson)
+    protected function getOrderDetailsById($orderId)
+    {
+        $query = "SELECT order_details FROM orders WHERE id = :id";
+        $stmt = $this->database->prepare($query);
+        $stmt->bindParam(':id', $orderId);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    protected function saveUpdatedOrderDetails($orderId, $updatedJson)
     {
         $query = "UPDATE orders 
-                SET order_details = :order_details, updated_at = NOW()
-                WHERE id = :id";
-
+            SET order_details = :order_details, 
+            updated_at = NOW() 
+            WHERE id = :id";
+            
         $stmt = $this->database->prepare($query);
         $stmt->bindParam(':order_details', $updatedJson);
         $stmt->bindParam(':id', $orderId);

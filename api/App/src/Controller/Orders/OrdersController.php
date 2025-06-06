@@ -40,6 +40,21 @@ class OrdersController extends Order
         return $this->instance->mergeAndUpdateExistingOrder($existing, $orderDetails);
     }
 
+    public function updateItemQuantity($orderId, $itemId, $newQuantity)
+    {
+        $result = $this->getOrderDetailsById($orderId);
+        $orderDetails = json_decode($result['order_details'], true);
+
+        foreach ($orderDetails as &$item) {
+            if ($item['uuid'] === $itemId) {
+                $item['quantity'] = $newQuantity;
+            }
+        }
+
+        $updatedJson = json_encode($orderDetails);
+        return $this->saveUpdatedOrderDetails($orderId, $updatedJson);
+    }
+
     public function removeFromCart($orderId, $uuidToDelete)
     {
         $data = $this->getProductDataByOrderId($orderId);
