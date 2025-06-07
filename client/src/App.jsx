@@ -30,7 +30,7 @@ const App = () => {
         <CartOverlay setIsCartExpanded={setIsCartExpanded} />
       )}
 
-      <main className="px-5">
+      <main className="px-2 px-md-5">
         <Outlet context={{ activeCategory, setIsCartExpanded, isCartExpanded }} />
       </main>
     </div>
