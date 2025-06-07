@@ -5,12 +5,12 @@ import { PLACE_ORDER } from '../graphql/mutations/placeOrder';
 import { REMOVE_ITEM } from '../graphql/mutations/removeItem';
 import { toast } from 'react-toastify';
 import { UPDATE_CART_ITEM_QUANTITY } from '../graphql/mutations/updateItemQuantity';
-
-const CartOverlay = ({setIsCartExpanded}) => {
+const CartOverlay = ({ setIsCartExpanded }) => {
   const [data, setData] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [totalItemQuantity, setTotalItemQuantity] = useState(0);
   const [quantities, setQuantities] = useState(() => {
-  const stored = localStorage.getItem('quantities');
+    const stored = localStorage.getItem('quantities');
     return stored ? JSON.parse(stored) : {};
   });
 
@@ -37,6 +37,15 @@ const CartOverlay = ({setIsCartExpanded}) => {
   useEffect(() => {
     setIsButtonEnabled(orderDetails.length !== 0);
   }, [orderDetails]);
+
+  // Update total item quantity when quantities or orderDetails change
+  useEffect(() => {
+    const total = orderDetails.reduce((sum, item) => {
+      const quantity = quantities[item.uuid] ?? item.quantity ?? 0;
+      return sum + quantity;
+    }, 0);
+    setTotalItemQuantity(total);
+  }, [quantities, orderDetails]);
 
   const handleIncrease = async (uuid, orderId) => {
     const currentQty = quantities[uuid] || 1;
@@ -107,7 +116,7 @@ const CartOverlay = ({setIsCartExpanded}) => {
   //Delete Cart Item
   const removeItem = async (id, productId) => {
     try {
-       const response = await axios.post(import.meta.env.VITE_API_URL, {
+      const response = await axios.post(import.meta.env.VITE_API_URL, {
         query: REMOVE_ITEM(id, productId),
       });
 
@@ -134,14 +143,18 @@ const CartOverlay = ({setIsCartExpanded}) => {
   //Get Currency Symbol
   const currencySymbol = orderDetails[0]?.prices[0]?.currency.symbol || '$';
 
+  //Get Total Items Quantity (fallback — NOT reactive)
+  const totalQuantity = orderDetails.reduce((sum, item) => sum + item.quantity, 0);
+  
   return (
     <div className="cart-overlay position-relative px-3 container" data-testid="cart-overlay">
       <div className="cart-overlay-container position-absolute end-0 p-4 bg-white">
         <h6 className="fw-bold text-start mb-3">
           My Bag:
-          <span className="ms-2 text-small small">{orderDetails.length} item{orderDetails.length !== 1 && 's'}</span>
+          <span className="ms-2 text-small small">
+            {totalItemQuantity} item{totalItemQuantity !== 1 && 's'}          
+          </span>        
         </h6>
-
         {orderDetails.map(item => (
           <div className="row align-items-start mb-3" key={`${item.primary_id}-${JSON.stringify(item.attrs)}`}>
             <div className="col-9">
