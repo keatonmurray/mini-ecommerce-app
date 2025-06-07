@@ -73,7 +73,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
   }
 
   return (
-    <div className="cart-overlay px-5">
+    <div className="cart-overlay px-2 px-md-5">
       <div className="header d-flex flex-wrap flex-md-row align-items-center justify-content-between py-3 py-md-4 mb-3">
         <div className="category mb-3 mb-md-0 w-md-50-custom">
           <ul className="d-flex flex-row align-items-center m-0 p-0">
@@ -98,7 +98,7 @@ const Header = ({ activeCategory, setActiveCategory, setHandleCartOverlay, setIs
           </ul>
         </div>
 
-        <div className="d-flex flex-nowrap justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3">
+        <div className="d-flex flex-nowrap justify-content-between align-items-center gap-2 w-md-50-custom mb-md-0 mb-3 me-3 me-md-0">
           <div className="icons">
             <Link to="/" onClick={hideCartOverlay}>
               <i className="bi bi-bag-heart-fill"></i>
