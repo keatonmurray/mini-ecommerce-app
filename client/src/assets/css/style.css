@@ -214,12 +214,10 @@
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.75); 
   color: #ffffff;
-  padding: 0.5rem 1rem;
   z-index: 1;
   border: 0;
   border-radius: 0 !important;
 }
-
 
 .single-product .full-preview .prev-image-btn {
   left: 0;

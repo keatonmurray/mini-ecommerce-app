@@ -209,7 +209,7 @@ const SingleProduct = () => {
 
         {/* Main Image */}
         <div className="col-12 col-md-6">
-          <div className="full-preview position-relative d-flex justify-content-center">
+          <div className="full-preview position-relative d-flex justify-content-center px-5 px-md-0">            
             <button
               type="button"
               className="position-absolute start-0 btn btn-overlay border-0 prev-image-btn"
@@ -251,8 +251,8 @@ const SingleProduct = () => {
             <p className="fw-bold text-uppercase mt-4">
               {size[0]?.attribute_name}
             </p>
-            <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+           <div
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-nowrap"
               data-testid="product-attribute-size"
             >
               {size.map((attr, index) => (
@@ -272,7 +272,7 @@ const SingleProduct = () => {
               {color[0]?.attribute_name}
             </p>
             <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-nowrap"
               data-testid="product-attribute-color"
             >
               {color.map((attr, index) => {
@@ -296,7 +296,7 @@ const SingleProduct = () => {
               {capacity[0]?.attribute_name}
             </p>
             <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-nowrap"
               data-testid="product-attribute-capacity"
             >
               {capacity.map((attr, index) => (
@@ -316,7 +316,7 @@ const SingleProduct = () => {
               {keyboard[0]?.attribute_name}
             </p>
             <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-nowrap"
               data-testid="product-attribute-touch-id-in-keyboard"
             >
               {keyboard.map((attr, index) => (
@@ -336,7 +336,7 @@ const SingleProduct = () => {
               {usb[0]?.attribute_name}
             </p>
             <div
-              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-wrap"
+              className="sizes d-flex justify-content-lg-start justify-content-center gap-2 flex-nowrap"
               data-testid="product-attribute-with-usb-3-ports"
             >
               {usb.map((attr, index) => (
@@ -360,7 +360,7 @@ const SingleProduct = () => {
           </div>
 
           <div
-            className="product-description mt-4 text-lg-start text-center"
+            className="product-description mt-4 text-start"
             data-testid="product-description"
           >
             {parse(cleanHtmlString(attributes[0]?.description))}
